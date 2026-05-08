@@ -1,0 +1,34 @@
+/* Fundo da tela na cor que você escolheu */
+.fundo-tela {
+  background-color: #676A6F; 
+  width: 100%;
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Tamanho da imagem diminuído conforme você pediu */
+.logo-card {
+  width: 300px;  /* Ajuste esse valor para o tamanho que achar melhor */
+  height: auto;
+  display: block;
+  margin: 0 auto 15px auto; /* Centraliza e dá um espaço pro título Login */
+  border-radius: 8px;
+}
+
+/* Estilo do Card */
+form {
+  background-color: #ffffff !important;
+  border-radius: 15px;
+  padding: 30px;
+  width: 100%;
+  max-width: 400px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+}
+
+label, h2 {
+  color: #333 !important;
+}

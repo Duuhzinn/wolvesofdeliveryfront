@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Wolvesofdelivery</title>
+  <base href="/">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  
+  <script
+  src="https://code.jquery.com/jquery-4.0.0.js"
+  integrity="sha256-9fsHeVnKBvqh3FB2HYu7g2xseAZ5MlN6Kz/qnkASV8U="
+  crossorigin="anonymous">
+  </script>
+
+</head>
+<body>
+  <app-root></app-root>
+
+<script>
+  $(document).ready(function () {
+    $.ajax({
+      url: "https://wolvesofdeliveryapi.onrender.com/wolvesofdeliveryAPI/users",
+      method: "GET",
+      success: function (data) {
+        console.log("Resposta:", data);
+      },
+      error: function (err) {
+        console.log("Erro:", err);
+      }
+    });
+  });
+</script>
+</body>
+</html>
