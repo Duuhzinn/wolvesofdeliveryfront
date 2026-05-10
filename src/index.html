@@ -17,20 +17,6 @@
 <body>
   <app-root></app-root>
 
-  <script>
-    $(document).ready(function () {
-      $.ajax({
-        url: "https://wolvesofdeliveryapi.onrender.com/wolvesofdeliveryAPI/",
-        method: "GET",
-        success: function (data) {
-          console.log("Resposta:", data);
-        },
-        error: function (err) {
-          console.log("Erro:", err);
-        }
-      });
-    });
-  </script>
 </body>
 
 </html>
