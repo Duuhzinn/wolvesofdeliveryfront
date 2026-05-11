@@ -16,8 +16,8 @@ export class LoginService {
   login(usuario: { login: string, senha: string }) {
     return this.http.post(AppConstants.baseLogin, JSON.stringify(usuario)).subscribe(data => {
       //CORPO DO MEU RETORNO HTTP
-      var token = (JSON.parse(JSON.stringify(data)).Authorization.split(' ')[1]);
-      localStorage.setItem("tokenAutenticacao", token);
+      var tokenLogin = (JSON.parse(JSON.stringify(data)).Authorization.split(' ')[1]);
+      localStorage.setItem("tokenAutenticacao", tokenLogin);
       alert("Token salvo com sucesso! TOKEN: " + localStorage.getItem("tokenAutenticacao"));
 
       this.router.navigate(['home'])

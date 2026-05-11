@@ -1,6 +1,16 @@
-import { Component, OnInit, signal } from '@angular/core';
+import {
+  Component,
+  Inject,
+  OnInit,
+  PLATFORM_ID,
+  signal
+} from '@angular/core';
+
+import { isPlatformBrowser } from '@angular/common';
+
 import { RouterOutlet, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+
 import { LoginService } from './service/login-service';
 import { Navbar } from './shared/navbar/navbar';
 
@@ -16,19 +26,31 @@ export class App implements OnInit {
 
   protected readonly title = signal('wolvesofdelivery');
 
-  constructor(private router: Router) {
-
-  }
+  constructor(
+    private router: Router,
+    @Inject(PLATFORM_ID) private platformId: Object
+  ) {}
 
   ngOnInit(): void {
-    if (localStorage.getItem('token') == null) {
-      this.router.navigate(['login']);
+
+    // Verifica se está no navegador
+    if (isPlatformBrowser(this.platformId)) {
+
+      if (localStorage.getItem('token') == null) {
+        this.router.navigate(['login']);
+      }
+
     }
   }
 
   public sair() {
-    localStorage.clear();
-    this.router.navigate(['login']);
+
+    if (isPlatformBrowser(this.platformId)) {
+
+      localStorage.clear();
+      this.router.navigate(['login']);
+
+    }
   }
 
 }
