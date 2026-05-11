@@ -1,0 +1,119 @@
+/* Barra de navegação principal */
+.wolf-navbar {
+  width: 100%;
+  height: 64px;
+  background: #1a1a2e;
+  display: flex;
+  align-items: center;
+  padding: 0 1.5rem;
+  gap: 2rem;
+  box-shadow: 0 2px 16px rgba(0,0,0,0.4);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+/* Logo */
+.navbar-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #f1f1f1;
+  font-weight: bold;
+  font-size: 1rem;
+}
+
+/* Lista de itens - desktop */
+.navbar-menu {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* Links do menu */
+.navbar-menu a {
+  color: #888;
+  text-decoration: none;
+  padding: 0.45rem 0.9rem;
+  border-radius: 6px;
+  font-size: 0.88rem;
+}
+
+/* Hover nos links */
+.navbar-menu a:hover {
+  color: #f1f1f1;
+  background: rgba(255,255,255,0.06);
+}
+
+/* Botão hamburguer - escondido no desktop */
+.hamburger {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  margin-left: auto;
+  padding: 4px;
+}
+
+/* As três linhas do hamburguer */
+.hamburger span {
+  display: block;
+  width: 22px;
+  height: 2px;
+  background: #f1f1f1;
+  border-radius: 2px;
+}
+
+/* Menu mobile - escondido por padrão */
+.mobile-menu {
+  display: none;
+  background: #1a1a2e;
+  padding: 1rem 1.5rem;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+}
+
+/* Links do menu mobile */
+.mobile-menu ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.mobile-menu a {
+  display: block;
+  color: #888;
+  text-decoration: none;
+  padding: 0.6rem 0.5rem;
+  border-radius: 6px;
+  font-size: 0.9rem;
+}
+
+.mobile-menu a:hover {
+  color: #f1f1f1;
+  background: rgba(255,255,255,0.06);
+}
+
+/* Quando o menu mobile está aberto */
+.mobile-menu.open {
+  display: block;
+}
+
+/* No mobile, esconde o menu desktop e mostra o hamburguer */
+@media (max-width: 768px) {
+  .navbar-menu {
+    display: none;
+  }
+
+  .hamburger {
+    display: flex;
+  }
+  
+}

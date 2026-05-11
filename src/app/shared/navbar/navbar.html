@@ -1,0 +1,43 @@
+<!-- Barra de navegação principal -->
+<nav class="wolf-navbar">
+
+    <!-- Logo e nome do sistema -->
+    <div class="navbar-brand">
+        <span>🐺</span>
+        <span>Wolves of Delivery</span>
+    </div>
+
+    <!-- Itens do menu - visível só no desktop -->
+    <ul class="navbar-menu">
+        <li><a href="#" [routerLink]="['/home']" routerLinkActive="router-link-active">Dashboard</a></li>
+        <li><a href="#">Entregas</a></li>
+        <li><a href="#">Pedidos</a></li>
+        <li><a href="#">Clientes</a></li>
+        <li><a href="#">Relatórios</a></li>
+        <li><a href="#">Configurações</a></li>
+        <li><a href="#" (click)="sair()">Sair</a></li>
+    </ul>
+
+
+
+    <!-- Botão hamburguer - visível só no mobile -->
+    <button class="hamburger" (click)="toggleMenu()">
+        <span></span>
+        <span></span>
+        <span></span>
+    </button>
+
+</nav>
+
+<!-- Menu mobile que abre/fecha -->
+<div class="mobile-menu" [class.open]="menuAberto">
+    <ul>
+        <li><a href="#" (click)="toggleMenu()">Dashboard</a></li>
+        <li><a href="#" (click)="toggleMenu()">Entregas</a></li>
+        <li><a href="#" (click)="toggleMenu()">Pedidos</a></li>
+        <li><a href="#" (click)="toggleMenu()">Clientes</a></li>
+        <li><a href="#" (click)="toggleMenu()">Relatórios</a></li>
+        <li><a href="#" (click)="toggleMenu()">Configurações</a></li>
+        <li><a href="#" (click)="toggleMenu()">Sair</a></li>
+    </ul>
+</div>
