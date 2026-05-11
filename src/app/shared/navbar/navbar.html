@@ -9,13 +9,13 @@
 
     <!-- Itens do menu - visível só no desktop -->
     <ul class="navbar-menu">
-        <li><a href="#" [routerLink]="['/home']" routerLinkActive="router-link-active">Dashboard</a></li>
-        <li><a href="#">Entregas</a></li>
-        <li><a href="#">Pedidos</a></li>
-        <li><a href="#">Clientes</a></li>
-        <li><a href="#">Relatórios</a></li>
-        <li><a href="#">Configurações</a></li>
-        <li><a href="#" (click)="sair()">Sair</a></li>
+        <li><a [routerLink]="['/home']" routerLinkActive="router-link-active">Dashboard</a></li>
+        <li><a >Entregas</a></li>
+        <li><a >Pedidos</a></li>
+        <li><a >Clientes</a></li>
+        <li><a >Relatórios</a></li>
+        <li><a >Configurações</a></li>
+        <li><a (click)="sair()">Sair</a></li>
     </ul>
 
 
@@ -32,7 +32,7 @@
 <!-- Menu mobile que abre/fecha -->
 <div class="mobile-menu" [class.open]="menuAberto">
     <ul>
-        <li><a href="#" (click)="toggleMenu()">Dashboard</a></li>
+        <li><a [routerLink]="['/home']" routerLinkActive="router-link-active" (click)="toggleMenu()">Dashboard</a></li>
         <li><a href="#" (click)="toggleMenu()">Entregas</a></li>
         <li><a href="#" (click)="toggleMenu()">Pedidos</a></li>
         <li><a href="#" (click)="toggleMenu()">Clientes</a></li>
