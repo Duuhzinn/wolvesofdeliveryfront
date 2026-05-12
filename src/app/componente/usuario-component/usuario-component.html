@@ -1,0 +1,33 @@
+<div class="container">
+  <div class="card">
+    <div class="card-header">
+      <h2>USUÁRIOS CADASTRADOS</h2>
+    </div>
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>NOME</th>
+          <th>LOGIN</th>
+          <th>TELEFONE</th>
+          <th>E-MAIL</th>
+          <th>ENDEREÇO</th>
+          <th>TIPO USUÁRIO</th>
+          <th>AÇÕES</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let usuario of usuarios">
+          <td>{{ usuario.id }}</td>
+          <td>{{ usuario.nome }}</td>
+          <td>{{ usuario.login }}</td>
+          <td>{{ usuario.telefone }}</td>
+          <td>{{ usuario.email }}</td>
+          <td>{{ usuario.endereco }}</td>
+          <td>{{ usuario.tipoUser }}</td>
+          <td><button class="btn-editar" (click)="editar(usuario)">Editar</button></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

@@ -10,11 +10,11 @@
     <!-- Itens do menu - visível só no desktop -->
     <ul class="navbar-menu">
         <li><a [routerLink]="['/home']" routerLinkActive="router-link-active">Dashboard</a></li>
-        <li><a >Entregas</a></li>
-        <li><a >Pedidos</a></li>
         <li><a >Clientes</a></li>
+        <li><a >Motoristas</a></li>
+        <li><a >Corridas</a></li>
         <li><a >Relatórios</a></li>
-        <li><a >Configurações</a></li>
+        <li><a [routerLink]="['/usuarioList']" routerLinkActive="router-link-active">Configurações</a></li>
         <li><a (click)="sair()">Sair</a></li>
     </ul>
 
@@ -37,7 +37,7 @@
         <li><a href="#" (click)="toggleMenu()">Pedidos</a></li>
         <li><a href="#" (click)="toggleMenu()">Clientes</a></li>
         <li><a href="#" (click)="toggleMenu()">Relatórios</a></li>
-        <li><a href="#" (click)="toggleMenu()">Configurações</a></li>
+        <li><a [routerLink]="['/usuarioList']" routerLinkActive="router-link-active" (click)="toggleMenu()">Configurações</a></li>
         <li><a href="#" (click)="toggleMenu()">Sair</a></li>
     </ul>
 </div>
