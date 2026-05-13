@@ -1,29 +1,39 @@
-import { HTTP_INTERCEPTORS, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
+import {
+  HTTP_INTERCEPTORS,
+  HttpEvent,
+  HttpHandler,
+  HttpInterceptor,
+  HttpRequest
+} from '@angular/common/http';
+
 import { Injectable, NgModule } from '@angular/core';
 import { Observable } from 'rxjs';
 
 @Injectable()
 export class HeaderInterceptor implements HttpInterceptor {
 
-  /* Metodo abaixo ele pega o token gerado no localStorage e passa no Header 
-  para autenticar alguma requisição no sistema */
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
 
-    if (localStorage.getItem('token') !== null) {
-      const tokenLogin = 'Bearer ' + localStorage.getItem('token');
+    const token = localStorage.getItem('token');
+
+    console.log('TOKEN LOCALSTORAGE:', token);
+    console.log('URL:', req.url);
+
+    if (token) {
+
       const tokenRequest = req.clone({
-        headers: req.headers.set('Authorization', tokenLogin)
+        setHeaders: {
+          Authorization: `Bearer ${token}`
+        }
       });
 
+      console.log('AUTH HEADER:', tokenRequest.headers.get('Authorization'));
+
       return next.handle(tokenRequest);
-    } else {
-      return next.handle(req);
+
     }
 
-  }
-
-  constructor() {
-
+    return next.handle(req);
   }
 }
 
@@ -32,9 +42,7 @@ export class HeaderInterceptor implements HttpInterceptor {
     provide: HTTP_INTERCEPTORS,
     useClass: HeaderInterceptor,
     multi: true,
-  },],
+  }],
 })
 
-export class HttpInterceptorModule{
-
-}
+export class HttpInterceptorModule {}
