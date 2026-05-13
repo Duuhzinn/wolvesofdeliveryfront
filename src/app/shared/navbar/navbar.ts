@@ -26,15 +26,6 @@ export class Navbar {
   toggleSub(nome: string): void {
     this.subAberto = this.subAberto === nome ? null : nome;
   }
-
-  fecharMenuDepois() {
-
-  setTimeout(() => {
-    this.toggleMenu();
-  }, 100);
-
-}
-
  
   sair(): void {
     // Limpe o token/sessão aqui se necessário
