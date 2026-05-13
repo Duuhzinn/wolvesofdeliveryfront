@@ -21,4 +21,13 @@ export class UsuarioService {
     }
     return this.http.get<any>(AppConstants.allUser, { headers });
   }
+
+  getMotoristaList(): Observable<any>{
+    let headers = new HttpHeaders();
+    if(isPlatformBrowser(this.platformId)){
+      const token = localStorage.getItem('tokenAutenticacao');
+      headers = new HttpHeaders({ Authorization: `Bearer ${token}`});
+    }
+    return this.http.get<any>(AppConstants.allDrive, {headers})
+  }
 }

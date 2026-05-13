@@ -10,6 +10,7 @@ export const routes: Routes = [
     {path: 'home', component: Home},//DECLARA A ROTA PARA A PAGINA HOME
     {path: 'login', component: Login},//DECLRA A ROTA PARA A PAGINA LOGIN
     {path: 'usuarioList', component: UsuarioComponent}//DECLARA A ROTA PARA A PAGINA USUARIO
+    
 ];
 
 
