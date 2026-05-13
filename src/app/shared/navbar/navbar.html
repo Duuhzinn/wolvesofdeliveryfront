@@ -1,43 +1,114 @@
 <!-- Barra de navegação principal -->
 <nav class="wolf-navbar">
+  <div class="navbar-brand">
+    <div class="brand-icon">🐺</div>
+    <span>Wolves of Delivery</span>
+  </div>
 
-    <!-- Logo e nome do sistema -->
-    <div class="navbar-brand">
-        <span>🐺</span>
-        <span>Wolves of Delivery</span>
-    </div>
+  <ul class="navbar-menu">
+    <li><a [routerLink]="['/home']" routerLinkActive="active">Dashboard</a></li>
 
-    <!-- Itens do menu - visível só no desktop -->
-    <ul class="navbar-menu">
-        <li><a [routerLink]="['/home']" routerLinkActive="router-link-active">Dashboard</a></li>
-        <li><a >Clientes</a></li>
-        <li><a >Motoristas</a></li>
-        <li><a >Corridas</a></li>
-        <li><a >Relatórios</a></li>
-        <li><a [routerLink]="['/usuarioList']" routerLinkActive="router-link-active">Configurações</a></li>
-        <li><a (click)="sair()">Sair</a></li>
-    </ul>
+    <li class="dropdown">
+      <a>Clientes <span class="chevron">▼</span></a>
+      <ul class="dropdown-menu">
+        <li><a [routerLink]="['/clienteCadastro']">Cadastrar</a></li>
+        <li><a [routerLink]="['/historicoCorridas']">Histórico de Corridas</a></li>
+      </ul>
+    </li>
 
+    <li class="dropdown">
+      <a>Motorista <span class="chevron">▼</span></a>
+      <ul class="dropdown-menu">
+        <li><a [routerLink]="['/motoristaCadastro']">Cadastrar</a></li>
+        <li><a [routerLink]="['/motoristaStatus']">Controle de Status</a></li>
+        <li><a [routerLink]="['/motoristaFila']">Ordem da Fila</a></li>
+      </ul>
+    </li>
 
+    <li class="dropdown">
+      <a>Corridas <span class="chevron">▼</span></a>
+      <ul class="dropdown-menu">
+        <li><a [routerLink]="['/chamarMotorista']">Chamar Motorista</a></li>
+        <li><a [routerLink]="['/corridasFinalizadas']">Finalizadas</a></li>
+      </ul>
+    </li>
 
-    <!-- Botão hamburguer - visível só no mobile -->
-    <button class="hamburger" (click)="toggleMenu()">
-        <span></span>
-        <span></span>
-        <span></span>
-    </button>
+    <li class="dropdown">
+      <a>Relatórios <span class="chevron">▼</span></a>
+      <ul class="dropdown-menu">
+        <li><a [routerLink]="['/relatorioCorrida']">Corrida</a></li>
+      </ul>
+    </li>
 
+    <li class="dropdown">
+      <a>Configurações <span class="chevron">▼</span></a>
+      <ul class="dropdown-menu">
+        <li><a [routerLink]="['/usuarioList']">Usuários</a></li>
+      </ul>
+    </li>
+
+    <li class="sair"><a (click)="sair()">Sair</a></li>
+  </ul>
+
+  <button class="hamburger" [class.open]="menuAberto" (click)="toggleMenu()" aria-label="Abrir menu">
+    <span></span><span></span><span></span>
+  </button>
 </nav>
 
-<!-- Menu mobile que abre/fecha -->
+<!-- Menu Mobile -->
 <div class="mobile-menu" [class.open]="menuAberto">
-    <ul>
-        <li><a [routerLink]="['/home']" routerLinkActive="router-link-active" (click)="toggleMenu()">Dashboard</a></li>
-        <li><a href="#" (click)="toggleMenu()">Entregas</a></li>
-        <li><a href="#" (click)="toggleMenu()">Pedidos</a></li>
-        <li><a href="#" (click)="toggleMenu()">Clientes</a></li>
-        <li><a href="#" (click)="toggleMenu()">Relatórios</a></li>
-        <li><a [routerLink]="['/usuarioList']" routerLinkActive="router-link-active" (click)="toggleMenu()">Configurações</a></li>
-        <li><a href="#" (click)="toggleMenu()">Sair</a></li>
-    </ul>
+  <ul>
+    <li><a [routerLink]="['/home']" (click)="toggleMenu()">Dashboard</a></li>
+
+    <li>
+      <a (click)="toggleSub('clientes')" [class.open]="subAberto === 'clientes'">
+        Clientes <span class="chevron">▼</span>
+      </a>
+      <ul class="submenu-mobile" [class.open]="subAberto === 'clientes'">
+        <li><a [routerLink]="['/clienteCadastro']" (click)="toggleMenu()">Cadastrar</a></li>
+        <li><a [routerLink]="['/historicoCorridas']" (click)="toggleMenu()">Histórico de Corridas</a></li>
+      </ul>
+    </li>
+
+    <li>
+      <a (click)="toggleSub('motorista')" [class.open]="subAberto === 'motorista'">
+        Motorista <span class="chevron">▼</span>
+      </a>
+      <ul class="submenu-mobile" [class.open]="subAberto === 'motorista'">
+        <li><a [routerLink]="['/motoristaCadastro']" (click)="toggleMenu()">Cadastrar</a></li>
+        <li><a [routerLink]="['/motoristaStatus']" (click)="toggleMenu()">Controle de Status</a></li>
+        <li><a [routerLink]="['/motoristaFila']" (click)="toggleMenu()">Ordem da Fila</a></li>
+      </ul>
+    </li>
+
+    <li>
+      <a (click)="toggleSub('corridas')" [class.open]="subAberto === 'corridas'">
+        Corridas <span class="chevron">▼</span>
+      </a>
+      <ul class="submenu-mobile" [class.open]="subAberto === 'corridas'">
+        <li><a [routerLink]="['/chamarMotorista']" (click)="toggleMenu()">Chamar Motorista</a></li>
+        <li><a [routerLink]="['/corridasFinalizadas']" (click)="toggleMenu()">Finalizadas</a></li>
+      </ul>
+    </li>
+
+    <li>
+      <a (click)="toggleSub('relatorios')" [class.open]="subAberto === 'relatorios'">
+        Relatórios <span class="chevron">▼</span>
+      </a>
+      <ul class="submenu-mobile" [class.open]="subAberto === 'relatorios'">
+        <li><a [routerLink]="['/relatorioCorrida']" (click)="toggleMenu()">Corrida</a></li>
+      </ul>
+    </li>
+
+    <li>
+      <a (click)="toggleSub('config')" [class.open]="subAberto === 'config'">
+        Configurações <span class="chevron">▼</span>
+      </a>
+      <ul class="submenu-mobile" [class.open]="subAberto === 'config'">
+        <li><a [routerLink]="['/usuarioList']" (click)="toggleMenu()">Usuários</a></li>
+      </ul>
+    </li>
+
+    <li class="sair-mobile"><a (click)="sair()">Sair</a></li>
+  </ul>
 </div>
