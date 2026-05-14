@@ -13,6 +13,7 @@ export class UsuarioService {
     @Inject(PLATFORM_ID) private platformId: Object,
   ) {}
 
+  //CONSULTA TODOS OS USUARIOS
   getUsuarioList(): Observable<any> {
     let headers = new HttpHeaders();
     if (isPlatformBrowser(this.platformId)) {
@@ -22,12 +23,24 @@ export class UsuarioService {
     return this.http.get<any>(AppConstants.allUser, { headers });
   }
 
-  getMotoristaList(): Observable<any>{
+  //CONSULTA TODOS OS MOTORISTAS
+  getMotoristaList(): Observable<any> {
     let headers = new HttpHeaders();
-    if(isPlatformBrowser(this.platformId)){
+    if (isPlatformBrowser(this.platformId)) {
       const token = localStorage.getItem('tokenAutenticacao');
-      headers = new HttpHeaders({ Authorization: `Bearer ${token}`});
+      headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
     }
-    return this.http.get<any>(AppConstants.allDrive, {headers})
+    return this.http.get<any>(AppConstants.allDrive, { headers });
+  }
+
+  //CONSULTA USUARIO POR NOME
+  getConsultaUserNome(nome: String): Observable<any> {
+    let headers = new HttpHeaders();
+    if (isPlatformBrowser(this.platformId)) {
+      const token = localStorage.getItem('tokenAutenticacao');
+      headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
+    }
+
+    return this.http.get<any>(AppConstants.pesqUserNome(nome), { headers });
   }
 }

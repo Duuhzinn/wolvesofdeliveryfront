@@ -30,7 +30,7 @@ table {
 }
 
 thead {
-  background-color: #5a5d62;
+  background-color: #1a1a2e;
 }
 
 thead th {
@@ -60,6 +60,10 @@ tbody td {
   font-size: 0.9rem;
 }
 
+tbody tr:hover {
+  background-color: #d9d9ee;
+}
+
 @media (max-width: 768px) {
   .container {
     padding: 15px;
@@ -71,14 +75,15 @@ tbody td {
     white-space: nowrap;
   }
 
-  thead th, tbody td {
+  thead th,
+  tbody td {
     padding: 10px 12px;
     font-size: 0.8rem;
   }
 }
 
 .btn-editar {
-  background-color: #4a4d52;
+  background-color: #323261;
   color: #ffffff;
   border: none;
   padding: 6px 14px;
@@ -89,5 +94,24 @@ tbody td {
 }
 
 .btn-editar:hover {
-  background-color: #676A6F;
+  background-color: #4a4a8f;
+}
+
+/*CAMPO DE BUSCA*/
+.input-busca {
+  width: 350px;
+  gap: 8px;
+}
+.input-busca .form-control:focus {
+  border-color: #1a1a2e;
+  box-shadow: 0 0 0 0.25rem rgba(26, 26, 46, 0.25);
+}
+.btn-buscar {
+  background-color: #323261;
+  border-color: #323261;
+  color: #fff;
+}
+.btn-buscar:hover {
+  background-color: #4a4a8f; /* mais claro, mesmo tom roxo/azul */
+  border-color: #4a4a8f;
 }

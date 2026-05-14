@@ -2,6 +2,13 @@
   <div class="card">
     <div class="card-header">
       <h2>USUÁRIOS CADASTRADOS</h2>
+
+      <!--CAMPO DE BUSCA-->
+      <div class="input-group input-busca mt-2">
+        <input type="text" class="form-control" placeholder="Digite o nome do usuário..." [(ngModel)]="nome"/>
+        <button class="btn btn-buscar" (click)="consultarUserNome()">Pesquisar</button>
+
+      </div>
     </div>
     <table>
       <thead>
