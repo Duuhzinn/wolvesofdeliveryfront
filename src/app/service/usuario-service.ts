@@ -3,6 +3,7 @@ import { Injectable, Inject, PLATFORM_ID } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { Observable } from 'rxjs';
 import { AppConstants } from '../app-constants';
+import { User } from '../model/user';
 
 @Injectable({
   providedIn: 'root',
@@ -43,4 +44,16 @@ export class UsuarioService {
 
     return this.http.get<any>(AppConstants.pesqUserNome(nome), { headers });
   }
+
+  salvarNovoUsuario(user: User): Observable<any> {
+  let headers = new HttpHeaders();
+  if (isPlatformBrowser(this.platformId)) {
+    const token = localStorage.getItem('tokenAutenticacao');
+    headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
+  }
+
+  return this.http.post<any>(AppConstants.salvarUsuario(), user, { headers });
+}
+
+  
 }

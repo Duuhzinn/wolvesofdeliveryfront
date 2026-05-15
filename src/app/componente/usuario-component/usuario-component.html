@@ -5,9 +5,14 @@
 
       <!--CAMPO DE BUSCA-->
       <div class="input-group input-busca mt-2">
-        <input type="text" class="form-control" placeholder="Digite o nome do usuário..." [(ngModel)]="nome"/>
+        <input
+          type="text"
+          class="form-control"
+          placeholder="Digite o nome do usuário..."
+          [(ngModel)]="nome"
+        />
         <button class="btn btn-buscar" (click)="consultarUserNome()">Pesquisar</button>
-
+        <button class="btn btn-novo" (click)="chamarModalNovo()">Novo</button>
       </div>
     </div>
     <table>
@@ -32,9 +37,162 @@
           <td>{{ usuario.email }}</td>
           <td>{{ usuario.endereco }}</td>
           <td>{{ usuario.tipoUser }}</td>
-          <td><button class="btn-editar" (click)="editar(usuario)">Editar</button></td>
+          <td><button class="btn-editar" (click)="chamarModalEdit(usuario.id)">Editar</button></td>
         </tr>
       </tbody>
     </table>
+  </div>
+</div>
+
+<!-- MODAL PARA EDICAO OU INSERÇÃO DO USUARIO-->
+<div class="modal-overlay" *ngIf="modalInsertEdit">
+  <!-- Paramos a propagação do clique para o modal não fechar ao clicar dentro dele -->
+  <div class="modal-dialog modal-lg modal-content-animated" (click)="$event.stopPropagation()">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">USUÁRIO</h5>
+        <button type="button" class="close" (click)="fecharModal()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form #userForm="ngForm">
+          <div class="input-container-flex">
+            <!--CAMPO ID-->
+            <div class="field-group group-id">
+              <label class="form-label">ID</label>
+              <input
+                type="text"
+                class="form-control field-id-vazio"
+                name="id"
+                [(ngModel)]="usuario.id"
+                readonly
+              />
+            </div>
+            <!--CAMPO NOME-->
+            <div class="field-group group-nome">
+              <label class="form-label">NOME</label>
+              <input
+                type="text"
+                class="form-control"
+                name="nome"
+                [(ngModel)]="usuario.nome"
+                placeholder="Digite o nome completo do usuário"
+              />
+            </div>
+          </div>
+          <!--CAMPO ENDEREÇO-->
+          <div class="input-container-flex mt-3">
+            <div class="field-group group-full">
+              <label class="form-label">ENDEREÇO</label>
+              <input
+                type="text"
+                class="form-control"
+                name="endereco"
+                [(ngModel)]="usuario.endereco"
+                placeholder="Rua, Número - Bairro"
+              />
+            </div>
+          </div>
+          <div class="input-container-flex mt-3">
+            <div class="field-group group-full">
+              <label class="form-label">E-MAIL</label>
+              <input
+                type="email"
+                class="form-control"
+                name="endereco"
+                [(ngModel)]="usuario.email"
+                placeholder="exemplo@exemplo"
+              />
+            </div>
+            <div class="field-group group-tipo">
+              <label class="form-label">TIPO DO USUÁRIO</label>
+              <select class="form-control" name="tipoUser" [(ngModel)]="usuario.tipoUser">
+                <option value="" disabled selected>Selecione...</option>
+                <option value="Admin">ADMINISTRADOR</option>
+                <option value="Cliente">CLIENTE</option>
+                <option value="Motorista">ENTREGADOR</option>
+              </select>
+            </div>
+          </div>
+          <div class="input-container-flex mt-3">
+            <div class="field-group group-3-col">
+              <label class="form-label">TELEFONE</label>
+              <input
+                type="text"
+                class="form-control"
+                name="telefone"
+                [(ngModel)]="usuario.telefone"
+                placeholder="(00) 00000-0000"
+              />
+            </div>
+            <div class="field-group group-3-col">
+              <label class="form-label">LOGIN</label>
+              <input
+                type="text"
+                class="form-control"
+                name="login"
+                [(ngModel)]="usuario.login"
+                placeholder="exemplo.exemplo"
+              />
+            </div>
+            <div class="field-group group-3-col">
+              <label class="form-label">SENHA</label>
+              <input
+                type="password"
+                class="form-control"
+                name="senha"
+                [(ngModel)]="usuario.senha"
+                placeholder="******"
+              />
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-Fechar" (click)="fecharModal()">Fechar</button>
+        <button type="button" class="btn btn-Salvar" (click)="salvarUser()">Salvar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--MODAL DE SUCESSO-->
+<div class="modal-overlay" *ngIf="modalSucess" (click)="fecharModal()">
+  <div class="modal-dialog modal-sm modal-content-animated" (click)="$event.stopPropagation()">
+    <div class="modal-content text-center">
+      <div class="modal-body p-4">
+        <div class="success-icon">
+          <span class="check-symbol">✓</span>
+        </div>
+
+        <h3 class="mt-3">Sucesso!</h3>
+        <p class="text-muted">O usuário foi salvo com sucesso no sistema.</p>
+      </div>
+
+      <div class="modal-footer justify-content-center">
+        <button type="button" class="btn-Salvar" (click)="fecharModal()">Ok, entendi!</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--MODAL DE USUARIO NAO ENCONTRADO-->
+<div class="modal-overlay" *ngIf="modalErro" (click)="fecharModal()">
+  <div class="modal-dialog modal-sm modal-content-animated" (click)="$event.stopPropagation()">
+    <div class="modal-content text-center">
+      <div class="modal-body p-4">
+        <div class="error-icon">
+          <span class="error-symbol">!</span>
+        </div>
+
+        <h3 class="mt-3">Atenção!</h3>
+        <p class="text-muted">Não foi possível localizar este usuário na lista.</p>
+      </div>
+
+      <div class="modal-footer justify-content-center">
+        <button type="button" class="btn-Fechar" (click)="fecharModal()">Tentar novamente</button>
+      </div>
+    </div>
   </div>
 </div>
