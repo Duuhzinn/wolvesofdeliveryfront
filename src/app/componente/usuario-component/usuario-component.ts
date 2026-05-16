@@ -94,9 +94,13 @@ export class UsuarioComponent implements OnInit {
       const index = this.usuarios.findIndex((u) => u.id === this.usuario.id);
 
       if (index !== -1) {
-        //SUBSTITUI O USUARIO NAQUELA POSICAO PELOS DADOS NOVOS DO FORMULARIO
-        //USANDO O {...} PARA GARANTIR QUE ESTAMOS PASSANDO UM OBJETO NOVO E LIMPO
+        //SUBSTITUI O USUARIO NAQUELA POSICAO PELOS DADOS NOVOS DO FORMULARIO USANDO O {...} PARA GARANTIR QUE ESTAMOS PASSANDO UM OBJETO NOVO E LIMPO
         this.usuarios[index] = { ...this.usuario };
+
+        this.usuario.nome = this.usuario.nome?.toUpperCase();
+        this.usuario.endereco = this.usuario.endereco?.toUpperCase();
+        this.usuario.email = this.usuario.email?.toUpperCase();
+
         this.modalInsertEdit = false;
         this.modalSucess = true;
 
@@ -108,7 +112,6 @@ export class UsuarioComponent implements OnInit {
             console.log(err);
           },
         });
-
       }
     } else {
       this.usuario.nome = this.usuario.nome?.toUpperCase();

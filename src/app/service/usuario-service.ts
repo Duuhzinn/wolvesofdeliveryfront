@@ -26,8 +26,11 @@ export class UsuarioService {
 
   //CONSULTA TODOS OS MOTORISTAS
   getMotoristaList(): Observable<any> {
-    const token = localStorage.getItem('tokenAutenticacao');
-    const  headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
+    let headers = new HttpHeaders();
+    if (isPlatformBrowser(this.platformId)) {
+      const token = localStorage.getItem('tokenAutenticacao');
+      headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
+    }
     return this.http.get<any>(AppConstants.allDrive, { headers });
   }
 

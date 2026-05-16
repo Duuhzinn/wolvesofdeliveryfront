@@ -1,0 +1,19 @@
+{
+  "name": "Wolves of Delivery",
+  "short_name": "Wolves",
+  "icons": [
+    {
+      "src": "logoWolves.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "logoWolves.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "theme_color": "#1a1a2e",
+  "background_color": "#1a1a2e",
+  "display": "standalone"
+}
