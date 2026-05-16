@@ -1,8 +1,9 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { afterNextRender, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { UsuarioService } from '../../service/usuario-service';
 import { User } from '../../model/user';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { after } from 'node:test';
 
 @Component({
   selector: 'app-usuario-component',
@@ -22,9 +23,15 @@ export class UsuarioComponent implements OnInit {
   constructor(
     private usuarioService: UsuarioService,
     private cdr: ChangeDetectorRef,
-  ) {}
+  ) {
+    afterNextRender(() => {
+      this.consultaTodosUsuarios();
+    });
+  }
 
-  ngOnInit(): void {
+  ngOnInit(): void {}
+
+  consultaTodosUsuarios(): void {
     this.usuarioService.getUsuarioList().subscribe({
       next: (data) => {
         this.usuarios = data;
@@ -36,11 +43,11 @@ export class UsuarioComponent implements OnInit {
     });
   }
 
-
   //CONSULTA O NOME DO USUARIO RETORNANDO TODAS AS INFORMAÇÕES NA TABELA
   consultarUserNome(): void {
     this.usuarioService.getConsultaUserNome(this.nome).subscribe({
       next: (data) => {
+        this.modalInsertEdit = false;
         console.log('Retorno:', data); // ← aqui
         this.usuarios = data;
         this.cdr.detectChanges();
@@ -72,9 +79,11 @@ export class UsuarioComponent implements OnInit {
     this.usuario = {} as User;
     this.modalSucess = false;
     this.modalErro = false;
+    //ATUALIZA A PAGINA
+    window.location.reload();
   }
 
-  abrirModalSucesso(){
+  abrirModalSucesso() {
     this.modalSucess = true;
   }
 
@@ -88,10 +97,18 @@ export class UsuarioComponent implements OnInit {
         //SUBSTITUI O USUARIO NAQUELA POSICAO PELOS DADOS NOVOS DO FORMULARIO
         //USANDO O {...} PARA GARANTIR QUE ESTAMOS PASSANDO UM OBJETO NOVO E LIMPO
         this.usuarios[index] = { ...this.usuario };
-        alert(this.usuario.id);
-
         this.modalInsertEdit = false;
         this.modalSucess = true;
+
+        this.usuarioService.putAtualizaUsuario(this.usuario).subscribe({
+          next: (data) => {
+            console.log('Atualizou o usuario ID :', this.usuario.id);
+          },
+          error: (err) => {
+            console.log(err);
+          },
+        });
+
       }
     } else {
       this.usuario.nome = this.usuario.nome?.toUpperCase();
@@ -99,11 +116,15 @@ export class UsuarioComponent implements OnInit {
       this.usuario.email = this.usuario.email?.toUpperCase();
       this.usuario.status = 0;
 
-      this.usuarioService.salvarNovoUsuario(this.usuario).subscribe({
+      this.modalInsertEdit = false;
+      this.modalSucess = true;
+
+      this.usuarioService.postSalvarNovoUsuario(this.usuario).subscribe({
         next: (data) => {
-          this.modalInsertEdit = false;
-          this.usuario = {} as User;
-          this.abrirModalSucesso();
+          console.log('Inseriu novo usuario ID :', this.usuario.id);
+        },
+        error: (err) => {
+          console.log(err);
         },
       });
     }
