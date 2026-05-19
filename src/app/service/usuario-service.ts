@@ -45,17 +45,18 @@ export class UsuarioService {
     return this.http.get<any>(AppConstants.pesqUserNome(nome), { headers });
   }
 
+  //INSERI NOVO USUARIO NO BANCO
   postSalvarNovoUsuario(user: User): Observable<any> {
     const token = localStorage.getItem('tokenAutenticacao');
     const headers = new HttpHeaders({ Authorization: `Bearer ${token}` })
     return this.http.post<any>(AppConstants.salvarUsuario(), user, { headers });
   }
 
+  //ATUALIZA USUARIO POR NOME
   putAtualizaUsuario( user: User): Observable<any>{
     const token = localStorage.getItem('tokenAutenticacao');
     const headers = new HttpHeaders({ Authorization: `Bearer ${token}` })
     return this.http.put<any>(AppConstants.atualizarUsuario(), user, {headers})
   }
-
   
 }

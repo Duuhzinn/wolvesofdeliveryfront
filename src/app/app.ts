@@ -26,7 +26,7 @@ export class App implements OnInit {
 
   ngOnInit(): void {
     if (isPlatformBrowser(this.platformId)) {
-      this.firebaseService.requestPermission();
+      //this.firebaseService.requestPermission();
 
       if (localStorage.getItem('tokenAutenticacao') == null) {
         this.router.navigate(['login']);

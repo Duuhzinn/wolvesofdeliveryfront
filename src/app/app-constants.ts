@@ -12,6 +12,7 @@ public static get allUser(): string {return this.baseUserURL + "/allUser"}
 public static pesqUserNome(nome: String): string {return this.baseUserURL + "/pesqName/" + nome}
 public static salvarUsuario(): string {return this.baseUserURL + "/createUser"}
 public static atualizarUsuario(): string {return this.baseUserURL + "/updateUser" }
+public static usuarioLogado(): string {return this.baseUserURL + "/userLogado"}
 
 //BASE PARA MONTAR REQUISIÇÕES DE MOTORISTAS
 public static get baseDriveURL(): string {return this.baseServidor + "/v1/drive"}
