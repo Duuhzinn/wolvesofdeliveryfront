@@ -1,1 +1,58 @@
-<p>motorista-component works!</p>
+<div class="container">
+  <div class="card">
+    <div class="card-header">
+      <h2>STATUS DOS MOTORISTAS</h2>
+    </div>
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>NOME</th>
+          <th>TELEFONE</th>
+          <th>STATUS</th>
+          <th>AÇÕES</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let usuario of usuarios">
+          <td>{{ usuario.id }}</td>
+          <td>{{ usuario.nome }}</td>
+          <td>{{ usuario.telefone }}</td>
+          <td [ngClass]="usuario.status === 1 ? 'online' : 'offline'">
+            {{ usuario.status === 1 ? 'On-Line' : 'Off-Line' }}
+          </td>
+
+          <td>
+            <button class="btn-editar" (click)="chamarModalEdit(usuario)">Alterar Status</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- MODAL PARA EDICAO OU INSERÇÃO DO USUARIO-->
+<div class="modal-overlay" *ngIf="modalEditStatus">
+  <!-- Paramos a propagação do clique para o modal não fechar ao clicar dentro dele -->
+  <div class="modal-dialog modal-lg modal-content-animated">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">ALTERAR STATUS DO MOTORISTA</h5>
+        <button type="button" class="close" (click)="fecharModal()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form #userForm="ngForm">
+          <div class="input-container-flex">
+            <p> Deseja alterar o status do motorista <strong style="color: red">{{ usuario.nome }}</strong> ?</p>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-Fechar" (click)="fecharModal()">Não</button>
+        <button type="button" class="btn btn-Salvar" (click)="salvarUser()">Sim</button>
+      </div>
+    </div>
+  </div>
+</div>

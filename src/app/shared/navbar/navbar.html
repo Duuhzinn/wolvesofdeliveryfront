@@ -74,7 +74,6 @@
         Motorista <span class="chevron">▼</span>
       </a>
       <ul class="submenu-mobile" [class.open]="subAberto === 'motorista'">
-        <li><a [routerLink]="['/motoristaCadastro']" (click)="toggleMenu()">Cadastrar</a></li>
         <li><a [routerLink]="['/motoristaStatus']" (click)="toggleMenu()">Controle de Status</a></li>
         <li><a [routerLink]="['/motoristaFila']" (click)="toggleMenu()">Ordem da Fila</a></li>
       </ul>

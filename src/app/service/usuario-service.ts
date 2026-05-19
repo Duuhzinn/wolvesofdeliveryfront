@@ -58,5 +58,12 @@ export class UsuarioService {
     const headers = new HttpHeaders({ Authorization: `Bearer ${token}` })
     return this.http.put<any>(AppConstants.atualizarUsuario(), user, {headers})
   }
+
+  //ATUALIZA O STATUS DO USUARIO POR ID
+  patchAlterarStatus(user: User): Observable<any>{
+    const token = localStorage.getItem('tokenAutenticacao');
+    const headers = new HttpHeaders({ Authorization: `Bearer ${token}` })
+    return this.http.patch<any>(AppConstants.changeStatus(user.id), user, {headers})
+  }
   
 }

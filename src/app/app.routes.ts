@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 import { Home } from './home/home';
 import { Login } from './login/login';
 import { UsuarioComponent } from './componente/usuario-component/usuario-component';
+import { MotoristaComponent } from './componente/motorista-component/motorista-component';
 
 //DECLARANDO ROTAS
 export const routes: Routes = [
@@ -10,6 +11,7 @@ export const routes: Routes = [
     {path: 'home', component: Home},//DECLARA A ROTA PARA A PAGINA HOME
     {path: 'login', component: Login},//DECLRA A ROTA PARA A PAGINA LOGIN
     {path: 'usuarioList', component: UsuarioComponent},//DECLARA A ROTA PARA A PAGINA USUARIO
+    {path: 'motoristaStatus', component: MotoristaComponent}
     
 ];
 

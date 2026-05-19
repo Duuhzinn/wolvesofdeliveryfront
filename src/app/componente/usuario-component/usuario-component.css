@@ -119,7 +119,7 @@ tbody tr:hover {
 
 .btn-novo {
   margin-left: auto; /* A MÁGICA: Empurra este botão para o final da linha */
-  margin-right: 20px;
+  margin-right: 12px;
   background-color: #323261; /* Opcional: verde para destacar que é "Novo" */
   border-color: #323261;
   color: #ffffff;

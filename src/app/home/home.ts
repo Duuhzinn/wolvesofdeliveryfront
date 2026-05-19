@@ -1,10 +1,7 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, Inject, PLATFORM_ID } from '@angular/core';
 import { User } from '../model/user';
 import { UsuarioService } from '../service/usuario-service';
 import { CommonModule } from '@angular/common';
-import { FirebaseService } from '../service/firebase-service';
-import { isPlatformBrowser } from '@angular/common';
-import { Inject, PLATFORM_ID } from '@angular/core';
 
 @Component({
   selector: 'app-home',
@@ -19,7 +16,6 @@ export class Home implements OnInit {
   constructor(
     private usuarioService: UsuarioService,
     private cdr: ChangeDetectorRef,
-    private firebaseService: FirebaseService,
     @Inject(PLATFORM_ID) private platformId: Object,
   ) {}
 
