@@ -14,4 +14,16 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 
+// REGISTRA O SERVICE WORKER
+if (typeof window !== 'undefined' && 'serviceWorker' in navigator) {
+  navigator.serviceWorker
+    .register('/firebase-messaging-sw.js')
+    .then((registration) => {
+      console.log('Service Worker registrado:', registration);
+    })
+    .catch((err) => {
+      console.error('Erro ao registrar Service Worker:', err);
+    });
+}
+
 export const messaging = typeof window !== 'undefined' ? getMessaging(app) : (null as any);
