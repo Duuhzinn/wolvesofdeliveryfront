@@ -63,14 +63,13 @@ export class MotoristaComponent implements OnInit {
       this.fecharModal();
       this.usuarioservice.patchAlterarStatus(this.usuario).subscribe({
         next: (data) => {
-          console.log('Alterou o usuario ID :', this.usuario.id);
+          console.log('Alterou o usuario ID :', this.usuario.id); //
           window.location.reload();
         },
         error: (err) => {
           console.log(err);
         },
-      })
+      });
     }
   }
-
 }
