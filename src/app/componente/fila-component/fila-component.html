@@ -1,0 +1,28 @@
+<div class="container">
+  <div class="card">
+    <div class="card-header">
+      <h2>ORDEM DA FILA DOS MOTORISTAS</h2>
+    </div>
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>NOME</th>
+          <th>TELEFONE</th>
+          <th>STATUS</th>
+        </tr>
+      </thead>
+      <tbody>
+       <tr *ngFor="let usuario of usuarios">
+          <td>{{ usuario.id }}</td>
+          <td>{{ usuario.nome }}</td>
+          <td>{{ usuario.telefone }}</td>
+          <td [ngClass]="usuario.status === 1 ? 'online' : 'offline'">
+            {{ usuario.status === 1 ? 'On-Line' : 'Off-Line' }}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+

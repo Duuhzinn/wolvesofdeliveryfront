@@ -18,6 +18,7 @@ public static usuarioLogado(): string {return this.baseUserURL + "/userLogado"}
 public static get baseDriveURL(): string {return this.baseServidor + "/v1/drive"}
 public static get allDrive(): string {return this.baseDriveURL + "/allDrive"}
 public static changeStatus(id: any): string { return this.baseDriveURL + "/changeStatus/" + id }
+public static get driverQueue(): string {return this.baseDriveURL+ "/driverQueue"}
 
 public static teste(): string { alert("entrou no AppConstants!"); return this.baseUserURL + "/createUser";}
 }

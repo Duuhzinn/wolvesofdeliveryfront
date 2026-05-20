@@ -3,7 +3,6 @@ import { UsuarioService } from '../../service/usuario-service';
 import { User } from '../../model/user';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { after } from 'node:test';
 
 @Component({
   selector: 'app-usuario-component',

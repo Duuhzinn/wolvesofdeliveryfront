@@ -1,0 +1,94 @@
+.container {
+  padding: 30px;
+  max-width: 100%;
+  margin: 0 auto;
+}
+
+.card {
+  background-color: #ffffff;
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+}
+
+.card-header {
+  background-color: #ffffff;
+  padding: 16px 20px;
+}
+
+.card-header h2 {
+  color: #333;
+  font-size: 2rem;
+  font-weight: 600;
+  margin: 0;
+  letter-spacing: 0.05em;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+thead {
+  background-color: #1a1a2e;
+}
+
+thead th {
+  color: #ffffff;
+  padding: 12px 16px;
+  text-align: left;
+  font-size: 0.8rem;
+  letter-spacing: 0.05em;
+}
+
+tbody tr {
+  border-bottom: 1px solid #e8e8e8;
+  transition: background-color 0.2s;
+}
+
+tbody tr:last-child {
+  border-bottom: none;
+}
+
+tbody tr:hover {
+  background-color: #f0f1f2;
+}
+
+tbody td {
+  padding: 12px 16px;
+  color: #333;
+  font-size: 0.9rem;
+}
+
+tbody tr:hover {
+  background-color: #d9d9ee;
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 15px;
+  }
+
+  table {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+
+  thead th,
+  tbody td {
+    padding: 10px 12px;
+    font-size: 0.8rem;
+  }
+}
+
+:host .online {
+  color: green;
+  font-weight: bold;
+}
+
+:host .offline {
+  color: red;
+  font-weight: bold;
+}
+

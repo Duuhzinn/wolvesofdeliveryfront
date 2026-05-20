@@ -1,14 +1,7 @@
-import {
-  afterNextRender,
-  ChangeDetectorRef,
-  Component,
-  Inject,
-  OnInit,
-  PLATFORM_ID,
-} from '@angular/core';
+import { ChangeDetectorRef, Component, Inject, OnInit, PLATFORM_ID } from '@angular/core';
 import { UsuarioService } from '../../service/usuario-service';
 import { User } from '../../model/user';
-import { CommonModule } from '@angular/common';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
 @Component({
@@ -30,7 +23,9 @@ export class MotoristaComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.listarTodosMotorista();
+    if (isPlatformBrowser(this.platformId)) {
+      this.listarTodosMotorista();
+    }
   }
 
   listarTodosMotorista() {
@@ -72,4 +67,6 @@ export class MotoristaComponent implements OnInit {
       });
     }
   }
+
+  
 }
