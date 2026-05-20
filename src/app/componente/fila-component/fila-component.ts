@@ -25,6 +25,9 @@ constructor(
 ngOnInit(): void {
     if (isPlatformBrowser(this.platformId)) {
       this.listarOrdemDaFila();
+      setInterval(() => {
+        this.listarOrdemDaFila();
+      }, 10000);
     }
 }
 
