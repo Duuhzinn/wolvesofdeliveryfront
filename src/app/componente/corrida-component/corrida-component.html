@@ -1,1 +1,75 @@
-<p>corrida-component works!</p>
+<div class="container">
+  <div class="card">
+    <div class="card-header">
+      <h2>USUÁRIOS CADASTRADOS</h2>
+
+      <!--CAMPO DE BUSCA-->
+      <div class="input-group input-busca mt-2">
+        <input
+          type="text"
+          class="form-control"
+          placeholder="Digite o endereço da entrega..."
+        />
+        <button class="btn btn-buscar" >Pesquisar</button>
+        <button class="btn btn-novo" (click)="chamarMotorista()">Chamar Motorista</button>
+      </div>
+    </div>
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>ESTABELECIMENTO</th>
+          <th>ENDEREÇO</th>
+          <th>CHAMADA</th>
+          <th>ACEITE</th>
+          <th>INICIO</th>
+          <th>TÉRMINO</th>
+          <th>MOTORISTA</th>
+          <th>STATUS</th>
+          <th>AÇÕES</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!--<tr *ngFor="let usuario of usuarios">
+          <td>{{ usuario.id }}</td>
+
+          <td><button class="btn-editar" (click)="chamarModalEdit(usuario.id)">Editar</button></td>
+        </tr>-->
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- MODAL CHAMANDO MOTORISTA -->
+<div class="modal-overlay" *ngIf="modalChamandoMotorista">
+  <div class="driver-modal" (click)="$event.stopPropagation()">
+    <div class="driver-animation">
+      <div class="pulse-ring"></div>
+      <div class="bike-circle">
+        🏍️
+      </div>
+    </div>
+    <h2>Chamando motorista...</h2>
+    <p>
+      Estamos procurando um motorista disponível próximo de você.
+    </p>
+    <div class="loading-bar">
+      <div class="loading-progress"></div>
+    </div>
+    <button class="btn-cancelar" (click)="cancelarCorrida()">
+      Cancelar chamada
+    </button>
+  </div>
+</div>
+
+<!-- MODAL SEM MOTORISTA -->
+<div class="modal-overlay" *ngIf="modalSemMotorista">
+  <div class="modal-dialog modal-sm modal-content-animated">
+    <h3>⚠️ Atenção</h3>
+    <p>Nenhum motorista online no momento.</p>
+    <button class="btn btn-ok" (click)="fecharModalSemMotorista()">
+      OK
+    </button>
+  </div>
+</div>
+

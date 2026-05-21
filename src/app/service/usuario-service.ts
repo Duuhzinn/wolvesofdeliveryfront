@@ -75,4 +75,21 @@ export class UsuarioService {
     }
     return this.http.get<any>(AppConstants.driverQueue, {headers});
   }
+
+  //CONSULTA O PRIMEIRO USUARIO DA LISTA DE MOTORISTA ONLINE
+  getConsultaPrimeiroMotorista(): Observable<any>{
+    let headers = new HttpHeaders();
+    if(isPlatformBrowser(this.platformId)){
+      const token = localStorage.getItem('tokenAutenticacao');
+      headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
+    }
+    return this.http.get<number>(AppConstants.firstDrive, {headers})
+  }
+
+  //ENVIAR A NOTIFICAÇÃO PARA O MOTORISTA DA VEZ
+  postEnviarNotificacao(usuarioId: number): Observable<any>{
+    const token = localStorage.getItem('tokenAutenticacao');
+    const headers = new HttpHeaders({ Authorization: `Bearer ${token}` })
+    return this.http.post<any>(AppConstants.sendDrive(usuarioId), {}, {headers})
+  }
 }
