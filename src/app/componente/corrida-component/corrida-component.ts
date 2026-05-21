@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { UsuarioService } from '../../service/usuario-service';
+import { interval, take, timer } from 'rxjs';
 
 @Component({
   selector: 'app-corrida-component',
@@ -36,16 +37,23 @@ export class CorridaComponent implements OnInit {
     this.usuarioService.getConsultaPrimeiroMotorista().subscribe({
       next: (data) => {
         if (data !== null) {
-          alert('ID: ' + data);
-          this.usuarioService.postEnviarNotificacao(data).subscribe({
-            next: (resp) => {
-              console.log('Notificação enviada:', resp)
-              this.chamarModalChamandoMotorista();
-            },
-            error: (err) => {
-              console.log('Erro ao enviar notificação:', err);
-            }
-          })
+          console.log('ID: ' + data);
+          alert('Procurando Motorista...');
+
+          //DISPARA IMEDIATAMENTE E DEPOIS A CADA 10S POR 5X (1 MINUTO)
+          timer(0, 7000).pipe(take(9)).subscribe({
+              next: (index) => {
+                if (index < 8) {
+                  this.usuarioService.postEnviarNotificacao(data).subscribe({
+                    next: (resp) => console.log('Notificação enviada:', resp),
+                    error: (err) => console.log('Erro ao enviar notificação:', err),
+                  });
+                } else {
+                  // nona execução (index === 8) — ação final aqui!
+                  console.log('9 tentativas concluídas...');
+                }
+              },
+            });
         } else {
           alert('Estamos sem Motorista no momento, por favor aguarde!!!');
         }
