@@ -59,7 +59,7 @@ export class CorridaComponent implements OnInit {
   private escutaAceite(){
     if(isPlatformBrowser(this.platformId)){
       this.websocketService.conectarCorrida(() => {
-        console.log('Motorista aceitou!');
+        alert('Motorista aceitou a corrida!');
         this.pararTudo();
         //this.modalChamandoMotorista = false;
         //this.cdr.detectChanges();
