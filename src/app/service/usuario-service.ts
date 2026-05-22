@@ -87,9 +87,18 @@ export class UsuarioService {
   }
 
   //ENVIAR A NOTIFICAÇÃO PARA O MOTORISTA DA VEZ
-  postEnviarNotificacao(usuarioId: number): Observable<string>{
+  postEnviarNotificacao(motoristaID: number): Observable<string>{
     const token = localStorage.getItem('tokenAutenticacao');
-    const headers = new HttpHeaders({ Authorization: `Bearer ${token}` })
-    return this.http.post(AppConstants.sendDrive(usuarioId), {}, {headers, responseType: 'text'})
+    const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
+    return this.http.post(AppConstants.sendDrive(motoristaID), {}, {headers, responseType: 'text'})
   }
+
+  //EVIAR NOTIFICAÇÃO DE CORRIDA PERDIDA
+  postEnviarNotificacaoPerdida(motoristaID: number): Observable<string>{
+    const token = localStorage.getItem('tokenAutenticacao');
+    const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
+    return this.http.post(AppConstants.lostRace(motoristaID), {}, {headers, responseType: 'text'})
+  }
+
+
 }

@@ -5,8 +5,6 @@ public static get baseServidor(): string {return "https://wolvesofdeliveryapi.on
 //ROTA PARA LOGAR NO SISTEMA
 public static get baseLogin(): string {return this.baseServidor + "/login"}
 
-
-
 //BASE PARA MONTAR REQUISIÇÕES DE USUARIOS
 public static get baseUserURL(): string {return this.baseServidor + "/v1/users"}
 public static get allUser(): string {return this.baseUserURL + "/allUser"}
@@ -24,8 +22,13 @@ public static get firstDrive(): string {return this.baseDriveURL + "/driverQueue
 
 //BASE PARA MONTAR A BASE DO PUSH NOTIFICATION
 public static get basePushNotification(): string {return this.baseServidor + "/v1/pushnotification"}
-public static sendDrive(usuarioId: number): string {
-    return this.basePushNotification + "/enviar/" + usuarioId}
+public static sendDrive(motoristaID: number): string {
+    return this.basePushNotification + "/send/" + motoristaID}
+public static lostRace(motoristaID: number): string {
+    return this.basePushNotification + "/lostRace/" + motoristaID
+}
+
+
 
 
 public static teste(): string { alert("entrou no AppConstants!"); return this.baseUserURL + "/createUser";}
