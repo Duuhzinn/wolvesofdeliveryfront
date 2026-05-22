@@ -5,6 +5,7 @@ import { interval, Subscription, take, timer } from 'rxjs';
 import { Client } from '@stomp/stompjs';
 import SockJS from 'sockjs-client';
 import { WebsocketService } from '../../service/websocket-service';
+import { NotificationStateService } from '../../service/notificationstate-service';
 
 @Component({
   selector: 'app-corrida-component',
@@ -15,6 +16,7 @@ import { WebsocketService } from '../../service/websocket-service';
 export class CorridaComponent implements OnInit {
   modalChamandoMotorista: boolean = false;
   modalSemMotorista: boolean = false;
+  mostrarModalCorrida: boolean = false;
 
   private timerSubscription: Subscription | null = null; //GUARDA A REFERENCIA DO TIMER PARA CANCELAR
   private stompClient: Client | null = null; // GUARDA A REFERENCIA DO WEBSOCKET PARA PODER DESCONECTAR
@@ -23,11 +25,29 @@ export class CorridaComponent implements OnInit {
     private usuarioService: UsuarioService,
     private cdr: ChangeDetectorRef,
     private websocketService: WebsocketService,
+    private notificationState: NotificationStateService,
     @Inject(PLATFORM_ID) private platformId: Object,
   ) {}
 
   ngOnInit(): void {
     this.pararTudo(); //LIMPA TUDO QUANDO O USUARIO SAIR DA TELA
+    this.notificationState.corrida$.subscribe((mostrar) =>{
+      this.mostrarModalCorrida = mostrar;
+      if(mostrar){
+
+        navigator.vibrate([1000, 500, 1000]);
+
+      }
+    })
+  }
+
+  fecharModalCorrida(){
+    this.notificationState.fecharTelaCorrida();
+  }
+
+  aceitarCorrida(){
+    this.notificationState.fecharTelaCorrida();
+    console.log('Corrida aceita');
   }
 
   //CHAMA MODAL PROCURAR NOVO MOTORISTA

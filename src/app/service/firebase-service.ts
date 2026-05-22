@@ -45,7 +45,9 @@ export class FirebaseService {
             onMessage(messaging, (payload) => {
               console.log('Mensagem recebida:', payload);
 
-              if(payload.notification?.title === 'Nova Corrida 🏍️'){
+              const title = payload.data?.['title'];
+              if(payload.data?.['title'] === 'Nova Corrida 🏍️'){
+                navigator.vibrate([1000, 500, 1000]);
                 this.notificationState.mostrarTelaCorrida();
               }
               //alert(payload.notification?.title + '\n' + payload.notification?.body);

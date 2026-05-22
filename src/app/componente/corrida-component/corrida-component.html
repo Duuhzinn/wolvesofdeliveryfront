@@ -73,3 +73,21 @@
   </div>
 </div>
 
+<!--MODAL ACEITAR/RECUSAR CORRIDA-->
+<div class="modal-overlay" *ngIf="mostrarModalCorrida">
+  <div class="modal-corrida">
+    <h1>🏍️ NOVA CORRIDA</h1>
+    <p>Você recebeu uma nova corrida!</p>
+    <div class="botoes">
+      <button class="btn-aceitar"
+              (click)="aceitarCorrida()">
+        ACEITAR
+      </button>
+      <button class="btn-recusar"
+              (click)="fecharModalCorrida()">
+        RECUSAR
+      </button>
+    </div>
+  </div>
+</div>
+
