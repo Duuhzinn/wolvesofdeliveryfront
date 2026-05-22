@@ -7,6 +7,7 @@ import { Navbar } from './shared/navbar/navbar';
 
 import { FirebaseService } from './service/firebase-service';
 import { NotificationStateService } from './service/notificationstate-service';
+import { UsuarioService } from './service/usuario-service';
 
 @Component({
   selector: 'app-root',
@@ -24,6 +25,7 @@ export class App implements OnInit {
     private router: Router,
     private firebaseService: FirebaseService,
     private notificationState: NotificationStateService,
+    private usuarioService: UsuarioService,
     @Inject(PLATFORM_ID) private platformId: Object,
   ) {}
 
@@ -37,24 +39,32 @@ export class App implements OnInit {
     }
 
     //ESCUTA O MODAL GLOBAL DE CORRIDA
-    this.notificationState.corrida$.subscribe((mostrar) =>{
+    this.notificationState.corrida$.subscribe((mostrar) => {
       this.mostrarModalCorrida = mostrar;
-      if(mostrar){
+      if (mostrar) {
         navigator.vibrate([1000, 500, 1000]);
       }
-    })
+    });
   }
 
   mostrarNavbar(): boolean {
     return this.router.url !== '/login' && this.router.url !== '/';
   }
 
-  fecharModalCorrida(){
+  fecharModalCorrida() {
     this.notificationState.fecharTelaCorrida();
   }
 
-  aceitarCorrida(){
-    this.notificationState.fecharTelaCorrida();
-    alert('Corrida Aceita');
+  aceitarCorrida() {
+    const motoristaId = localStorage.getItem('usuarioId');
+    if (motoristaId) {
+      this.usuarioService.postAceitarCorrida(Number(motoristaId)).subscribe({
+        next: (resp) => {
+          console.log('Corrida aceita:', resp);
+          this.notificationState.fecharTelaCorrida();
+        },
+        error: (err) => console.log('Erro ao aceitar corrida:', err),
+      });
+    }
   }
 }

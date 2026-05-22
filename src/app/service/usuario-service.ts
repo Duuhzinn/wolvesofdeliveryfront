@@ -100,5 +100,11 @@ export class UsuarioService {
     return this.http.post(AppConstants.lostRace(motoristaID), {}, {headers, responseType: 'text'})
   }
 
+  postAceitarCorrida(usuarioId: number): Observable<string>{
+    const token = localStorage.getItem('tokenAutenticacao');
+    const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
+    return this.http.post(AppConstants.acceptRace(usuarioId), {}, { headers, responseType: 'text' });
+  }
+
 
 }
