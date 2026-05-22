@@ -31,34 +31,7 @@ export class CorridaComponent implements OnInit {
 
   ngOnInit(): void {
     this.pararTudo(); //LIMPA TUDO QUANDO O USUARIO SAIR DA TELA
-    this.notificationState.corrida$.subscribe((mostrar) =>{
-      this.mostrarModalCorrida = mostrar;
-      if(mostrar){
 
-        navigator.vibrate([1000, 500, 1000]);
-
-      }
-    })
-  }
-
-  fecharModalCorrida(){
-    this.notificationState.fecharTelaCorrida();
-  }
-
-  aceitarCorrida(){
-    this.notificationState.fecharTelaCorrida();
-    console.log('Corrida aceita');
-  }
-
-  //CHAMA MODAL PROCURAR NOVO MOTORISTA
-  chamarModalChamandoMotorista() {
-    this.modalChamandoMotorista = true;
-  }
-
-  //CANCELA A CORRIDA: PARA O TIMER, DESCONECTA O WEBSOCKET E FECHA O MODAL
-  cancelaCorrida() {
-    this.pararTudo();
-    this.modalChamandoMotorista = false;
   }
 
   //FECHA O MODAL

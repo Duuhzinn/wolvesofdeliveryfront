@@ -6,6 +6,7 @@ import { LoginService } from './service/login-service';
 import { Navbar } from './shared/navbar/navbar';
 
 import { FirebaseService } from './service/firebase-service';
+import { NotificationStateService } from './service/notificationstate-service';
 
 @Component({
   selector: 'app-root',
@@ -17,10 +18,12 @@ import { FirebaseService } from './service/firebase-service';
 })
 export class App implements OnInit {
   protected readonly title = signal('wolvesofdelivery');
+  mostrarModalCorrida: boolean = false;
 
   constructor(
     private router: Router,
     private firebaseService: FirebaseService,
+    private notificationState: NotificationStateService,
     @Inject(PLATFORM_ID) private platformId: Object,
   ) {}
 
@@ -32,9 +35,26 @@ export class App implements OnInit {
         this.router.navigate(['login']);
       }
     }
+
+    //ESCUTA O MODAL GLOBAL DE CORRIDA
+    this.notificationState.corrida$.subscribe((mostrar) =>{
+      this.mostrarModalCorrida = mostrar;
+      if(mostrar){
+        navigator.vibrate([1000, 500, 1000]);
+      }
+    })
   }
 
   mostrarNavbar(): boolean {
     return this.router.url !== '/login' && this.router.url !== '/';
+  }
+
+  fecharModalCorrida(){
+    this.notificationState.fecharTelaCorrida();
+  }
+
+  aceitarCorrida(){
+    this.notificationState.fecharTelaCorrida();
+    alert('Corrida Aceita');
   }
 }
