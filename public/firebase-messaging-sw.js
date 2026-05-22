@@ -24,8 +24,10 @@ messaging.onBackgroundMessage((payload) => {
     body: payload.notification.body,
     icon: '/icons/icon-192x192.png',
     badge: '/icons/icon-72x72.png',
-    vibrate: [300, 100, 300, 100, 300],
+    vibrate: [1000, 500, 1000, 500, 1000, 500, 1000],
     requireInteraction: true,
+    tag: 'nova-corrida',
+    renotify: true,
     data: {
       url: '/chamarMotorista'
     }
@@ -35,7 +37,22 @@ messaging.onBackgroundMessage((payload) => {
 });
 
 self.addEventListener('notificationclick', function(event){
+
   event.notification.close();
   const urlToOpen = event.notification.data.url;
-  event.waitUntil(clients.openWindow(urlToOpen));
+  event.waitUntil(
+    clients.matchAll({
+      type: 'window',
+      includeUncontrolled: true
+    }).then((clientList) => {
+      for (const client of clientList) {
+        if (client.url.includes(urlToOpen) && 'focus' in client) {
+          return client.focus();
+        }
+      }
+      if (clients.openWindow) {
+        return clients.openWindow(urlToOpen);
+      }
+    })
+  );
 });
