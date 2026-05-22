@@ -33,7 +33,16 @@ messaging.onBackgroundMessage((payload) => {
     }
   };
 
-  self.registration.showNotification(notificationTitle, notificationOptions);
+  //self.registration.showNotification(notificationTitle, notificationOptions);
+  self.registration.getNotifications().then((notifications) =>{
+    notifications.forEach((notification) => {
+      notification.close();
+    });
+    self.registration.showNotification(
+      notificationTitle,
+      notificationOptions
+    );
+  });
 });
 
 self.addEventListener('notificationclick', function(event){
