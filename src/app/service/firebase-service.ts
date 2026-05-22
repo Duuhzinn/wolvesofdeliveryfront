@@ -4,12 +4,16 @@ import { messaging } from '../firebase';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { TokenFB } from '../model/tokenfb';
 import { AppConstants } from '../app-constants';
+import { NotificationStateService } from './notificationstate-service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class FirebaseService {
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private notificationState: NotificationStateService
+  ) {}
 
   async requestPermission(usuarioId: number) {
     try {
@@ -41,7 +45,10 @@ export class FirebaseService {
             onMessage(messaging, (payload) => {
               console.log('Mensagem recebida:', payload);
 
-              alert(payload.notification?.title + '\n' + payload.notification?.body);
+              if(payload.notification?.title === 'Nova Corrida 🏍️'){
+                this.notificationState.mostrarTelaCorrida();
+              }
+              //alert(payload.notification?.title + '\n' + payload.notification?.body);
             });
           },
 

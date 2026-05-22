@@ -22,8 +22,20 @@ messaging.onBackgroundMessage((payload) => {
   const notificationTitle = payload.notification.title;
   const notificationOptions = {
     body: payload.notification.body,
-    icon: '/firebase-logo.png'
+    icon: '/icons/icon-192x192.png',
+    badge: '/icons/icon-72x72.png',
+    vibrate: [300, 100, 300, 100, 300],
+    requireInteraction: true,
+    data: {
+      url: '/chamarMotorista'
+    }
   };
 
   self.registration.showNotification(notificationTitle, notificationOptions);
+});
+
+self.addEventListener('notificationclick', function(event){
+  event.notification.close();
+  const urlToOpen = event.notification.data.url;
+  event.waitUntil(clients.openWindow(urlToOpen));
 });

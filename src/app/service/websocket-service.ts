@@ -26,6 +26,17 @@ export class WebsocketService {
     this.client.activate();
   }
 
+  conectarCorrida(callback: () => void){
+    this.client.onConnect = () => {
+
+      console.log('WebSocket Conectado - Corrida');
+      this.client.subscribe('/topic/corrida', () => {
+        callback();
+      });
+    };
+    this.client.activate();
+  }
+
   desconectar() {
     this.client.deactivate();
   }

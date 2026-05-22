@@ -1,9 +1,10 @@
-import { CommonModule } from '@angular/common';
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
+import { ChangeDetectorRef, Component, Inject, OnInit, PLATFORM_ID } from '@angular/core';
 import { UsuarioService } from '../../service/usuario-service';
 import { interval, Subscription, take, timer } from 'rxjs';
 import { Client } from '@stomp/stompjs';
 import SockJS from 'sockjs-client';
+import { WebsocketService } from '../../service/websocket-service';
 
 @Component({
   selector: 'app-corrida-component',
@@ -21,10 +22,12 @@ export class CorridaComponent implements OnInit {
   constructor(
     private usuarioService: UsuarioService,
     private cdr: ChangeDetectorRef,
+    private websocketService: WebsocketService,
+    @Inject(PLATFORM_ID) private platformId: Object,
   ) {}
 
   ngOnInit(): void {
-    this.paraTudo(); //LIMPA TUDO QUANDO O USUARIO SAIR DA TELA
+    this.pararTudo(); //LIMPA TUDO QUANDO O USUARIO SAIR DA TELA
   }
 
   //CHAMA MODAL PROCURAR NOVO MOTORISTA
@@ -34,20 +37,20 @@ export class CorridaComponent implements OnInit {
 
   //CANCELA A CORRIDA: PARA O TIMER, DESCONECTA O WEBSOCKET E FECHA O MODAL
   cancelaCorrida() {
-    this.paraTudo();
+    this.pararTudo();
     this.modalChamandoMotorista = false;
   }
 
   //FECHA O MODAL
   cancelarCorrida() {
-    this.paraTudo();
+    this.pararTudo();
     this.modalChamandoMotorista = false;
   }
   fecharModalSemMotorista() {
     this.modalSemMotorista = false;
   }
 
-  private paraTudo() {
+  private pararTudo() {
     //PARA O TIMER DA CHAMADA DE MOTORISTA
     if (this.timerSubscription) {
       this.timerSubscription.unsubscribe();
@@ -61,23 +64,14 @@ export class CorridaComponent implements OnInit {
 
   //CONECTA O WEBSOCKET E FICA ESCUTANDO O ACEITE DO MOTORISTA
   private escutaAceite(){
-    this.stompClient = new Client({
-      //USA O WEBSOCKET PARA SE CONECTAR COM O BACKEND
-      webSocketFactory: () => new SockJS('https://wolvesofdeliveryapi.onrender.com/wolvesofdeliveryAPI/ws'),
-      onConnect: () =>{
-        console.log('WebSocket conectado!');
-        //ESCUTA O TÓPICO QUE O BACKEND PUBLICA QUANDO O MOTORISTA ACEITA
-        this.stompClient?.subscribe('/topic/corrida', (message) =>{
-          console.log('Motorista Aceitou', message.body);
-          this.paraTudo(); //PARA O TIMER E DESCONECTA O WEBSOCKET
-          this.modalChamandoMotorista = false; //FECHA O MODAL CHAMANDO MOTORISTA
-          alert('Motorista aceitou a corrida'); //AVISA O DESPACHANTE
-          this.cdr.detectChanges(); //força o angular a atualizar a tela
-        });
-      },
-      onDisconnect: () => console.log('WebSocket desconectado'),
-    });
-    this.stompClient.activate(); //INICIA A CONEXÃO
+    if(isPlatformBrowser(this.platformId)){
+      this.websocketService.conectarCorrida(() => {
+        console.log('Motorista aceitou!');
+        this.pararTudo();
+        //this.modalChamandoMotorista = false;
+        //this.cdr.detectChanges();
+      })
+    }
   }
 
   chamarMotorista() {
@@ -105,7 +99,7 @@ export class CorridaComponent implements OnInit {
                     next: (resp) => console.log('Notificação enviada: ', resp ),
                     error: (err) => console.log('Erro ao enviar notificação', err),
                   });
-                  this.paraTudo();
+                  this.pararTudo();
                   //this.modalChamandoMotorista = false;
                   //this.modalSemMotorista = true;
                   //this.cdr.detectChanges();  
