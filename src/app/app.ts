@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit, PLATFORM_ID, signal } from '@angular/core';
+import { ChangeDetectorRef, Component, Inject, OnInit, PLATFORM_ID, signal } from '@angular/core';
 import { isPlatformBrowser, CommonModule } from '@angular/common';
 import { RouterOutlet, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
@@ -26,6 +26,7 @@ export class App implements OnInit {
     private firebaseService: FirebaseService,
     private notificationState: NotificationStateService,
     private usuarioService: UsuarioService,
+    private cdr: ChangeDetectorRef,
     @Inject(PLATFORM_ID) private platformId: Object,
   ) {}
 
@@ -43,6 +44,7 @@ export class App implements OnInit {
       this.mostrarModalCorrida = mostrar;
       if (mostrar) {
         navigator.vibrate([1000, 500, 1000]);
+        this.cdr.detectChanges();
       }
     });
   }
