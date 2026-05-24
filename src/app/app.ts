@@ -68,6 +68,7 @@ export class App implements OnInit {
             error: (err) => console.log('Erro ao atualizar status:', err)
           })
           this.notificationState.fecharTelaCorrida();
+          this.cdr.detectChanges();
         },
         error: (err) => console.log('Erro ao aceitar corrida:', err),
       });
