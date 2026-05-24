@@ -70,7 +70,7 @@ export class UsuarioService {
   patchOcupado(usuarioId: number): Observable<string>{
     const token = localStorage.getItem('tokenAutenticacao');
     const headers = new HttpHeaders({ Authorization: `Bearer ${token}` })
-    return this.http.post(AppConstants.busy(usuarioId), {}, { headers, responseType: 'text' });
+    return this.http.patch(AppConstants.busy(usuarioId), {}, { headers, responseType: 'text' });
   }
 
   //LISTA ORDEM DA FILA DOS MOTORISTAS

@@ -63,6 +63,10 @@ export class App implements OnInit {
       this.usuarioService.postAceitarCorrida(Number(motoristaId)).subscribe({
         next: (resp) => {
           console.log('Corrida aceita:', resp);
+          this.usuarioService.patchOcupado(Number(motoristaId)).subscribe({
+            next: (resp) => console.log('Status atualizado:', resp),
+            error: (err) => console.log('Erro ao atualizar status:', err)
+          })
           this.notificationState.fecharTelaCorrida();
         },
         error: (err) => console.log('Erro ao aceitar corrida:', err),

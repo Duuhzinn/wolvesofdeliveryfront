@@ -64,13 +64,7 @@ export class CorridaComponent implements OnInit {
         //this.modalChamandoMotorista = false;
          //ALTERA STATUS PARA OCUPADO
           const motoristaId = localStorage.getItem('usuarioId');
-          this.usuarioService.patchOcupado(Number(motoristaId)).subscribe({
-            next: (resp) => {
-              this.mostrarModalCorrida = false;
-              this.cdr.detectChanges();
-              console.log("Usuario " + motoristaId + "entrou como ocupado")
-            }
-          })
+
       })
     }
   }
