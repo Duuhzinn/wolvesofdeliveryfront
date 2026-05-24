@@ -7,7 +7,7 @@
 </main>
 
 <!-- MODAL GLOBAL DE CORRIDA -->
-<div class="modal-overlay" *ngIf="mostrarModalCorrida">
+<div class="modal-overlay" *ngIf="corrida$ | async">
   <div class="modal-corrida">
     <h1>🏍️ NOVA CORRIDA</h1>
     <p>Você recebeu uma nova corrida!</p>

@@ -20,7 +20,9 @@ import { UsuarioService } from './service/usuario-service';
 export class App implements OnInit {
   protected readonly title = signal('wolvesofdelivery');
   mostrarModalCorrida: boolean = false;
-
+  corrida$: any;
+  
+  
   constructor(
     private router: Router,
     private firebaseService: FirebaseService,
@@ -28,8 +30,10 @@ export class App implements OnInit {
     private usuarioService: UsuarioService,
     private cdr: ChangeDetectorRef,
     @Inject(PLATFORM_ID) private platformId: Object,
-  ) {}
-
+  ) {
+    this.corrida$ = this.notificationState.corrida$;
+  }
+  
   ngOnInit(): void {
     if (isPlatformBrowser(this.platformId)) {
       //this.firebaseService.requestPermission();
@@ -46,7 +50,7 @@ export class App implements OnInit {
         navigator.vibrate([1000, 500, 1000]);
         this.cdr.detectChanges();
       }
-      this.cdr.detectChanges();
+      
     });
   }
 
