@@ -42,11 +42,11 @@ export class App implements OnInit {
     //ESCUTA O MODAL GLOBAL DE CORRIDA
     this.notificationState.corrida$.subscribe((mostrar) => {
       this.mostrarModalCorrida = mostrar;
-      this.cdr.detectChanges();
       if (mostrar) {
         navigator.vibrate([1000, 500, 1000]);
         this.cdr.detectChanges();
       }
+      this.cdr.detectChanges();
     });
   }
 
