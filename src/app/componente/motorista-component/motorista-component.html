@@ -18,8 +18,8 @@
           <td>{{ usuario.id }}</td>
           <td>{{ usuario.nome }}</td>
           <td>{{ usuario.telefone }}</td>
-          <td [ngClass]="usuario.status === 1 ? 'online' : 'offline'">
-            {{ usuario.status === 1 ? 'On-Line' : 'Off-Line' }}
+          <td [ngClass]="usuario.status === 1 ? 'online' : usuario.status === 2 ? 'ocupado' : 'offline'">
+            {{ usuario.status === 1 ? 'ON-LINE' : usuario.status === 2 ? 'OCUPADO' : 'OFF-LINE' }}
           </td>
 
           <td>

@@ -97,6 +97,10 @@ tbody td {
   font-weight: bold;
 }
 
+:host .ocupado {
+  color: orange;
+}
+
 :host .offline {
   color: red;
   font-weight: bold;

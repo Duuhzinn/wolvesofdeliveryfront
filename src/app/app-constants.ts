@@ -19,6 +19,7 @@ public static get allDrive(): string {return this.baseDriveURL + "/allDrive"}
 public static changeStatus(id: any): string { return this.baseDriveURL + "/changeStatus/" + id }
 public static get driverQueue(): string {return this.baseDriveURL + "/driverQueue"}
 public static get firstDrive(): string {return this.baseDriveURL + "/driverQueue/firstid"}
+public static busy(id: any): string { return this.baseDriveURL + "/busy/" + id}
 
 
 //BASE PARA MONTAR A BASE DO PUSH NOTIFICATION

@@ -66,6 +66,13 @@ export class UsuarioService {
     return this.http.patch<any>(AppConstants.changeStatus(user.id), user, {headers})
   }
 
+  //ATUALIZA STATUS DO MOTORISTA PARA OCUPADO INICIANDO A CORRIDA
+  patchOcupado(usuarioId: number): Observable<string>{
+    const token = localStorage.getItem('tokenAutenticacao');
+    const headers = new HttpHeaders({ Authorization: `Bearer ${token}` })
+    return this.http.post(AppConstants.busy(usuarioId), {}, { headers, responseType: 'text' });
+  }
+
   //LISTA ORDEM DA FILA DOS MOTORISTAS
   getListaOrdemDafila(): Observable<any>{
     let headers = new HttpHeaders();
@@ -105,6 +112,8 @@ export class UsuarioService {
     const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
     return this.http.post(AppConstants.acceptRace(usuarioId), {}, { headers, responseType: 'text' });
   }
+
+  
 
 
 }
