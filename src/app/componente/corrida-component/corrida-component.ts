@@ -62,7 +62,15 @@ export class CorridaComponent implements OnInit {
         alert('Motorista aceitou a corrida!');
         this.pararTudo();
         //this.modalChamandoMotorista = false;
-        //this.cdr.detectChanges();
+         //ALTERA STATUS PARA OCUPADO
+          const motoristaId = localStorage.getItem('usuarioId');
+          this.usuarioService.patchOcupado(Number(motoristaId)).subscribe({
+            next: (resp) => {
+              this.mostrarModalCorrida = false;
+              this.cdr.detectChanges();
+              console.log("Usuario " + motoristaId + "entrou como ocupado")
+            }
+          })
       })
     }
   }

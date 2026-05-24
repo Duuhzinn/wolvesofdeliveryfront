@@ -64,14 +64,6 @@ export class App implements OnInit {
         next: (resp) => {
           console.log('Corrida aceita:', resp);
           this.notificationState.fecharTelaCorrida();
-
-          //ALTERA STATUS PARA OCUPADO
-          this.usuarioService.patchOcupado(Number(motoristaId)).subscribe({
-            next: (resp) => {
-              this.mostrarModalCorrida = false;
-              console.log("Usuario " + motoristaId + "entrou como ocupado")
-            }
-          })
         },
         error: (err) => console.log('Erro ao aceitar corrida:', err),
       });
