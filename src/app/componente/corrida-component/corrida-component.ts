@@ -62,9 +62,6 @@ export class CorridaComponent implements OnInit {
         alert('Motorista aceitou a corrida!');
         this.pararTudo();
         //this.modalChamandoMotorista = false;
-         //ALTERA STATUS PARA OCUPADO
-          const motoristaId = localStorage.getItem('usuarioId');
-
       })
     }
   }
