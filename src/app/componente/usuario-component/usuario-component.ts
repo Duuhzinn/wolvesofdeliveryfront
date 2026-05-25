@@ -30,6 +30,7 @@ export class UsuarioComponent implements OnInit {
 
   ngOnInit(): void {}
 
+  
   consultaTodosUsuarios(): void {
     this.usuarioService.getUsuarioList().subscribe({
       next: (data) => {

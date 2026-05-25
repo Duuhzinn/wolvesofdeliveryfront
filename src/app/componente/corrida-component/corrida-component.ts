@@ -31,7 +31,6 @@ export class CorridaComponent implements OnInit {
 
   ngOnInit(): void {
     this.pararTudo(); //LIMPA TUDO QUANDO O USUARIO SAIR DA TELA
-
   }
 
   //FECHA O MODAL
@@ -49,65 +48,66 @@ export class CorridaComponent implements OnInit {
       this.timerSubscription.unsubscribe();
       this.timerSubscription = null;
     }
-    if(this.stompClient){
+    if (this.stompClient) {
       this.stompClient.deactivate();
       this.stompClient = null;
     }
   }
 
   //CONECTA O WEBSOCKET E FICA ESCUTANDO O ACEITE DO MOTORISTA
-  private escutaAceite(){
-    if(isPlatformBrowser(this.platformId)){
+  private escutaAceite() {
+    if (isPlatformBrowser(this.platformId)) {
       this.websocketService.conectarCorrida(() => {
         alert('Motorista aceitou a corrida!');
         this.pararTudo();
         //this.modalChamandoMotorista = false;
-      })
+      });
     }
   }
 
   chamarMotorista() {
-    this.usuarioService.getConsultaPrimeiroMotorista().subscribe({
-      next: (motoristaID) => {
-        if (motoristaID !== null) {
-          console.log('ID do motorista encontrado: ' + motoristaID);
-          alert('Procurando Motorista...');
-          //this.modalChamandoMotorista = true;//ABRE O MODAL CHAMANDO MOTORISTA
-          this.escutaAceite();//INICIA A ESCUTA DO WEBSOCKET
+    const despachante = Number(localStorage.getItem('usuarioId'));
 
-          //DISPARA IMEDIATAMENTE A CADA 7 SEGUNDOS DURANTE 9X
-          this.timerSubscription = timer(0, 7000).pipe(take(9)).subscribe({
-              next: (index) => {
-                if (index < 8) {
-                  this.usuarioService.postEnviarNotificacao(motoristaID).subscribe({
-                    next: (resp) => console.log('Notificação enviada:', resp),
-                    error: (err) => console.log('Erro ao enviar notificação:', err),
-                  });
-                } else {
-                  // nona execução (index === 8) — ação final aqui!
-                  console.log('9 tentativas concluídas...');
-                  //DISPARA A NOTIFICAÇÃO DE CORRIDA PERDIDA
-                  this.usuarioService.postEnviarNotificacaoPerdida(motoristaID).subscribe({
-                    next: (resp) => console.log('Notificação enviada: ', resp ),
-                    error: (err) => console.log('Erro ao enviar notificação', err),
-                  });
-                  this.pararTudo();
-                  //this.modalChamandoMotorista = false;
-                  //this.modalSemMotorista = true;
-                  //this.cdr.detectChanges();  
-                  alert('Sem Motorista')
-                }
-              },
-            });
-        } else {
-          alert('Estamos sem Motorista no momento, por favor aguarde!!!');
-          //this.modalSemMotorista = true;
-          //this.cdr.detectChanges();
-        }
+    // CRIA A CORRIDA ANTES DE CHAMAR O MOTORISTA
+    this.usuarioService.postCriarCorrida(despachante).subscribe({
+      next: (corrida) => {
+        console.log('Corrida criada:', corrida);
+
+        this.usuarioService.getConsultaPrimeiroMotorista().subscribe({
+          next: (motoristaID) => {
+            if (motoristaID !== null) {
+              console.log('ID do motorista encontrado: ' + motoristaID);
+              alert('Procurando Motorista...');
+              this.escutaAceite();
+
+              this.timerSubscription = timer(0, 7000)
+                .pipe(take(9))
+                .subscribe({
+                  next: (index) => {
+                    if (index < 8) {
+                      this.usuarioService.postEnviarNotificacao(motoristaID).subscribe({
+                        next: (resp) => console.log('Notificação enviada:', resp),
+                        error: (err) => console.log('Erro ao enviar notificação:', err),
+                      });
+                    } else {
+                      console.log('9 tentativas concluídas...');
+                      this.usuarioService.postEnviarNotificacaoPerdida(motoristaID).subscribe({
+                        next: (resp) => console.log('Notificação enviada: ', resp),
+                        error: (err) => console.log('Erro ao enviar notificação', err),
+                      });
+                      this.pararTudo();
+                      alert('Sem Motorista');
+                    }
+                  },
+                });
+            } else {
+              alert('Estamos sem Motorista no momento, por favor aguarde!!!');
+            }
+          },
+          error: (err) => console.log(err),
+        });
       },
-      error: (err) => {
-        console.log(err);
-      },
+      error: (err) => console.log('Erro ao criar corrida:', err),
     });
   }
 }

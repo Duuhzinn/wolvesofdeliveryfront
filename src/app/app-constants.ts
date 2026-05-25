@@ -22,7 +22,7 @@ public static get firstDrive(): string {return this.baseDriveURL + "/driverQueue
 public static busy(id: any): string { return this.baseDriveURL + "/busy/" + id}
 
 
-//BASE PARA MONTAR A BASE DO PUSH NOTIFICATION
+//BASE PARA MONTAR A REQUISIÇÕES DO PUSH NOTIFICATION
 public static get basePushNotification(): string {return this.baseServidor + "/v1/pushnotification"}
 public static sendDrive(motoristaID: number): string {
     return this.basePushNotification + "/send/" + motoristaID}
@@ -32,6 +32,11 @@ public static lostRace(motoristaID: number): string {
 public static acceptRace(motoristaID: number): string{
     return this.basePushNotification + "/acceptRace/" + motoristaID
 }
+
+//BASE PARA MONTAR AS REQUISIÇÕES DA CORRIDA
+public static get baseRaceURL(): string {return this.baseServidor + "/v1/corrida"}
+public static createRace(despachante: number): string {
+    return this.baseRaceURL + "/createRace/" + despachante}
 
 
 
