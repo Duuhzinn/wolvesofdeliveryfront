@@ -72,6 +72,7 @@ export class CorridaComponent implements OnInit {
     this.usuarioService.postCriarCorrida(despachante).subscribe({
       next: (corrida) => {
         console.log('Corrida criada:', corrida);
+        const corridaID = corrida.corrida.id;
 
         this.usuarioService.getConsultaPrimeiroMotorista().subscribe({
           next: (motoristaID) => {
@@ -85,13 +86,13 @@ export class CorridaComponent implements OnInit {
                 .subscribe({
                   next: (index) => {
                     if (index < 8) {
-                      this.usuarioService.postEnviarNotificacao(motoristaID).subscribe({
+                      this.usuarioService.postEnviarNotificacao(motoristaID, corridaID).subscribe({
                         next: (resp) => console.log('Notificação enviada:', resp),
                         error: (err) => console.log('Erro ao enviar notificação:', err),
                       });
                     } else {
                       console.log('9 tentativas concluídas...');
-                      this.usuarioService.postEnviarNotificacaoPerdida(motoristaID).subscribe({
+                      this.usuarioService.postEnviarNotificacaoPerdida(motoristaID, corridaID).subscribe({
                         next: (resp) => console.log('Notificação enviada: ', resp),
                         error: (err) => console.log('Erro ao enviar notificação', err),
                       });

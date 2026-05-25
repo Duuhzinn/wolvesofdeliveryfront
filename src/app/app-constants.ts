@@ -24,10 +24,10 @@ public static busy(id: any): string { return this.baseDriveURL + "/busy/" + id}
 
 //BASE PARA MONTAR A REQUISIÇÕES DO PUSH NOTIFICATION
 public static get basePushNotification(): string {return this.baseServidor + "/v1/pushnotification"}
-public static sendDrive(motoristaID: number): string {
-    return this.basePushNotification + "/send/" + motoristaID}
-public static lostRace(motoristaID: number): string {
-    return this.basePushNotification + "/lostRace/" + motoristaID
+public static sendDrive(motoristaID: number, corridaID: number): string {
+    return this.basePushNotification + "/send/" + motoristaID + "/" + corridaID}
+public static lostRace(motoristaID: number, corridaID: number): string {
+  return this.basePushNotification + "/lostRace/" + motoristaID + "/" + corridaID;
 }
 public static acceptRace(motoristaID: number): string{
     return this.basePushNotification + "/acceptRace/" + motoristaID

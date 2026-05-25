@@ -48,79 +48,87 @@ export class UsuarioService {
   //INSERI NOVO USUARIO NO BANCO
   postSalvarNovoUsuario(user: User): Observable<any> {
     const token = localStorage.getItem('tokenAutenticacao');
-    const headers = new HttpHeaders({ Authorization: `Bearer ${token}` })
+    const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
     return this.http.post<any>(AppConstants.salvarUsuario(), user, { headers });
   }
 
   //ATUALIZA USUARIO POR NOME
-  putAtualizaUsuario( user: User): Observable<any>{
+  putAtualizaUsuario(user: User): Observable<any> {
     const token = localStorage.getItem('tokenAutenticacao');
-    const headers = new HttpHeaders({ Authorization: `Bearer ${token}` })
-    return this.http.put<any>(AppConstants.atualizarUsuario(), user, {headers})
+    const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
+    return this.http.put<any>(AppConstants.atualizarUsuario(), user, { headers });
   }
 
   //ATUALIZA O STATUS DO USUARIO POR ID
-  patchAlterarStatus(user: User): Observable<any>{
+  patchAlterarStatus(user: User): Observable<any> {
     const token = localStorage.getItem('tokenAutenticacao');
-    const headers = new HttpHeaders({ Authorization: `Bearer ${token}` })
-    return this.http.patch<any>(AppConstants.changeStatus(user.id), user, {headers})
+    const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
+    return this.http.patch<any>(AppConstants.changeStatus(user.id), user, { headers });
   }
 
   //ATUALIZA STATUS DO MOTORISTA PARA OCUPADO INICIANDO A CORRIDA
-  patchOcupado(usuarioId: number): Observable<string>{
+  patchOcupado(usuarioId: number): Observable<string> {
     const token = localStorage.getItem('tokenAutenticacao');
-    const headers = new HttpHeaders({ Authorization: `Bearer ${token}` })
+    const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
     return this.http.patch(AppConstants.busy(usuarioId), {}, { headers, responseType: 'text' });
   }
 
   //LISTA ORDEM DA FILA DOS MOTORISTAS
-  getListaOrdemDafila(): Observable<any>{
+  getListaOrdemDafila(): Observable<any> {
     let headers = new HttpHeaders();
-    if(isPlatformBrowser(this.platformId)){
+    if (isPlatformBrowser(this.platformId)) {
       const token = localStorage.getItem('tokenAutenticacao');
       headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
     }
-    return this.http.get<any>(AppConstants.driverQueue, {headers});
+    return this.http.get<any>(AppConstants.driverQueue, { headers });
   }
 
   //CONSULTA O PRIMEIRO USUARIO DA LISTA DE MOTORISTA ONLINE
-  getConsultaPrimeiroMotorista(): Observable<any>{
+  getConsultaPrimeiroMotorista(): Observable<any> {
     let headers = new HttpHeaders();
-    if(isPlatformBrowser(this.platformId)){
+    if (isPlatformBrowser(this.platformId)) {
       const token = localStorage.getItem('tokenAutenticacao');
       headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
     }
-    return this.http.get<number>(AppConstants.firstDrive, {headers})
+    return this.http.get<number>(AppConstants.firstDrive, { headers });
   }
 
   //CRIA A CORRIDA
-  postCriarCorrida(despachante: number): Observable<string>{
+  postCriarCorrida(despachante: number): Observable<any> {
     const token = localStorage.getItem('tokenAutenticacao');
     const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
-    return this.http.post(AppConstants.createRace(despachante), {}, {headers, responseType: 'text'})
+    return this.http.post<any>(AppConstants.createRace(despachante), {}, { headers });
   }
 
   //ENVIAR A NOTIFICAÇÃO PARA O MOTORISTA DA VEZ
-  postEnviarNotificacao(motoristaID: number): Observable<string>{
+  postEnviarNotificacao(motoristaID: number, corridaID: number): Observable<string> {
     const token = localStorage.getItem('tokenAutenticacao');
     const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
-    return this.http.post(AppConstants.sendDrive(motoristaID), {}, {headers, responseType: 'text'})
+    return this.http.post(
+      AppConstants.sendDrive(motoristaID, corridaID),
+      {},
+      { headers, responseType: 'text' },
+    );
   }
 
   //EVIAR NOTIFICAÇÃO DE CORRIDA PERDIDA
-  postEnviarNotificacaoPerdida(motoristaID: number): Observable<string>{
+  postEnviarNotificacaoPerdida(motoristaID: number, corridaID: number): Observable<string> {
     const token = localStorage.getItem('tokenAutenticacao');
     const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
-    return this.http.post(AppConstants.lostRace(motoristaID), {}, {headers, responseType: 'text'})
+    return this.http.post(
+      AppConstants.lostRace(motoristaID, corridaID),
+      {},
+      { headers, responseType: 'text' },
+    );
   }
 
-  postAceitarCorrida(usuarioId: number): Observable<string>{
+  postAceitarCorrida(usuarioId: number): Observable<string> {
     const token = localStorage.getItem('tokenAutenticacao');
     const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
-    return this.http.post(AppConstants.acceptRace(usuarioId), {}, { headers, responseType: 'text' });
+    return this.http.post(
+      AppConstants.acceptRace(usuarioId),
+      {},
+      { headers, responseType: 'text' },
+    );
   }
-
-  
-
-
 }
