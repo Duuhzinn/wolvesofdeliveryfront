@@ -74,6 +74,9 @@ export class App implements OnInit {
           })
           this.notificationState.fecharTelaCorrida();
           this.cdr.detectChanges();
+
+          //REDIRECIONA PARA A ROTA DE CORRIDAS
+          this.router.navigate(['/chamarMotorista']);
         },
         error: (err) => console.log('Erro ao aceitar corrida:', err),
       });
