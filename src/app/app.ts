@@ -21,7 +21,8 @@ export class App implements OnInit {
   protected readonly title = signal('wolvesofdelivery');
   mostrarModalCorrida: boolean = false;
   corrida$: any;
-
+  
+  
   constructor(
     private router: Router,
     private firebaseService: FirebaseService,
@@ -32,7 +33,7 @@ export class App implements OnInit {
   ) {
     this.corrida$ = this.notificationState.corrida$;
   }
-
+  
   ngOnInit(): void {
     if (isPlatformBrowser(this.platformId)) {
       //this.firebaseService.requestPermission();
@@ -49,6 +50,7 @@ export class App implements OnInit {
         navigator.vibrate([1000, 500, 1000]);
         this.cdr.detectChanges();
       }
+      
     });
   }
 
@@ -61,18 +63,17 @@ export class App implements OnInit {
   }
 
   aceitarCorrida() {
-    try {
-      const motoristaId = localStorage.getItem('usuarioId');
-      const corridaId = localStorage.getItem('corridaId');
-      alert('motorista: ' + motoristaId + 'Corrida: ' + corridaId);
-
+    const motoristaId = localStorage.getItem('usuarioId');
+    const corridaId = localStorage.getItem('corridaId');
+    alert("corrida: " + corridaId + "Motorista: " + motoristaId )
+    if (motoristaId) {
       this.usuarioService.postAceitarCorrida(Number(motoristaId)).subscribe({
         next: (resp) => {
           console.log('Corrida aceita:', resp);
           this.usuarioService.patchOcupado(Number(motoristaId)).subscribe({
-            next: (resp) => alert('Status atualizado:' + resp),
-            error: (err) => alert('Erro ao atualizar status:' + err),
-          });
+            next: (resp) => console.log('Status atualizado:', resp),
+            error: (err) => console.log('Erro ao atualizar status:', err)
+          })
           this.notificationState.fecharTelaCorrida();
           this.cdr.detectChanges();
 
@@ -81,8 +82,6 @@ export class App implements OnInit {
         },
         error: (err) => console.log('Erro ao aceitar corrida:', err),
       });
-    } catch (e: any) {
-      alert('ERRO: ' + e.message);
     }
   }
 }

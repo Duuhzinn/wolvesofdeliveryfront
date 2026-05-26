@@ -104,22 +104,19 @@ export class UsuarioService {
   postEnviarNotificacao(motoristaID: number, corridaID: number): Observable<string> {
     const token = localStorage.getItem('tokenAutenticacao');
     const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
-    return this.http.post(AppConstants.sendDrive(motoristaID, corridaID),{},{ headers, responseType: 'text' },
-    );
+    return this.http.post(AppConstants.sendDrive(motoristaID, corridaID), {}, { headers, responseType: 'text' },);
   }
 
   //EVIAR NOTIFICAÇÃO DE CORRIDA PERDIDA
   postEnviarNotificacaoPerdida(motoristaID: number, corridaID: number): Observable<string> {
     const token = localStorage.getItem('tokenAutenticacao');
     const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
-    return this.http.post(AppConstants.lostRace(motoristaID, corridaID), {}, { headers, responseType: 'text' },
-    );
+    return this.http.post(AppConstants.lostRace(motoristaID, corridaID), {}, { headers, responseType: 'text' },);
   }
 
-  postAceitarCorrida(motoristaId: number): Observable<string> {
+  postAceitarCorrida(usuarioId: number): Observable<string> {
     const token = localStorage.getItem('tokenAutenticacao');
     const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
-    return this.http.patch(AppConstants.acceptRace(motoristaId), {}, { headers, responseType: 'text' },
-    );
+    return this.http.post(AppConstants.acceptRace(usuarioId), {}, { headers, responseType: 'text' },);
   }
 }
