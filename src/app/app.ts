@@ -64,8 +64,9 @@ export class App implements OnInit {
 
   aceitarCorrida() {
     const motoristaId = localStorage.getItem('usuarioId');
-    if (motoristaId) {
-      this.usuarioService.postAceitarCorrida(Number(motoristaId)).subscribe({
+    const corridaId = localStorage.getItem('corridaId');
+    if (motoristaId && corridaId) {
+      this.usuarioService.postAceitarCorrida(Number(motoristaId), Number(motoristaId)).subscribe({
         next: (resp) => {
           console.log('Corrida aceita:', resp);
           this.usuarioService.patchOcupado(Number(motoristaId)).subscribe({
