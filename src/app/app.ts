@@ -68,8 +68,8 @@ export class App implements OnInit {
       next: (resp) => {
         console.log('Corrida aceita:', resp);
         this.usuarioService.patchOcupado(Number(motoristaId)).subscribe({
-          next: (resp) => console.log('Status atualizado:', resp),
-          error: (err) => console.log('Erro ao atualizar status:', err),
+          next: (resp) => alert('Status atualizado:'+ resp),
+          error: (err) => alert('Erro ao atualizar status:'+ err),
         });
         this.notificationState.fecharTelaCorrida();
         this.cdr.detectChanges();
