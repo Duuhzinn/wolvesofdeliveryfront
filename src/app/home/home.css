@@ -4,19 +4,29 @@
   margin: 0 auto;
 }
 
-.card {
-  background-color: #ffffff;
-  border-radius: 15px;
-  overflow: hidden;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+.cards-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  padding: 16px;
 }
 
-.card-header {
-  background-color: #ffffff;
-  padding: 16px 20px;
+.motorista-card {
+  background: #fff;
+  border: 0.5px solid #ddd;
+  border-radius: 12px;
+  padding: 16px;
+  flex: 1 1 220px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
-.card-header h2 {
+.header-card {
+  flex: 1 1 100%;
+}
+
+.header-card h2 {
   color: #333;
   font-size: 2rem;
   font-weight: 600;
@@ -24,84 +34,33 @@
   letter-spacing: 0.05em;
 }
 
-table {
-  width: 100%;
-  border-collapse: collapse;
+.card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 0.5px solid #eee;
+  padding-bottom: 10px;
 }
 
-thead {
-  background-color: #5a5d62;
+.card-id {
+  font-size: 16px;
+  font-weight: 500;
+  color: #534AB7;
 }
 
-thead th {
-  color: #ffffff;
-  padding: 12px 16px;
-  text-align: left;
-  font-size: 0.8rem;
-  letter-spacing: 0.05em;
+.card-body p {
+  margin: 5px 0;
+  font-size: 13px;
+  display: flex;
+  gap: 6px;
+  align-items: center;
 }
 
-tbody tr {
-  border-bottom: 1px solid #e8e8e8;
-  transition: background-color 0.2s;
-}
+.badge-online { color: #3B6D11; font-weight: 500; }
+.badge-ocupado { color: #854F0B; font-weight: 500; }
+.badge-offline { color: #A32D2D; font-weight: 500; }
 
-tbody tr:last-child {
-  border-bottom: none;
-}
-
-tbody tr:hover {
-  background-color: #f0f1f2;
-}
-
-tbody td {
-  padding: 12px 16px;
-  color: #333;
-  font-size: 0.9rem;
-}
-
-@media (max-width: 768px) {
-  .container {
-    padding: 15px;
-  }
-
-  table {
-    display: block;
-    overflow-x: auto;
-    white-space: nowrap;
-  }
-
-  thead th, tbody td {
-    padding: 10px 12px;
-    font-size: 0.8rem;
-  }
-}
-
-.btn-editar {
-  background-color: #4a4d52;
-  color: #ffffff;
-  border: none;
-  padding: 6px 14px;
-  border-radius: 8px;
-  font-size: 0.8rem;
-  cursor: pointer;
-  transition: background-color 0.2s;
-}
-
-.btn-editar:hover {
-  background-color: #676A6F;
-}
-
-:host .online {
-  color: green;
-  font-weight: bold;
-}
-
-:host .ocupado {
-  color: orange;
-}
-
-:host .offline {
-  color: red;
-  font-weight: bold;
+@media (max-width: 600px) {
+  .container { padding: 15px; }
+  .motorista-card { flex: 1 1 100%; }
 }

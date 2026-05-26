@@ -45,6 +45,10 @@ public static raceDespatcher(clienteId: number): string{
 public static raceDrive(motoristaId: number): string{
     return this.baseRaceURL + "/raceDrive/" + motoristaId
 }
+public static allRace(): string {return this.baseRaceURL + "/allRace"}
+public static updateRace(corridaId: number): string{
+    return this. baseRaceURL + "/updateRace/" + corridaId
+}
 
 
 

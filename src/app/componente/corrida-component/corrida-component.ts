@@ -51,7 +51,10 @@ export class CorridaComponent implements OnInit {
         error: (err) => console.log(err)
       });
     }else{
-      alert("ADMIN");
+      this.usuarioService.getCorridasAdm().subscribe({
+        next: (data) => { this.corridas = data; this.cdr.detectChanges(); },
+        error: (err) => console.log(err)
+      });
     }
   }
 
@@ -82,6 +85,7 @@ export class CorridaComponent implements OnInit {
       this.websocketService.conectarCorrida(() => {
         alert('Motorista aceitou a corrida!');
         this.pararTudo();
+        this.carregarCorridas();
         //this.modalChamandoMotorista = false;
       });
     }
@@ -136,12 +140,13 @@ export class CorridaComponent implements OnInit {
     });
   }
 
-  atualizarCorridas(corrida: any){
-    if(!corrida.inicio_corrida){
-      alert('Inicio da corrida vazio - ID: ' + corrida.id);
-    } else if(!corrida.termino_corrida){
-      alert('Inicio preenchido, termino vazio - ID: ' + corrida.id);
-    }
+  atualizarCorridas(corridaId: number){
+    this.usuarioService.patchAtualizarCorrida(corridaId).subscribe({
+      next: (resp) => {
+        console.log('Corrida atualizada:', resp);
+        this.carregarCorridas(); // recarrega a tabela
+      },
+      error: (err) => console.log('Erro ao atualizar corrida:', err)
+    });
   }
-
 }

@@ -104,35 +104,60 @@ export class UsuarioService {
   postEnviarNotificacao(motoristaID: number, corridaID: number): Observable<string> {
     const token = localStorage.getItem('tokenAutenticacao');
     const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
-    return this.http.post(AppConstants.sendDrive(motoristaID, corridaID), {}, { headers, responseType: 'text' },);
+    return this.http.post(
+      AppConstants.sendDrive(motoristaID, corridaID),
+      {},
+      { headers, responseType: 'text' },
+    );
   }
 
   //EVIAR NOTIFICAÇÃO DE CORRIDA PERDIDA
   postEnviarNotificacaoPerdida(motoristaID: number, corridaID: number): Observable<string> {
     const token = localStorage.getItem('tokenAutenticacao');
     const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
-    return this.http.post(AppConstants.lostRace(motoristaID, corridaID), {}, { headers, responseType: 'text' },);
+    return this.http.post(
+      AppConstants.lostRace(motoristaID, corridaID),
+      {},
+      { headers, responseType: 'text' },
+    );
   }
 
   //ACEITE DO MOTORISTA NAS CORRIDAS NOTIFICADAS
   postAceitarCorrida(motoristaId: number, usuarioId: number): Observable<string> {
     const token = localStorage.getItem('tokenAutenticacao');
     const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
-    return this.http.post(AppConstants.acceptRace(motoristaId, usuarioId), {}, { headers, responseType: 'text' },);
+    return this.http.post(
+      AppConstants.acceptRace(motoristaId, usuarioId),
+      {},
+      { headers, responseType: 'text' },
+    );
   }
 
   //LISTA TODAS AS CORRIDAS DOS CLIENTES
-  getCorridasCliente(clienteId: number): Observable<any>{
+  getCorridasCliente(clienteId: number): Observable<any> {
     const token = localStorage.getItem('tokenAutenticacao');
     const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
-    return this.http.get(AppConstants.raceDespatcher(clienteId), { headers },);
+    return this.http.get(AppConstants.raceDespatcher(clienteId), { headers });
   }
 
   //LISTA TODAS AS CORRIDAS DOS CLIENTES
-  getCorridasMotorista(motoristaId: number): Observable<any>{
+  getCorridasMotorista(motoristaId: number): Observable<any> {
     const token = localStorage.getItem('tokenAutenticacao');
     const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
-    return this.http.get(AppConstants.raceDrive(motoristaId), { headers },);
+    return this.http.get(AppConstants.raceDrive(motoristaId), { headers });
   }
-  
+  //ATUALIZA TODAS AS CORRIDAS PARA OS ADM
+  getCorridasAdm(): Observable<any>{
+    const token = localStorage.getItem('tokenAutenticacao');
+    const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
+    return this.http.get(AppConstants.allRace(), { headers });
+  }
+
+  //ATUALIZA AS CORRIDAS
+  patchAtualizarCorrida(corridaId: number): Observable<any> {
+    const token = localStorage.getItem('tokenAutenticacao');
+    const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
+    return this.http.patch(AppConstants.updateRace(corridaId), {}, { headers, responseType: 'text' });
+  }
+
 }
