@@ -116,10 +116,10 @@ export class UsuarioService {
     );
   }
 
-  postAceitarCorrida(corridaId: number, motoristaId: number): Observable<string> {
+  postAceitarCorrida(motoristaId: number): Observable<string> {
     const token = localStorage.getItem('tokenAutenticacao');
     const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
-    return this.http.patch(AppConstants.acceptRace(corridaId, motoristaId), {}, { headers, responseType: 'text' },
+    return this.http.patch(AppConstants.acceptRace(motoristaId), {}, { headers, responseType: 'text' },
     );
   }
 }
