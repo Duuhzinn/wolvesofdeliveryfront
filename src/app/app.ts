@@ -21,8 +21,7 @@ export class App implements OnInit {
   protected readonly title = signal('wolvesofdelivery');
   mostrarModalCorrida: boolean = false;
   corrida$: any;
-  
-  
+
   constructor(
     private router: Router,
     private firebaseService: FirebaseService,
@@ -33,7 +32,7 @@ export class App implements OnInit {
   ) {
     this.corrida$ = this.notificationState.corrida$;
   }
-  
+
   ngOnInit(): void {
     if (isPlatformBrowser(this.platformId)) {
       //this.firebaseService.requestPermission();
@@ -50,7 +49,6 @@ export class App implements OnInit {
         navigator.vibrate([1000, 500, 1000]);
         this.cdr.detectChanges();
       }
-      
     });
   }
 
@@ -65,23 +63,21 @@ export class App implements OnInit {
   aceitarCorrida() {
     const motoristaId = localStorage.getItem('usuarioId');
     const corridaId = localStorage.getItem('corridaId');
-    alert("motorista: " + motoristaId + "Corrida: " + corridaId)
-    if (motoristaId && corridaId) {
-      this.usuarioService.postAceitarCorrida(Number(motoristaId), Number(motoristaId)).subscribe({
-        next: (resp) => {
-          console.log('Corrida aceita:', resp);
-          this.usuarioService.patchOcupado(Number(motoristaId)).subscribe({
-            next: (resp) => console.log('Status atualizado:', resp),
-            error: (err) => console.log('Erro ao atualizar status:', err)
-          })
-          this.notificationState.fecharTelaCorrida();
-          this.cdr.detectChanges();
+    alert('motorista: ' + motoristaId + 'Corrida: ' + corridaId);
+    this.usuarioService.postAceitarCorrida(Number(corridaId), Number(motoristaId)).subscribe({
+      next: (resp) => {
+        console.log('Corrida aceita:', resp);
+        this.usuarioService.patchOcupado(Number(motoristaId)).subscribe({
+          next: (resp) => console.log('Status atualizado:', resp),
+          error: (err) => console.log('Erro ao atualizar status:', err),
+        });
+        this.notificationState.fecharTelaCorrida();
+        this.cdr.detectChanges();
 
-          //REDIRECIONA PARA A ROTA DE CORRIDAS
-          //this.router.navigate(['/chamarMotorista']);
-        },
-        error: (err) => console.log('Erro ao aceitar corrida:', err),
-      });
-    }
+        //REDIRECIONA PARA A ROTA DE CORRIDAS
+        //this.router.navigate(['/chamarMotorista']);
+      },
+      error: (err) => console.log('Erro ao aceitar corrida:', err),
+    });
   }
 }
