@@ -62,26 +62,30 @@ export class App implements OnInit {
   }
 
   aceitarCorrida() {
-    const motoristaId = localStorage.getItem('usuarioId');
-    const corridaId = localStorage.getItem('corridaId');
-    alert('motorista: ' + motoristaId + 'Corrida: ' + corridaId);
-    const url = AppConstants.acceptRace(Number(corridaId), Number(motoristaId));
-    alert("2 - URL: " + url); 
-    
-    this.usuarioService.postAceitarCorrida(Number(corridaId), Number(motoristaId)).subscribe({
-      next: (resp) => {
-        console.log('Corrida aceita:', resp);
-        this.usuarioService.patchOcupado(Number(motoristaId)).subscribe({
-          next: (resp) => alert('Status atualizado:'+ resp),
-          error: (err) => alert('Erro ao atualizar status:'+ err),
-        });
-        this.notificationState.fecharTelaCorrida();
-        this.cdr.detectChanges();
+    try {
+      const motoristaId = localStorage.getItem('usuarioId');
+      const corridaId = localStorage.getItem('corridaId');
+      alert('motorista: ' + motoristaId + 'Corrida: ' + corridaId);
+      const url = AppConstants.acceptRace(Number(corridaId), Number(motoristaId));
+      alert('2 - URL: ' + url);
 
-        //REDIRECIONA PARA A ROTA DE CORRIDAS
-        //this.router.navigate(['/chamarMotorista']);
-      },
-      error: (err) => console.log('Erro ao aceitar corrida:', err),
-    });
+      this.usuarioService.postAceitarCorrida(Number(corridaId), Number(motoristaId)).subscribe({
+        next: (resp) => {
+          console.log('Corrida aceita:', resp);
+          this.usuarioService.patchOcupado(Number(motoristaId)).subscribe({
+            next: (resp) => alert('Status atualizado:' + resp),
+            error: (err) => alert('Erro ao atualizar status:' + err),
+          });
+          this.notificationState.fecharTelaCorrida();
+          this.cdr.detectChanges();
+
+          //REDIRECIONA PARA A ROTA DE CORRIDAS
+          //this.router.navigate(['/chamarMotorista']);
+        },
+        error: (err) => console.log('Erro ao aceitar corrida:', err),
+      });
+    } catch (e: any) {
+      alert('ERRO: ' + e.message);
+    }
   }
 }
