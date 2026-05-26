@@ -29,7 +29,7 @@ public static sendDrive(motoristaID: number, corridaID: number): string {
 public static lostRace(motoristaID: number, corridaID: number): string {
   return this.basePushNotification + "/lostRace/" + motoristaID + "/" + corridaID;
 }
-public static acceptRace(motoristaID: number): string{
+public static acceptRace(corridaId: number, motoristaID: number): string{
     return this.basePushNotification + "/acceptRace/" + motoristaID
 }
 
