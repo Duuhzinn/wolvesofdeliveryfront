@@ -29,6 +29,9 @@ public static sendDrive(motoristaID: number, corridaID: number): string {
 public static lostRace(motoristaID: number, corridaID: number): string {
   return this.basePushNotification + "/lostRace/" + motoristaID + "/" + corridaID;
 }
+public static acceptRace(corridaId: number, motoristaId: number): string{
+    return this.basePushNotification + "/acceptRace/" + corridaId + "/" + motoristaId
+}
 
 
 //BASE PARA MONTAR AS REQUISIÇÕES DA CORRIDA
@@ -36,9 +39,7 @@ public static get baseRaceURL(): string {return this.baseServidor + "/v1/corrida
 public static createRace(despachante: number): string {
     return this.baseRaceURL + "/createRace/" + despachante
 }
-public static acceptRace(corridaId: number, motoristaId: number): string{
-    return this.baseRaceURL + "/aceitar/" + corridaId + "/" + motoristaId
-}
+
 
 
 
