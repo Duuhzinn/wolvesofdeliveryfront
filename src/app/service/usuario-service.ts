@@ -114,9 +114,25 @@ export class UsuarioService {
     return this.http.post(AppConstants.lostRace(motoristaID, corridaID), {}, { headers, responseType: 'text' },);
   }
 
+  //ACEITE DO MOTORISTA NAS CORRIDAS NOTIFICADAS
   postAceitarCorrida(motoristaId: number, usuarioId: number): Observable<string> {
     const token = localStorage.getItem('tokenAutenticacao');
     const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
     return this.http.post(AppConstants.acceptRace(motoristaId, usuarioId), {}, { headers, responseType: 'text' },);
   }
+
+  //LISTA TODAS AS CORRIDAS DOS CLIENTES
+  getCorridasCliente(clienteId: number): Observable<any>{
+    const token = localStorage.getItem('tokenAutenticacao');
+    const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
+    return this.http.get(AppConstants.raceDespatcher(clienteId), { headers },);
+  }
+
+  //LISTA TODAS AS CORRIDAS DOS CLIENTES
+  getCorridasMotorista(motoristaId: number): Observable<any>{
+    const token = localStorage.getItem('tokenAutenticacao');
+    const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
+    return this.http.get(AppConstants.raceDrive(motoristaId), { headers },);
+  }
+  
 }

@@ -39,6 +39,14 @@ public static get baseRaceURL(): string {return this.baseServidor + "/v1/corrida
 public static createRace(despachante: number): string {
     return this.baseRaceURL + "/createRace/" + despachante
 };
+public static raceDespatcher(clienteId: number): string{
+    return this.baseRaceURL + "/raceDespatcher/" + clienteId
+}
+public static raceDrive(motoristaId: number): string{
+    return this.baseRaceURL + "/raceDrive/" + motoristaId
+}
+
+
 
 
 public static teste(): string { alert("entrou no AppConstants!"); return this.baseUserURL + "/createUser";}

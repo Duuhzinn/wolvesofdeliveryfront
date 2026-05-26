@@ -30,11 +30,20 @@
         </tr>
       </thead>
       <tbody>
-        <!--<tr *ngFor="let usuario of usuarios">
-          <td>{{ usuario.id }}</td>
-
-          <td><button class="btn-editar" (click)="chamarModalEdit(usuario.id)">Editar</button></td>
-        </tr>-->
+        <tr *ngFor="let corrida of corridas">
+          <td>{{ corrida.id }}</td>
+          <td>{{ corrida.cliente?.nome }}</td>
+          <td><strong>{{ corrida.endereco_entrega }}</strong></td>
+          <td><strong>{{ corrida.data_chamada | date:'dd/MM/yyyy HH:mm' }}</strong></td>
+          <td><strong>{{ corrida.data_aceite | date:'dd/MM/yyyy HH:mm' }}</strong></td>
+          <td><strong>{{ corrida.inicio_corrida | date:'dd/MM/yyyy HH:mm' }}</strong></td>
+          <td><strong>{{ corrida.termino_corrida | date:'dd/MM/yyyy HH:mm' }}</strong></td>
+          <td>{{ corrida.motorista?.nome }}</td>
+          <td [ngClass]="{'status-andamento': corrida.status_corrida === 'EM ANDAMENTO',
+            'status-finalizada': corrida.status_corrida === 'FINALIZADA'
+          }">{{ corrida.status_corrida }}</td>
+          <td><button class="btn-editar" *ngIf="!corrida.termino_corrida" (click)="atualizarCorridas(corrida)">Editar</button></td>
+        </tr>
       </tbody>
     </table>
   </div>

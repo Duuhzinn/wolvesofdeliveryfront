@@ -30,6 +30,7 @@ export class LoginService {
           .subscribe((usuarioLogado) => {
             console.log('Usuario logado:', usuarioLogado);
             localStorage.setItem('usuarioId', usuarioLogado.id.toString());
+            localStorage.setItem('tipoUser', usuarioLogado.tipoUser);
             //SALVANDO O TOKEN COM USUARIO LOGADO NO BANCO
             this.firebaseService.requestPermission(usuarioLogado.id);
           });

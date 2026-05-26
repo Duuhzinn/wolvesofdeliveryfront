@@ -29,8 +29,30 @@ export class CorridaComponent implements OnInit {
     @Inject(PLATFORM_ID) private platformId: Object,
   ) {}
 
+  corridas: any[] = [];
+
   ngOnInit(): void {
-    this.pararTudo(); //LIMPA TUDO QUANDO O USUARIO SAIR DA TELA
+    if (isPlatformBrowser(this.platformId)) {
+      this.carregarCorridas();
+    }
+  }
+  carregarCorridas() {
+    const usuarioId = Number(localStorage.getItem('usuarioId'));
+    const tipoUser = localStorage.getItem('tipoUser');
+
+    if(tipoUser === 'CLIENTE'){
+      this.usuarioService.getCorridasCliente(usuarioId).subscribe({
+        next: (data) => { this.corridas = data; this.cdr.detectChanges(); },
+        error: (err) => console.log(err)
+      });
+    } else if (tipoUser === "MOTORISTA"){
+      this.usuarioService.getCorridasMotorista(usuarioId).subscribe({
+        next: (data) => { this.corridas = data; this.cdr.detectChanges(); },
+        error: (err) => console.log(err)
+      });
+    }else{
+      alert("ADMIN");
+    }
   }
 
   //FECHA O MODAL
@@ -92,10 +114,12 @@ export class CorridaComponent implements OnInit {
                       });
                     } else {
                       console.log('9 tentativas concluídas...');
-                      this.usuarioService.postEnviarNotificacaoPerdida(motoristaID, corridaID).subscribe({
-                        next: (resp) => console.log('Notificação enviada: ', resp),
-                        error: (err) => console.log('Erro ao enviar notificação', err),
-                      });
+                      this.usuarioService
+                        .postEnviarNotificacaoPerdida(motoristaID, corridaID)
+                        .subscribe({
+                          next: (resp) => console.log('Notificação enviada: ', resp),
+                          error: (err) => console.log('Erro ao enviar notificação', err),
+                        });
                       this.pararTudo();
                       alert('Sem Motorista');
                     }
@@ -111,4 +135,13 @@ export class CorridaComponent implements OnInit {
       error: (err) => console.log('Erro ao criar corrida:', err),
     });
   }
+
+  atualizarCorridas(corrida: any){
+    if(!corrida.inicio_corrida){
+      alert('Inicio da corrida vazio - ID: ' + corrida.id);
+    } else if(!corrida.termino_corrida){
+      alert('Inicio preenchido, termino vazio - ID: ' + corrida.id);
+    }
+  }
+
 }

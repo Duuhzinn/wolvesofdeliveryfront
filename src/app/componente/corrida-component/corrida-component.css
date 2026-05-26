@@ -113,7 +113,7 @@ tbody tr:hover {
   transform: translateY(-1px);
 }
 
-.btn-novo {
+.btn-novo, .btn-editar {
   margin-left: auto; /* A MÁGICA: Empurra este botão para o final da linha */
   margin-right: 12px;
   background-color: #323261; /* Opcional: verde para destacar que é "Novo" */
@@ -126,7 +126,7 @@ tbody tr:hover {
   cursor: pointer;
   transition: background-color 0.2s;
 }
-.btn-novo:hover {
+.btn-novo:hover, .btn-editar:hover {
   background-color: #4a4a8f;
   border-color: #4a4a8f;
   transform: translateY(-1px);
@@ -323,5 +323,14 @@ tbody tr:hover {
     transform: scale(1);
     opacity: 1;
   }
+}
+
+.status-andamento {
+  color: #856404 !important;
+  font-weight: bold;
+}
+.status-finalizada {
+  color: #155724 !important;
+  font-weight: bold;
 }
 
