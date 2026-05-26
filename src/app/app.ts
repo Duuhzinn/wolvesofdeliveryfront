@@ -8,6 +8,7 @@ import { Navbar } from './shared/navbar/navbar';
 import { FirebaseService } from './service/firebase-service';
 import { NotificationStateService } from './service/notificationstate-service';
 import { UsuarioService } from './service/usuario-service';
+import { AppConstants } from './app-constants';
 
 @Component({
   selector: 'app-root',
@@ -64,6 +65,9 @@ export class App implements OnInit {
     const motoristaId = localStorage.getItem('usuarioId');
     const corridaId = localStorage.getItem('corridaId');
     alert('motorista: ' + motoristaId + 'Corrida: ' + corridaId);
+    const url = AppConstants.acceptRace(Number(corridaId), Number(motoristaId));
+    alert("2 - URL: " + url); 
+    
     this.usuarioService.postAceitarCorrida(Number(corridaId), Number(motoristaId)).subscribe({
       next: (resp) => {
         console.log('Corrida aceita:', resp);
