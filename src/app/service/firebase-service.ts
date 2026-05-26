@@ -49,10 +49,7 @@ export class FirebaseService {
               if(payload.data?.['title'] === 'Nova Corrida 🏍️'){
                 // salva o corridaId no localStorage
                 const corridaId = payload.data?.['corridaId'];
-                if(corridaId){
-                  localStorage.setItem('corridaId', corridaId);
-                  console.log('CorridaId salvo:', corridaId);
-                }
+
                 navigator.vibrate([1000, 500, 1000]);
                 this.notificationState.mostrarTelaCorrida();
               }
