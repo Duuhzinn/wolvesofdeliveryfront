@@ -36,6 +36,8 @@ export class App implements OnInit {
       //this.firebaseService.requestPermission();
       if (localStorage.getItem('tokenAutenticacao') == null) {
         this.router.navigate(['login']);
+      } else {
+        this.firebaseService.escutarNotificacoes();
       }
     }
 
