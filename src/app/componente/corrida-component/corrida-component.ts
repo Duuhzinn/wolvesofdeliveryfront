@@ -117,7 +117,7 @@ export class CorridaComponent implements OnInit {
           this.usuarioService.patchChamandoMotorista(motoristaId).subscribe({
             next: () => {
               alert("Motorista " + motoristaId + " está sendo chamado" );
-              this.usuarioService.postEnviarNotificacao(motoristaId, 0).subscribe({
+              this.usuarioService.postEnviarNotificacao(motoristaId).subscribe({
                 next: (resp) => alert('Notificação enviada:' +  resp),
                 error: (err) => console.log('Erro ao enviar notificação:', err),
               })

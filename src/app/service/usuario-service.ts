@@ -102,11 +102,11 @@ export class UsuarioService {
   }
 
   //ENVIAR A NOTIFICAÇÃO PARA O MOTORISTA DA VEZ
-  postEnviarNotificacao(motoristaID: number, corridaID: number): Observable<string> {
+  postEnviarNotificacao(motoristaID: number): Observable<string> {
     const token = localStorage.getItem('tokenAutenticacao');
     const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
     return this.http.post(
-      AppConstants.sendDrive(motoristaID, corridaID),
+      AppConstants.sendDrive(motoristaID),
       {},
       { headers, responseType: 'text' },
     );
