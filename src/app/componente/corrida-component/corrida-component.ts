@@ -99,7 +99,7 @@ export class CorridaComponent implements OnInit {
       this.modalChamandoMotorista = false;
       this.cdr.detectChanges();
       this.carregarCorridas();
-      alert('Motorista aceitou a corrida!');
+      //alert('Motorista aceitou a corrida!');
     });
   }
 
