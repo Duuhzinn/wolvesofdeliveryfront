@@ -57,13 +57,14 @@ export class App implements OnInit {
 
   aceitarCorrida() {
     if (isPlatformBrowser(this.platformId)) {
-      const motoristaId = localStorage.getItem('usuarioId');
-      const corridaId = localStorage.getItem('corridaId');
+      const motoristaId = Number(localStorage.getItem('usuarioId'));
+      const despachanteId = Number(localStorage.getItem('despachanteId'));
       //alert('corrida: ' + corridaId + 'Motorista: ' + motoristaId);
-      this.usuarioService.postAceitarCorrida(Number(corridaId), Number(motoristaId)).subscribe({
+      this.usuarioService.postCriarCorrida(motoristaId, despachanteId).subscribe({
         next: (resp) => {
           //alert("'sucesso: ' + resp");
-          console.log('Corrida aceita:', resp);
+          alert('Corrida criada: ' + resp);
+          console.log('Corrida criada:', resp);
           this.usuarioService.patchOcupado(Number(motoristaId)).subscribe({
             next: (resp) => console.log('Status atualizado:', resp),
             error: (err) => console.log('Erro ao atualizar status:', err),

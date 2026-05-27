@@ -12,7 +12,7 @@ import { NotificationStateService } from './notificationstate-service';
 export class FirebaseService {
   constructor(
     private http: HttpClient,
-    private notificationState: NotificationStateService
+    private notificationState: NotificationStateService,
   ) {}
 
   async requestPermission(usuarioId: number) {
@@ -36,17 +36,20 @@ export class FirebaseService {
           next: () => {
             console.log('Token Firebase salvo!');
 
-            // ESCUTA NOTIFICAÇÕES
             onMessage(messaging, (payload) => {
               console.log('Mensagem recebida:', payload);
 
-              const title = payload.data?.['title'];
-              if(payload.data?.['title'] === 'Nova Corrida 🏍️'){
-                // salva o corridaId no localStorage
+              if (payload.data?.['title'] === 'Nova Corrida 🏍️') {
                 const corridaId = payload.data?.['corridaId'];
+                const despachanteId = payload.data?.['despachanteId'];
+
                 if (corridaId) {
                   localStorage.setItem('corridaId', corridaId);
                   console.log('CorridaId salvo:', corridaId);
+                }
+                if (despachanteId) {
+                  localStorage.setItem('despachanteId', despachanteId);
+                  console.log('DespachanteId salvo:', despachanteId);
                 }
 
                 navigator.vibrate([1000, 500, 1000]);

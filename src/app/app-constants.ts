@@ -28,21 +28,20 @@ public static signoffline(id: number): string {return this.baseDriveURL + "/sign
 
 //BASE PARA MONTAR A REQUISIÇÕES DO PUSH NOTIFICATION
 public static get basePushNotification(): string {return this.baseServidor + "/v1/pushnotification"}
-public static sendDrive(motoristaID: number): string {
-    return this.basePushNotification + "/send/" + motoristaID}
+public static sendDrive(motoristaID: number, despachanteId: number): string {
+  return this.basePushNotification + "/send/" + motoristaID + "/" + despachanteId;
+}
 public static lostRace(motoristaID: number, corridaID: number): string {
   return this.basePushNotification + "/lostRace/" + motoristaID + "/" + corridaID;
 }
-public static acceptRace(corridaId: number, motoristaId: number): string{
+public static createRace(corridaId: number, motoristaId: number): string{
     return this.basePushNotification + "/acceptRace/" + corridaId + "/" + motoristaId
 }
 
 
 //BASE PARA MONTAR AS REQUISIÇÕES DA CORRIDA
 public static get baseRaceURL(): string {return this.baseServidor + "/v1/corrida"}
-public static createRace(despachante: number): string {
-    return this.baseRaceURL + "/createRace/" + despachante
-};
+
 public static raceDespatcher(clienteId: number): string{
     return this.baseRaceURL + "/raceDespatcher/" + clienteId
 }
