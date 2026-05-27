@@ -99,7 +99,7 @@ export class CorridaComponent implements OnInit {
       this.modalChamandoMotorista = false;
       this.cdr.detectChanges();
       this.carregarCorridas();
-      alert('Motorista aceitou a corrida!');
+      //alert('Motorista aceitou a corrida!');
     });
   }
 
@@ -118,7 +118,7 @@ export class CorridaComponent implements OnInit {
 
               this.usuarioService.postEnviarNotificacao(motoristaId, despachante).subscribe({
                 next: (resp) => {
-                  alert('Notificação enviada:' +  resp),
+                  //alert('Notificação enviada:' +  resp),
                   this.escutaAceite();
                 },  
                 error: (err) => console.log('Erro ao enviar notificação:', err),
