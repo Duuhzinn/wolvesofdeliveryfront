@@ -11,9 +11,11 @@
         <span [ngClass]="{
           'status-online': usuario.status === 1,
           'status-ocupado': usuario.status === 2,
+          'status-chamando': usuario.status === 3,
           'status-offline': usuario.status === 0
         }">
-          {{ usuario.status === 1 ? 'ON-LINE' : usuario.status === 2 ? 'OCUPADO' : 'OFF-LINE' }}
+          {{ usuario.status === 1 ? 'ON-LINE' : usuario.status === 2 ? 'OCUPADO' : 
+          usuario.status === 3 ? 'CHAMANDO' :'OFF-LINE' }}
         </span>
       </div>
       <div class="card-body">

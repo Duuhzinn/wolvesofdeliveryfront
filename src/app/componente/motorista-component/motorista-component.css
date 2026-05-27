@@ -91,6 +91,11 @@
   font-weight: bold;
 }
 
+.status-chamando {
+  color: blue;
+  font-weight: bold;
+}
+
 .status-offline {
   color: red;
   font-weight: bold;

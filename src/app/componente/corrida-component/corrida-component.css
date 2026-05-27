@@ -276,3 +276,21 @@
   .container { padding: 15px; }
   .corrida-card { flex: 1 1 100%; }
 }
+
+.btn-ok {
+  background-color: #323261;
+  color: #fff;
+  border: none;
+  padding: 6px 14px;
+  border-radius: 8px;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  width: 100%;
+  margin-top: 10px;
+}
+
+.btn-ok:hover {
+  background-color: #4a4a8f;
+  transform: translateY(-1px);
+}

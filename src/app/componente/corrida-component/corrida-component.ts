@@ -42,7 +42,6 @@ export class CorridaComponent implements OnInit {
   ngOnInit(): void {
     if (isPlatformBrowser(this.platformId)) {
       this.carregarCorridas();
-      this.escutaAceite();
     }
   }
 
@@ -110,44 +109,27 @@ export class CorridaComponent implements OnInit {
 
     this.usuarioService.getConsultaPrimeiroMotorista().subscribe({
       next: (motoristaId) => {
-        if (motoristaId !== null) {
+        if(motoristaId !== null){
+          alert("Motorista: " + motoristaId);
           const despachante = Number(localStorage.getItem('usuarioId'));
-          this.usuarioService.patchChamandoMotorista(motoristaId).subscribe();
+          alert("Despachante: " + despachante);
 
-          this.usuarioService.postCriarCorrida(despachante).subscribe({
-            next: (corrida) => {
-              const corridaID = corrida.corrida.id;
-              //alert("CORRIDA CRIADA:" + corridaID);
-
-              this.timerSubscription = timer(0, 7000).pipe(take(9)).subscribe({
-                next: (index) => {
-                  if (index < 8) {
-                    this.usuarioService.postEnviarNotificacao(motoristaId, corridaID).subscribe({
-                      next: (resp) => console.log('Notificação enviada:', resp),
-                      error: (err) => console.log('Erro:', err),
-                    });
-                  } else {
-                    this.usuarioService.postEnviarNotificacaoPerdida(motoristaId, corridaID).subscribe();
-                    this.usuarioService.patchMarcarOffline(motoristaId).subscribe();
-                    this.pararTudo();
-                    this.aguardandoAceite = false;
-                    this.escutaAceite();
-                    this.chamarMotorista();
-                  }
-                },
-              });
-            },
-            error: (err) => console.log('Erro ao criar corrida:', err),
+          this.usuarioService.patchChamandoMotorista(motoristaId).subscribe({
+            next: () => {
+              alert("Motorista " + motoristaId + " está sendo chamado" );
+              this.usuarioService.postEnviarNotificacao(motoristaId, 0).subscribe({
+                next: (resp) => alert('Notificação enviada:' +  resp),
+                error: (err) => console.log('Erro ao enviar notificação:', err),
+              })
+            }
           });
-
         } else {
           //alert("Sem Motorista online")
           this.modalChamandoMotorista = false;
           this.modalSemMotorista = true;
           this.cdr.detectChanges();
         }
-      },
-      error: (err) => console.log(err),
+      }
     });
   }
 
