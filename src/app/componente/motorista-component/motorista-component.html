@@ -1,40 +1,38 @@
 <div class="container">
-  <div class="card">
-    <div class="card-header">
+  <div class="cards-container">
+
+    <div class="corrida-card header-card">
       <h2>STATUS DOS MOTORISTAS</h2>
     </div>
-    <table>
-      <thead>
-        <tr>
-          <th>ID</th>
-          <th>NOME</th>
-          <th>TELEFONE</th>
-          <th>STATUS</th>
-          <th>AÇÕES</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let usuario of usuarios">
-          <td>{{ usuario.id }}</td>
-          <td>{{ usuario.nome }}</td>
-          <td>{{ usuario.telefone }}</td>
-          <td [ngClass]="usuario.status === 1 ? 'online' : usuario.status === 2 ? 'ocupado' : 'offline'">
-            {{ usuario.status === 1 ? 'ON-LINE' : usuario.status === 2 ? 'OCUPADO' : 'OFF-LINE' }}
-          </td>
 
-          <td>
-            <button class="btn-editar" (click)="chamarModalEdit(usuario)">Alterar Status</button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+    <div class="corrida-card" *ngFor="let usuario of usuarios">
+      <div class="card-top">
+        <span class="card-id">#{{ usuario.id }}</span>
+        <span [ngClass]="{
+          'status-online': usuario.status === 1,
+          'status-ocupado': usuario.status === 2,
+          'status-offline': usuario.status === 0
+        }">
+          {{ usuario.status === 1 ? 'ON-LINE' : usuario.status === 2 ? 'OCUPADO' : 'OFF-LINE' }}
+        </span>
+      </div>
+      <div class="card-body">
+        <p class="card-label">MOTORISTA</p>
+        <p><i class="ti ti-user" aria-hidden="true"></i> <span>{{ usuario.nome }}</span></p>
+        <p class="card-label">CONTATO</p>
+        <p><i class="ti ti-phone" aria-hidden="true"></i> <span>{{ usuario.telefone }}</span></p>
+      </div>
+      <div class="card-footer" *ngIf="usuario.status !== 2">
+        <button class="btn-editar" (click)="chamarModalEdit(usuario)">Alterar Status</button>
+      </div>
+    </div>
+
   </div>
 </div>
 
 <!-- MODAL PARA EDICAO OU INSERÇÃO DO USUARIO-->
 <div class="modal-overlay" *ngIf="modalEditStatus">
-  <!-- Paramos a propagação do clique para o modal não fechar ao clicar dentro dele -->
-  <div class="modal-dialog modal-lg modal-content-animated">
+  <div class="driver-modal" (click)="$event.stopPropagation()">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title">ALTERAR STATUS DO MOTORISTA</h5>
@@ -43,11 +41,7 @@
         </button>
       </div>
       <div class="modal-body">
-        <form #userForm="ngForm">
-          <div class="input-container-flex">
-            <p> Deseja alterar o status do motorista <strong style="color: red">{{ usuario.nome }}</strong> ?</p>
-          </div>
-        </form>
+        <p>Deseja alterar o status do motorista <strong style="color: red">{{ usuario.nome }}</strong>?</p>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-Fechar" (click)="fecharModal()">Não</button>

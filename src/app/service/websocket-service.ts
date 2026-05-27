@@ -6,38 +6,56 @@ import SockJS from 'sockjs-client';
   providedIn: 'root',
 })
 export class WebsocketService {
-  private client: Client;
+  private clientFila: Client;
+  private clientCorrida: Client | null = null;
 
   constructor() {
-    this.client = new Client({
-      webSocketFactory: () => 
+    this.clientFila = new Client({
+      webSocketFactory: () =>
         new SockJS('https://wolvesofdeliveryapi.onrender.com/wolvesofdeliveryAPI/ws'),
       reconnectDelay: 5000,
     });
   }
 
   conectar(callback: () => void) {
-    this.client.onConnect = () => {
-      console.log('WebSocket conectado');
-      this.client.subscribe('/topic/fila', () => {
+    this.clientFila.onConnect = () => {
+      console.log('WebSocket conectado - Fila');
+      this.clientFila.subscribe('/topic/fila', () => {
         callback();
       });
     };
-    this.client.activate();
+    if (!this.clientFila.active) {
+      this.clientFila.activate();
+    }
   }
 
-  conectarCorrida(callback: () => void){
-    this.client.onConnect = () => {
+  conectarCorrida(callback: () => void) {
+    this.clientCorrida = new Client({
+      webSocketFactory: () =>
+        new SockJS('https://wolvesofdeliveryapi.onrender.com/wolvesofdeliveryAPI/ws'),
+      reconnectDelay: 0,
+    });
 
-      console.log('WebSocket Conectado - Corrida');
-      this.client.subscribe('/topic/corrida', () => {
+    this.clientCorrida.onConnect = () => {
+      console.log('WebSocket conectado - Corrida');
+      this.clientCorrida!.subscribe('/topic/corrida', () => {
         callback();
+        this.desconectarCorrida();
       });
     };
-    this.client.activate();
+
+    this.clientCorrida.activate();
+  }
+
+  desconectarCorrida() {
+    if (this.clientCorrida) {
+      this.clientCorrida.deactivate();
+      this.clientCorrida = null;
+    }
   }
 
   desconectar() {
-    this.client.deactivate();
+    this.clientFila.deactivate();
+    this.desconectarCorrida();
   }
 }

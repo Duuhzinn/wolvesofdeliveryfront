@@ -4,87 +4,101 @@
   margin: 0 auto;
 }
 
-.card {
-  background-color: #ffffff;
-  border-radius: 15px;
-  overflow: hidden;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+.cards-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  padding: 16px;
 }
 
-.card-header {
-  background-color: #ffffff;
-  padding: 16px 20px;
+.corrida-card {
+  background: #fff;
+  border: 0.5px solid #ddd;
+  border-radius: 12px;
+  padding: 16px;
+  flex: 1 1 280px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
-.card-header h2 {
+.header-card {
+  flex: 1 1 100%;
+}
+
+.header-card h2 {
   color: #333;
   font-size: 2rem;
   font-weight: 600;
-  margin: 0;
+  margin: 0 0 12px 0;
   letter-spacing: 0.05em;
 }
 
-table {
+.card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 0.5px solid #eee;
+  padding-bottom: 10px;
+}
+
+.card-id {
+  font-size: 16px;
+  font-weight: 500;
+  color: #534AB7;
+}
+
+.card-label {
+  display: block !important;
+  text-align: center !important;
+  font-size: 11px;
+  font-weight: 700;
+  color: #888;
+  letter-spacing: 0.1em;
+  margin: 8px 0 2px 0 !important;
+  border-top: 0.5px solid #eee;
+  padding-top: 8px;
   width: 100%;
-  border-collapse: collapse;
 }
 
-thead {
-  background-color: #1a1a2e;
+.card-body p {
+  margin: 5px 0;
+  font-size: 13px;
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  color: #555;
 }
 
-thead th {
-  color: #ffffff;
-  padding: 12px 16px;
-  text-align: left;
-  font-size: 0.8rem;
-  letter-spacing: 0.05em;
-}
-
-tbody tr {
-  border-bottom: 1px solid #e8e8e8;
-  transition: background-color 0.2s;
-}
-
-tbody tr:last-child {
-  border-bottom: none;
-}
-
-tbody tr:hover {
-  background-color: #f0f1f2;
-}
-
-tbody td {
-  padding: 12px 16px;
+.card-body p span {
   color: #333;
-  font-size: 0.9rem;
+  font-weight: 500;
 }
 
-tbody tr:hover {
-  background-color: #d9d9ee;
+.card-footer {
+  margin-top: auto;
+  padding-top: 10px;
+  border-top: 0.5px solid #eee;
 }
 
-@media (max-width: 768px) {
-  .container {
-    padding: 15px;
-  }
-
-  table {
-    display: block;
-    overflow-x: auto;
-    white-space: nowrap;
-  }
-
-  thead th,
-  tbody td {
-    padding: 10px 12px;
-    font-size: 0.8rem;
-  }
+.status-online {
+  color: green;
+  font-weight: bold;
 }
-.btn-Salvar,
-.btn-editar {
+
+.status-ocupado {
+  color: orange;
+  font-weight: bold;
+}
+
+.status-offline {
+  color: red;
+  font-weight: bold;
+}
+
+.btn-editar,
+.btn-Salvar {
   background-color: #323261;
-  border-color: #323261;
   color: #fff;
   border: none;
   padding: 6px 14px;
@@ -92,17 +106,17 @@ tbody tr:hover {
   font-size: 0.8rem;
   cursor: pointer;
   transition: background-color 0.2s;
+  width: 100%;
 }
-.btn-Salvar:hover,
-.btn-editar:hover {
-  background-color: #4a4a8f; /* mais claro, mesmo tom roxo/azul */
-  border-color: #4a4a8f;
+
+.btn-editar:hover,
+.btn-Salvar:hover {
+  background-color: #4a4a8f;
   transform: translateY(-1px);
 }
 
 .btn-Fechar {
   background-color: #6c757d;
-  border-color: #6c757d;
   color: #fff;
   border: none;
   padding: 6px 14px;
@@ -111,62 +125,85 @@ tbody tr:hover {
   cursor: pointer;
   transition: background-color 0.2s;
 }
-/* Efeito de hover para o Fechar */
+
 .btn-Fechar:hover {
-  background-color: #5a6268; /* Um pouco mais escuro no hover */
+  background-color: #5a6268;
   transform: translateY(-1px);
 }
 
-:host .online {
-  color: green;
-  font-weight: bold;
-}
-
-:host .ocupado {
-  color: orange;
-}
-
-:host .offline {
-  color: red;
-  font-weight: bold;
-}
-
-/*MODAL*/
-/* Fundo escurecido com transição de opacidade */
 .modal-overlay {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.55);
   display: flex;
-  align-items: flex-start; /* Alinha ao topo para começar a queda */
   justify-content: center;
-  z-index: 1050;
-  animation: fadeIn 0.3s ease-out;
+  align-items: center;
+  z-index: 9999;
+  backdrop-filter: blur(4px);
+  animation: fadeIn 0.3s ease;
 }
-/* O "corpo" do modal que vai cair */
-.modal-content-animated {
-  margin-top: 50px; /* Distância do topo após cair */
-  animation: slideDown 0.4s ease-out forwards;
+
+.driver-modal {
+  width: 380px;
+  background: white;
+  border-radius: 24px;
+  padding: 35px;
+  animation: modalUp 0.35s ease;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
 }
-/* Definição das animações */
-@keyframes slideDown {
-  from {
-    transform: translateY(-100%);
-    opacity: 0;
-  }
-  to {
-    transform: translateY(0);
-    opacity: 1;
-  }
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
 }
+
+.modal-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #333;
+  margin: 0;
+}
+
+.modal-body {
+  margin-bottom: 16px;
+  font-size: 0.9rem;
+  color: #555;
+}
+
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.close {
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+  color: #888;
+}
+
+.close:hover {
+  color: #333;
+}
+
+@keyframes modalUp {
+  from { transform: translateY(40px) scale(0.95); opacity: 0; }
+  to { transform: translateY(0) scale(1); opacity: 1; }
+}
+
 @keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@media (max-width: 600px) {
+  .container { padding: 15px; }
+  .corrida-card { flex: 1 1 100%; }
 }

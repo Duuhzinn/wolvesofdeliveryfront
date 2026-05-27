@@ -56,11 +56,12 @@
   align-items: center;
 }
 
-.badge-online { color: #3B6D11; font-weight: 500; }
-.badge-ocupado { color: #854F0B; font-weight: 500; }
-.badge-offline { color: #A32D2D; font-weight: 500; }
+.badge-online { color: green; font-weight: bold; }
+.badge-ocupado { color: orange; font-weight: bold; }
+.badge-offline { color: red; font-weight: bold; }
 
 @media (max-width: 600px) {
   .container { padding: 15px; }
   .motorista-card { flex: 1 1 100%; }
 }
+

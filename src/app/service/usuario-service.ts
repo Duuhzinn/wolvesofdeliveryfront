@@ -35,14 +35,15 @@ export class UsuarioService {
   }
 
   //CONSULTA USUARIO POR NOME
-  getConsultaUserNome(nome: String): Observable<any> {
+  getConsultaUserNome(nome: String, tipoUser: string): Observable<any> {
+    const url = AppConstants.pesqUserNome(nome, tipoUser);
     let headers = new HttpHeaders();
     if (isPlatformBrowser(this.platformId)) {
       const token = localStorage.getItem('tokenAutenticacao');
       headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
     }
 
-    return this.http.get<any>(AppConstants.pesqUserNome(nome), { headers });
+    return this.http.get<any>(AppConstants.pesqUserNome(nome, tipoUser), { headers });
   }
 
   //INSERI NOVO USUARIO NO BANCO
@@ -111,6 +112,13 @@ export class UsuarioService {
     );
   }
 
+  //CHAMANDO O MOTORISTA DA VEZ
+  patchChamandoMotorista(motoristaId: number): Observable<any>{
+    const token = localStorage.getItem('tokenAutenticacao');
+    const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
+    return this.http.patch(AppConstants.callingDrive(motoristaId), {}, { headers, responseType: 'text'});
+  }
+
   //EVIAR NOTIFICAÇÃO DE CORRIDA PERDIDA
   postEnviarNotificacaoPerdida(motoristaID: number, corridaID: number): Observable<string> {
     const token = localStorage.getItem('tokenAutenticacao');
@@ -131,6 +139,13 @@ export class UsuarioService {
       {},
       { headers, responseType: 'text' },
     );
+  }
+
+  //ALTERA O STATUS DO MOTORISTA PARA OFFLINE
+  patchMarcarOffline(motoristaId: number): Observable<any>{
+    const token = localStorage.getItem('tokenAutenticacao');
+    const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
+    return this.http.patch(AppConstants.signoffline(motoristaId), {}, { headers, responseType: 'text' });
   }
 
   //LISTA TODAS AS CORRIDAS DOS CLIENTES

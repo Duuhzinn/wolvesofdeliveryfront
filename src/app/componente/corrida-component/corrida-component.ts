@@ -31,6 +31,15 @@ export class CorridaComponent implements OnInit {
 
   corridas: any[] = [];
 
+  //APENAS CLIENTES CHAMEM MOTORISTA
+  get isCliente(): boolean {
+    return isPlatformBrowser(this.platformId) && localStorage.getItem('tipoUser') === 'CLIENTE';
+  }
+  //APENAS MOTORISTA ATUALIZAM OS CARDS
+  get isMotorista(): boolean {
+    return isPlatformBrowser(this.platformId) && localStorage.getItem('tipoUser') === 'MOTORISTA';
+  }
+
   ngOnInit(): void {
     if (isPlatformBrowser(this.platformId)) {
       this.carregarCorridas();
@@ -40,20 +49,29 @@ export class CorridaComponent implements OnInit {
     const usuarioId = Number(localStorage.getItem('usuarioId'));
     const tipoUser = localStorage.getItem('tipoUser');
 
-    if(tipoUser === 'CLIENTE'){
+    if (tipoUser === 'CLIENTE') {
       this.usuarioService.getCorridasCliente(usuarioId).subscribe({
-        next: (data) => { this.corridas = data; this.cdr.detectChanges(); },
-        error: (err) => console.log(err)
+        next: (data) => {
+          this.corridas = data;
+          this.cdr.detectChanges();
+        },
+        error: (err) => console.log(err),
       });
-    } else if (tipoUser === "MOTORISTA"){
+    } else if (tipoUser === 'MOTORISTA') {
       this.usuarioService.getCorridasMotorista(usuarioId).subscribe({
-        next: (data) => { this.corridas = data; this.cdr.detectChanges(); },
-        error: (err) => console.log(err)
+        next: (data) => {
+          this.corridas = data;
+          this.cdr.detectChanges();
+        },
+        error: (err) => console.log(err),
       });
-    }else{
+    } else {
       this.usuarioService.getCorridasAdm().subscribe({
-        next: (data) => { this.corridas = data; this.cdr.detectChanges(); },
-        error: (err) => console.log(err)
+        next: (data) => {
+          this.corridas = data;
+          this.cdr.detectChanges();
+        },
+        error: (err) => console.log(err),
       });
     }
   }
@@ -83,15 +101,62 @@ export class CorridaComponent implements OnInit {
   private escutaAceite() {
     if (isPlatformBrowser(this.platformId)) {
       this.websocketService.conectarCorrida(() => {
-        alert('Motorista aceitou a corrida!');
         this.pararTudo();
+        this.modalChamandoMotorista = false;
+        this.cdr.detectChanges();
         this.carregarCorridas();
-        //this.modalChamandoMotorista = false;
+        alert('Motorista aceitou a corrida!');
       });
     }
   }
 
-  chamarMotorista() {
+  chamarMotorista(){
+    this.modalChamandoMotorista = true;
+
+    this.usuarioService.getConsultaPrimeiroMotorista().subscribe({
+      next: (motoristaId) => {
+        if(motoristaId !== null) {
+          const despachante = Number(localStorage.getItem('usuarioId'));
+          this.usuarioService.patchChamandoMotorista(motoristaId).subscribe();
+
+          this.usuarioService.postCriarCorrida(despachante).subscribe({
+            next: (corrida) =>{
+              const corridaID = corrida.corrida.id;
+              alert("CORRIDA CRIADA:" + corridaID);
+              this.escutaAceite();
+
+              this.timerSubscription = timer(0, 7000).pipe(take(9)).subscribe({
+                next: (index) => {
+                  if (index < 8) {
+                    this.usuarioService.postEnviarNotificacao(motoristaId, corridaID).subscribe({
+                      next: (resp) => console.log('Notificação enviada:', resp),
+                      error: (err) => console.log('Erro:', err),
+                    });
+                  } else {
+                    this.usuarioService.postEnviarNotificacaoPerdida(motoristaId, corridaID).subscribe();
+                    this.usuarioService.patchMarcarOffline(motoristaId).subscribe();
+                    this.pararTudo();
+                    this.chamarMotorista(); // BUSCA O PRÓXIMO
+                  }
+                },
+              });
+            },
+            error: (err) => console.log('Erro ao criar corrida:', err),
+          })
+          alert("Motorista encontado: " + motoristaId);
+          alert("Usuario: " + despachante);
+          this.modalChamandoMotorista = false;
+          this.cdr.detectChanges();
+        } else {
+          alert("Sem Motorista online")
+          this.modalChamandoMotorista = false;
+          this.modalSemMotorista = true;
+          this.cdr.detectChanges();
+        }
+      }
+    });
+  }
+  chamarMotorista1() {
     const despachante = Number(localStorage.getItem('usuarioId'));
 
     // CRIA A CORRIDA ANTES DE CHAMAR O MOTORISTA
@@ -140,13 +205,13 @@ export class CorridaComponent implements OnInit {
     });
   }
 
-  atualizarCorridas(corridaId: number){
+  atualizarCorridas(corridaId: number) {
     this.usuarioService.patchAtualizarCorrida(corridaId).subscribe({
       next: (resp) => {
         console.log('Corrida atualizada:', resp);
         this.carregarCorridas(); // recarrega a tabela
       },
-      error: (err) => console.log('Erro ao atualizar corrida:', err)
+      error: (err) => console.log('Erro ao atualizar corrida:', err),
     });
   }
 }

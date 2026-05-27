@@ -8,7 +8,9 @@ public static get baseLogin(): string {return this.baseServidor + "/login"}
 //BASE PARA MONTAR REQUISIÇÕES DE USUARIOS
 public static get baseUserURL(): string {return this.baseServidor + "/v1/users"}
 public static get allUser(): string {return this.baseUserURL + "/allUser"}
-public static pesqUserNome(nome: String): string {return this.baseUserURL + "/pesqName/" + nome}
+public static pesqUserNome(nome: String, tipoUser: string): string {
+  return this.baseUserURL + "/pesqName/" + nome + "?tipoUser=" + tipoUser;
+}
 public static salvarUsuario(): string {return this.baseUserURL + "/createUser"}
 public static atualizarUsuario(): string {return this.baseUserURL + "/updateUser" }
 public static usuarioLogado(): string {return this.baseUserURL + "/userLogado"}
@@ -19,7 +21,9 @@ public static get allDrive(): string {return this.baseDriveURL + "/allDrive"}
 public static changeStatus(id: any): string { return this.baseDriveURL + "/changeStatus/" + id }
 public static get driverQueue(): string {return this.baseDriveURL + "/driverQueue"}
 public static get firstDrive(): string {return this.baseDriveURL + "/driverQueue/firstid"}
+public static callingDrive(id: number): string {return this.baseDriveURL + "/callingDrive/" + id }
 public static busy(id: any): string { return this.baseDriveURL + "/busy/" + id}
+public static signoffline(id: number): string {return this.baseDriveURL + "/signOffline/" + id}
 
 
 //BASE PARA MONTAR A REQUISIÇÕES DO PUSH NOTIFICATION

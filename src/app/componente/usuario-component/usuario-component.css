@@ -4,103 +4,129 @@
   margin: 0 auto;
 }
 
-.card {
-  background-color: #ffffff;
-  border-radius: 15px;
-  overflow: hidden;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+.cards-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  padding: 16px;
 }
 
-.card-header {
-  background-color: #ffffff;
-  padding: 16px 20px;
+.corrida-card {
+  background: #fff;
+  border: 0.5px solid #ddd;
+  border-radius: 12px;
+  padding: 16px;
+  flex: 1 1 280px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
-.card-header h2 {
+.header-card {
+  flex: 1 1 100%;
+}
+
+.header-card h2 {
   color: #333;
   font-size: 2rem;
   font-weight: 600;
-  margin: 0;
+  margin: 0 0 12px 0;
   letter-spacing: 0.05em;
 }
 
-table {
+.card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 0.5px solid #eee;
+  padding-bottom: 10px;
+}
+
+.card-id {
+  font-size: 16px;
+  font-weight: 500;
+  color: #534AB7;
+}
+
+.card-label {
+  display: block !important;
+  text-align: center !important;
+  font-size: 11px;
+  font-weight: 700;
+  color: #888;
+  letter-spacing: 0.1em;
+  margin: 8px 0 2px 0 !important;
+  border-top: 0.5px solid #eee;
+  padding-top: 8px;
   width: 100%;
-  border-collapse: collapse;
 }
 
-thead {
-  background-color: #1a1a2e;
+.card-body p {
+  margin: 5px 0;
+  font-size: 13px;
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  color: #555;
 }
 
-thead th {
-  color: #ffffff;
-  padding: 12px 16px;
-  text-align: left;
-  font-size: 0.8rem;
-  letter-spacing: 0.05em;
-}
-
-tbody tr {
-  border-bottom: 1px solid #e8e8e8;
-  transition: background-color 0.2s;
-}
-
-tbody tr:last-child {
-  border-bottom: none;
-}
-
-tbody tr:hover {
-  background-color: #f0f1f2;
-}
-
-tbody td {
-  padding: 12px 16px;
+.card-body p span {
   color: #333;
-  font-size: 0.9rem;
+  font-weight: 500;
 }
 
-tbody tr:hover {
-  background-color: #d9d9ee;
+.card-footer {
+  margin-top: auto;
+  padding-top: 10px;
+  border-top: 0.5px solid #eee;
 }
 
-@media (max-width: 768px) {
-  .container {
-    padding: 15px;
-  }
+.tipo-admin     { color: #534AB7; font-weight: bold; font-size: 12px; }
+.tipo-cliente   { color: #0F6E56; font-weight: bold; font-size: 12px; }
+.tipo-motorista { color: #BA7517; font-weight: bold; font-size: 12px; }
 
-  table {
-    display: block;
-    overflow-x: auto;
-    white-space: nowrap;
-  }
-
-  thead th,
-  tbody td {
-    padding: 10px 12px;
-    font-size: 0.8rem;
-  }
+.filtro-abas {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+  flex-wrap: wrap;
 }
 
-/*CAMPO DE BUSCA*/
+.filtro-abas button {
+  background: none;
+  border: 0.5px solid #ddd;
+  border-radius: 20px;
+  padding: 4px 16px;
+  font-size: 0.8rem;
+  cursor: pointer;
+  color: #555;
+  transition: all 0.2s;
+}
+
+.filtro-abas button:hover {
+  background: #f0f0f8;
+  border-color: #534AB7;
+  color: #534AB7;
+}
+
+.filtro-abas button.aba-ativa {
+  background: #323261;
+  border-color: #323261;
+  color: #fff;
+}
+
 .input-busca {
-  width: 100%; /* Ocupa a largura total para permitir o alinhamento no fim */
+  width: 100%;
   display: flex;
   gap: 8px;
 }
+
 .input-busca .form-control {
   max-width: 350px;
 }
 
-.input-busca .form-control:focus {
-  border-color: #1a1a2e;
-  box-shadow: 0 0 0 0.25rem rgba(26, 26, 46, 0.25);
-}
-.btn-buscar,
-.btn-Salvar,
-.btn-editar {
+.btn-buscar, .btn-Salvar, .btn-editar {
   background-color: #323261;
-  border-color: #323261;
   color: #fff;
   border: none;
   padding: 6px 14px;
@@ -109,35 +135,15 @@ tbody tr:hover {
   cursor: pointer;
   transition: background-color 0.2s;
 }
-.btn-buscar:hover,
-.btn-Salvar:hover,
-.btn-editar:hover {
-  background-color: #4a4a8f; /* mais claro, mesmo tom roxo/azul */
-  border-color: #4a4a8f;
+
+.btn-buscar:hover, .btn-Salvar:hover, .btn-editar:hover {
+  background-color: #4a4a8f;
   transform: translateY(-1px);
 }
 
 .btn-novo {
-  margin-left: auto; /* A MÁGICA: Empurra este botão para o final da linha */
-  margin-right: 12px;
-  background-color: #323261; /* Opcional: verde para destacar que é "Novo" */
-  border-color: #323261;
-  color: #ffffff;
-  border: none;
-  padding: 6px 14px;
-  border-radius: 8px;
-  font-size: 0.8rem;
-  cursor: pointer;
-  transition: background-color 0.2s;
-}
-.btn-novo:hover {
-  background-color: #4a4a8f;
-  border-color: #4a4a8f;
-  transform: translateY(-1px);
-}
-.btn-Fechar {
-  background-color: #6c757d;
-  border-color: #6c757d;
+  margin-left: auto;
+  background-color: #323261;
   color: #fff;
   border: none;
   padding: 6px 14px;
@@ -146,169 +152,114 @@ tbody tr:hover {
   cursor: pointer;
   transition: background-color 0.2s;
 }
-/* Efeito de hover para o Fechar */
-.btn-Fechar:hover {
-  background-color: #5a6268; /* Um pouco mais escuro no hover */
+
+.btn-novo:hover {
+  background-color: #4a4a8f;
   transform: translateY(-1px);
 }
 
-/*MODAL*/
-/* Fundo escurecido com transição de opacidade */
+.btn-editar { width: 100%; }
+
+.btn-Fechar {
+  background-color: #6c757d;
+  color: #fff;
+  border: none;
+  padding: 6px 14px;
+  border-radius: 8px;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.btn-Fechar:hover {
+  background-color: #5a6268;
+  transform: translateY(-1px);
+}
+
 .modal-overlay {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background-color: rgba(0,0,0,0.5);
   display: flex;
-  align-items: flex-start; /* Alinha ao topo para começar a queda */
+  align-items: flex-start;
   justify-content: center;
   z-index: 1050;
   animation: fadeIn 0.3s ease-out;
 }
-/* O "corpo" do modal que vai cair */
+
 .modal-content-animated {
-  margin-top: 50px; /* Distância do topo após cair */
+  margin-top: 50px;
   animation: slideDown 0.4s ease-out forwards;
 }
-/* Definição das animações */
-@keyframes slideDown {
-  from {
-    transform: translateY(-100%);
-    opacity: 0;
-  }
-  to {
-    transform: translateY(0);
-    opacity: 1;
-  }
-}
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
 
-/* Faz o modal crescer conforme o conteúdo ou ter um tamanho mínimo decente */
 .modal-dialog {
-  max-width: 600px; /* Define uma largura máxima confortável */
-  width: 90%; /* Para telas menores */
+  max-width: 600px;
+  width: 90%;
   margin: 30px auto;
 }
 
-/* Container que coloca os itens lado a lado */
-.input-container-flex {
-  display: flex;
-  gap: 15px; /* Espaço entre o ID e o Nome */
-  width: 100%;
-}
-/* Base para cada grupo (label + input) */
-.field-group {
-  display: flex;
-  flex-direction: column;
-}
-/* ID com largura fixa ou pequena, mas visível */
-.group-id {
-  flex: 0 0 80px; /* Não estica, não encolhe, mantém 80px */
-}
-/* Nome estica para ocupar todo o resto da linha */
-.group-nome {
-  flex: 1;
-}
-/* Estilo do label (conforme sua imagem) */
-.form-label {
-  font-size: 14px;
-  font-weight: bold;
-  margin-bottom: 8px;
-  color: #333;
-}
-/* Estilo do Input */
-.form-control {
-  height: 40px;
-  border: 1px solid #ced4da;
-  border-radius: 4px;
-  padding: 8px;
-  width: 100%;
-}
-/* Espaçamento entre as linhas */
-.mt-3 {
-  margin-top: 15px;
-}
+.modal-sm { max-width: 400px; }
 
-/* Força o campo a ocupar 100% da largura da linha */
-.group-full {
-  flex: 1;
-  width: 100%;
-}
-/* Garante que o container flex não tente colocar o endereço ao lado do nome */
-.modal-body form {
-  display: flex;
-  flex-direction: column;
-}
-/* Ajuste fino no input de endereço para parecer maior se necessário */
-.group-full input {
-  width: 100%;
-}
-/*EMAIL E TIPO DE USUARIO*/
-/* E-mail ganha mais espaço (70%) */
-.group-email {
-  flex: 7;
-}
+.input-container-flex { display: flex; gap: 15px; width: 100%; }
+.field-group { display: flex; flex-direction: column; }
+.group-id { flex: 0 0 80px; }
+.group-nome { flex: 1; }
+.group-full { flex: 1; width: 100%; }
+.group-3-col { flex: 1; min-width: 0; }
+.group-tipo { flex: 0 0 180px; }
 
-/* Faz com que cada um dos 3 campos ocupe o mesmo espaço (33% cada) */
-.group-3-col {
-  flex: 1;
-  min-width: 0; /* Evita que o input "estoure" o container em telas menores */
-}
+.form-label { font-size: 14px; font-weight: bold; margin-bottom: 8px; color: #333; }
+.form-control { height: 40px; border: 1px solid #ced4da; border-radius: 4px; padding: 8px; width: 100%; }
+input[type='password'] { height: 40px; border: 1px solid #ced4da; border-radius: 4px; padding: 8px; width: 100%; }
+.mt-2 { margin-top: 8px; }
+.mt-3 { margin-top: 15px; }
 
-/* Garante que o input tipo password siga o mesmo estilo dos outros */
-input[type='password'] {
-  height: 40px;
-  border: 1px solid #ced4da;
-  border-radius: 4px;
-  padding: 8px;
-  width: 100%;
-}
+.modal-body form { display: flex; flex-direction: column; }
+.modal-header { display: flex; justify-content: space-between; align-items: center; padding: 16px; border-bottom: 0.5px solid #eee; }
+.modal-body { padding: 16px; }
+.modal-footer { display: flex; justify-content: flex-end; gap: 8px; padding: 16px; border-top: 0.5px solid #eee; }
+.modal-title { font-size: 1rem; font-weight: 600; margin: 0; }
+.close { background: none; border: none; font-size: 1.2rem; cursor: pointer; color: #888; }
 
 .success-icon {
-  width: 80px;
-  height: 80px;
-  background-color: #d4edda; /* Verde clarinho */
-  color: #28a745; /* Verde forte */
+  width: 80px; height: 80px;
+  background-color: #d4edda; color: #28a745;
   border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 0 auto; /* Centraliza o círculo */
-  font-size: 40px;
-  font-weight: bold;
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto;
+  font-size: 40px; font-weight: bold;
   border: 4px solid #28a745;
 }
-/* Tamanho menor para o modal de sucesso */
-.modal-sm {
-  max-width: 400px;
-}
-.text-center {
-  text-align: center;
-}
 
-/* Estilo do círculo laranja/vermelho */
 .error-icon {
-  width: 80px;
-  height: 80px;
-  background-color: #fff3cd; /* Fundo amarelo/laranja clarinho */
-  color: #856404;            /* Texto marrom/alerta */
+  width: 80px; height: 80px;
+  background-color: #fff3cd; color: #856404;
   border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  display: flex; align-items: center; justify-content: center;
   margin: 0 auto;
-  font-size: 40px;
-  font-weight: bold;
+  font-size: 40px; font-weight: bold;
   border: 4px solid #ffeeba;
 }
 
+.text-center { text-align: center; }
+.text-muted { color: #888; }
+.p-4 { padding: 1.5rem; }
+.justify-content-center { justify-content: center; }
 
+@keyframes slideDown {
+  from { transform: translateY(-100%); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@media (max-width: 600px) {
+  .container { padding: 15px; }
+  .corrida-card { flex: 1 1 100%; }
+  .input-container-flex { flex-direction: column; }
+  .group-id, .group-tipo { flex: 1; }
+}

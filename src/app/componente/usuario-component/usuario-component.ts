@@ -15,6 +15,7 @@ export class UsuarioComponent implements OnInit {
   usuario: User = {} as User;
   usuarios: User[] = [];
   nome: string = '';
+  filtroAtivo: string = 'ADMIN';
   modalInsertEdit: boolean = false;
   modalSucess: boolean = false;
   modalErro: Boolean = false;
@@ -30,31 +31,32 @@ export class UsuarioComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  
   consultaTodosUsuarios(): void {
-    this.usuarioService.getUsuarioList().subscribe({
-      next: (data) => {
-        this.usuarios = data;
-        this.cdr.detectChanges();
-      },
-      error: (err) => {
-        console.log(err);
-      },
-    });
-  }
+  this.usuarioService.getUsuarioList().subscribe({
+    next: (data) => {
+      console.log('todos:', data);
+      console.log('filtroAtivo:', this.filtroAtivo);
+      this.usuarios = data.filter((u: any) => u.tipoUser === this.filtroAtivo);
+      console.log('filtrados:', this.usuarios);
+      this.cdr.detectChanges();
+    },
+    error: (err) => console.log(err),
+  });
+}
 
   //CONSULTA O NOME DO USUARIO RETORNANDO TODAS AS INFORMAÇÕES NA TABELA
   consultarUserNome(): void {
-    this.usuarioService.getConsultaUserNome(this.nome).subscribe({
+    if (this.nome.trim() === '') {
+      this.consultaTodosUsuarios();
+      return;
+    }
+
+    this.usuarioService.getConsultaUserNome(this.nome, this.filtroAtivo).subscribe({
       next: (data) => {
-        this.modalInsertEdit = false;
-        console.log('Retorno:', data); // ← aqui
         this.usuarios = data;
         this.cdr.detectChanges();
       },
-      error: (err) => {
-        console.log(err);
-      },
+      error: (err) => console.log(err),
     });
   }
 
