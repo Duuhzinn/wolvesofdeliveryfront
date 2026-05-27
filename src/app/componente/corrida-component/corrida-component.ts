@@ -1,9 +1,8 @@
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { ChangeDetectorRef, Component, Inject, OnInit, PLATFORM_ID } from '@angular/core';
 import { UsuarioService } from '../../service/usuario-service';
-import { interval, Subscription, take, timer } from 'rxjs';
+import { Subscription, take, timer } from 'rxjs';
 import { Client } from '@stomp/stompjs';
-import SockJS from 'sockjs-client';
 import { WebsocketService } from '../../service/websocket-service';
 import { NotificationStateService } from '../../service/notificationstate-service';
 
@@ -17,9 +16,10 @@ export class CorridaComponent implements OnInit {
   modalChamandoMotorista: boolean = false;
   modalSemMotorista: boolean = false;
   mostrarModalCorrida: boolean = false;
+  private aguardandoAceite: boolean = false;
 
-  private timerSubscription: Subscription | null = null; //GUARDA A REFERENCIA DO TIMER PARA CANCELAR
-  private stompClient: Client | null = null; // GUARDA A REFERENCIA DO WEBSOCKET PARA PODER DESCONECTAR
+  private timerSubscription: Subscription | null = null;
+  private stompClient: Client | null = null;
 
   constructor(
     private usuarioService: UsuarioService,
@@ -31,11 +31,10 @@ export class CorridaComponent implements OnInit {
 
   corridas: any[] = [];
 
-  //APENAS CLIENTES CHAMEM MOTORISTA
   get isCliente(): boolean {
     return isPlatformBrowser(this.platformId) && localStorage.getItem('tipoUser') === 'CLIENTE';
   }
-  //APENAS MOTORISTA ATUALIZAM OS CARDS
+
   get isMotorista(): boolean {
     return isPlatformBrowser(this.platformId) && localStorage.getItem('tipoUser') === 'MOTORISTA';
   }
@@ -43,50 +42,43 @@ export class CorridaComponent implements OnInit {
   ngOnInit(): void {
     if (isPlatformBrowser(this.platformId)) {
       this.carregarCorridas();
+      this.escutaAceite();
     }
   }
+
   carregarCorridas() {
     const usuarioId = Number(localStorage.getItem('usuarioId'));
     const tipoUser = localStorage.getItem('tipoUser');
 
     if (tipoUser === 'CLIENTE') {
       this.usuarioService.getCorridasCliente(usuarioId).subscribe({
-        next: (data) => {
-          this.corridas = data;
-          this.cdr.detectChanges();
-        },
+        next: (data) => { this.corridas = data; this.cdr.detectChanges(); },
         error: (err) => console.log(err),
       });
     } else if (tipoUser === 'MOTORISTA') {
       this.usuarioService.getCorridasMotorista(usuarioId).subscribe({
-        next: (data) => {
-          this.corridas = data;
-          this.cdr.detectChanges();
-        },
+        next: (data) => { this.corridas = data; this.cdr.detectChanges(); },
         error: (err) => console.log(err),
       });
     } else {
       this.usuarioService.getCorridasAdm().subscribe({
-        next: (data) => {
-          this.corridas = data;
-          this.cdr.detectChanges();
-        },
+        next: (data) => { this.corridas = data; this.cdr.detectChanges(); },
         error: (err) => console.log(err),
       });
     }
   }
 
-  //FECHA O MODAL
   cancelarCorrida() {
     this.pararTudo();
     this.modalChamandoMotorista = false;
   }
+
   fecharModalSemMotorista() {
     this.modalSemMotorista = false;
   }
 
   private pararTudo() {
-    //PARA O TIMER DA CHAMADA DE MOTORISTA
+    this.aguardandoAceite = false;
     if (this.timerSubscription) {
       this.timerSubscription.unsubscribe();
       this.timerSubscription = null;
@@ -97,33 +89,35 @@ export class CorridaComponent implements OnInit {
     }
   }
 
-  //CONECTA O WEBSOCKET E FICA ESCUTANDO O ACEITE DO MOTORISTA
   private escutaAceite() {
-    if (isPlatformBrowser(this.platformId)) {
-      this.websocketService.conectarCorrida(() => {
-        this.pararTudo();
-        this.modalChamandoMotorista = false;
-        this.cdr.detectChanges();
-        this.carregarCorridas();
-        alert('Motorista aceitou a corrida!');
-      });
-    }
+    if (!isPlatformBrowser(this.platformId)) return;
+    if (this.aguardandoAceite) return;
+    this.aguardandoAceite = true;
+
+    this.websocketService.conectarCorrida(() => {
+      this.aguardandoAceite = false;
+      this.pararTudo();
+      this.modalChamandoMotorista = false;
+      this.cdr.detectChanges();
+      this.carregarCorridas();
+      alert('Motorista aceitou a corrida!');
+    });
   }
 
-  chamarMotorista(){
+  chamarMotorista() {
     this.modalChamandoMotorista = true;
+    this.cdr.detectChanges();
 
     this.usuarioService.getConsultaPrimeiroMotorista().subscribe({
       next: (motoristaId) => {
-        if(motoristaId !== null) {
+        if (motoristaId !== null) {
           const despachante = Number(localStorage.getItem('usuarioId'));
           this.usuarioService.patchChamandoMotorista(motoristaId).subscribe();
 
           this.usuarioService.postCriarCorrida(despachante).subscribe({
-            next: (corrida) =>{
+            next: (corrida) => {
               const corridaID = corrida.corrida.id;
-              alert("CORRIDA CRIADA:" + corridaID);
-              this.escutaAceite();
+              //alert("CORRIDA CRIADA:" + corridaID);
 
               this.timerSubscription = timer(0, 7000).pipe(take(9)).subscribe({
                 next: (index) => {
@@ -136,72 +130,27 @@ export class CorridaComponent implements OnInit {
                     this.usuarioService.postEnviarNotificacaoPerdida(motoristaId, corridaID).subscribe();
                     this.usuarioService.patchMarcarOffline(motoristaId).subscribe();
                     this.pararTudo();
-                    this.chamarMotorista(); // BUSCA O PRÓXIMO
+                    this.aguardandoAceite = false;
+                    this.escutaAceite();
+                    this.chamarMotorista();
                   }
                 },
               });
             },
             error: (err) => console.log('Erro ao criar corrida:', err),
-          })
-          alert("Motorista encontado: " + motoristaId);
-          alert("Usuario: " + despachante);
-          this.modalChamandoMotorista = false;
-          this.cdr.detectChanges();
+          });
+
+          //alert("Motorista encontado: " + motoristaId);
+          //alert("Usuario: " + despachante);
+
         } else {
-          alert("Sem Motorista online")
+          //alert("Sem Motorista online")
           this.modalChamandoMotorista = false;
           this.modalSemMotorista = true;
           this.cdr.detectChanges();
         }
-      }
-    });
-  }
-  chamarMotorista1() {
-    const despachante = Number(localStorage.getItem('usuarioId'));
-
-    // CRIA A CORRIDA ANTES DE CHAMAR O MOTORISTA
-    this.usuarioService.postCriarCorrida(despachante).subscribe({
-      next: (corrida) => {
-        console.log('Corrida criada:', corrida);
-        const corridaID = corrida.corrida.id;
-
-        this.usuarioService.getConsultaPrimeiroMotorista().subscribe({
-          next: (motoristaID) => {
-            if (motoristaID !== null) {
-              console.log('ID do motorista encontrado: ' + motoristaID);
-              alert('Procurando Motorista...');
-              this.escutaAceite();
-
-              this.timerSubscription = timer(0, 7000)
-                .pipe(take(9))
-                .subscribe({
-                  next: (index) => {
-                    if (index < 8) {
-                      this.usuarioService.postEnviarNotificacao(motoristaID, corridaID).subscribe({
-                        next: (resp) => console.log('Notificação enviada:', resp),
-                        error: (err) => console.log('Erro ao enviar notificação:', err),
-                      });
-                    } else {
-                      console.log('9 tentativas concluídas...');
-                      this.usuarioService
-                        .postEnviarNotificacaoPerdida(motoristaID, corridaID)
-                        .subscribe({
-                          next: (resp) => console.log('Notificação enviada: ', resp),
-                          error: (err) => console.log('Erro ao enviar notificação', err),
-                        });
-                      this.pararTudo();
-                      alert('Sem Motorista');
-                    }
-                  },
-                });
-            } else {
-              alert('Estamos sem Motorista no momento, por favor aguarde!!!');
-            }
-          },
-          error: (err) => console.log(err),
-        });
       },
-      error: (err) => console.log('Erro ao criar corrida:', err),
+      error: (err) => console.log(err),
     });
   }
 
@@ -209,7 +158,7 @@ export class CorridaComponent implements OnInit {
     this.usuarioService.patchAtualizarCorrida(corridaId).subscribe({
       next: (resp) => {
         console.log('Corrida atualizada:', resp);
-        this.carregarCorridas(); // recarrega a tabela
+        this.carregarCorridas();
       },
       error: (err) => console.log('Erro ao atualizar corrida:', err),
     });

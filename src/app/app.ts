@@ -4,7 +4,6 @@ import { RouterOutlet, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { LoginService } from './service/login-service';
 import { Navbar } from './shared/navbar/navbar';
-
 import { FirebaseService } from './service/firebase-service';
 import { NotificationStateService } from './service/notificationstate-service';
 import { UsuarioService } from './service/usuario-service';
@@ -19,7 +18,6 @@ import { UsuarioService } from './service/usuario-service';
 })
 export class App implements OnInit {
   protected readonly title = signal('wolvesofdelivery');
-  mostrarModalCorrida: boolean = false;
   corrida$: any;
 
   constructor(
@@ -36,15 +34,12 @@ export class App implements OnInit {
   ngOnInit(): void {
     if (isPlatformBrowser(this.platformId)) {
       //this.firebaseService.requestPermission();
-
       if (localStorage.getItem('tokenAutenticacao') == null) {
         this.router.navigate(['login']);
       }
     }
 
-    //ESCUTA O MODAL GLOBAL DE CORRIDA
     this.notificationState.corrida$.subscribe((mostrar) => {
-      this.mostrarModalCorrida = mostrar;
       if (mostrar) {
         navigator.vibrate([1000, 500, 1000]);
         this.cdr.detectChanges();
@@ -64,10 +59,10 @@ export class App implements OnInit {
     if (isPlatformBrowser(this.platformId)) {
       const motoristaId = localStorage.getItem('usuarioId');
       const corridaId = localStorage.getItem('corridaId');
-      alert('corrida: ' + corridaId + 'Motorista: ' + motoristaId);
+      //alert('corrida: ' + corridaId + 'Motorista: ' + motoristaId);
       this.usuarioService.postAceitarCorrida(Number(corridaId), Number(motoristaId)).subscribe({
         next: (resp) => {
-          alert("'sucesso: ' + resp");
+          //alert("'sucesso: ' + resp");
           console.log('Corrida aceita:', resp);
           this.usuarioService.patchOcupado(Number(motoristaId)).subscribe({
             next: (resp) => console.log('Status atualizado:', resp),
