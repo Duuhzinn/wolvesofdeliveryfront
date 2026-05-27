@@ -140,9 +140,6 @@ export class CorridaComponent implements OnInit {
             error: (err) => console.log('Erro ao criar corrida:', err),
           });
 
-          //alert("Motorista encontado: " + motoristaId);
-          //alert("Usuario: " + despachante);
-
         } else {
           //alert("Sem Motorista online")
           this.modalChamandoMotorista = false;
