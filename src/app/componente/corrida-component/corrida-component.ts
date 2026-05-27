@@ -110,18 +110,17 @@ export class CorridaComponent implements OnInit {
     this.usuarioService.getConsultaPrimeiroMotorista().subscribe({
       next: (motoristaId) => {
         if(motoristaId !== null){
-          alert("Motorista: " + motoristaId);
           const despachante = Number(localStorage.getItem('usuarioId'));
-          alert("Despachante: " + despachante);
-
           this.usuarioService.patchChamandoMotorista(motoristaId).subscribe({
             next: () => {
-              alert("Motorista " + motoristaId + " está sendo chamado" );
-                console.log('Motorista marcado como chamando:', motoristaId);
-                console.log('Despachante:', despachante);
+              console.log('Motorista marcado como chamando:', motoristaId);
+              console.log('Despachante:', despachante);
 
               this.usuarioService.postEnviarNotificacao(motoristaId, despachante).subscribe({
-                next: (resp) => alert('Notificação enviada:' +  resp),
+                next: (resp) => {
+                  alert('Notificação enviada:' +  resp),
+                  this.escutaAceite();
+                },  
                 error: (err) => console.log('Erro ao enviar notificação:', err),
               })
             }

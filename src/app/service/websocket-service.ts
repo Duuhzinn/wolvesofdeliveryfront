@@ -6,11 +6,10 @@ import SockJS from 'sockjs-client';
   providedIn: 'root',
 })
 export class WebsocketService {
-  private clientFila: Client;
-  private clientCorrida: Client | null = null;
+  private client: Client;
 
   constructor() {
-    this.clientFila = new Client({
+    this.client = new Client({
       webSocketFactory: () =>
         new SockJS('https://wolvesofdeliveryapi.onrender.com/wolvesofdeliveryAPI/ws'),
       reconnectDelay: 5000,
@@ -18,44 +17,38 @@ export class WebsocketService {
   }
 
   conectar(callback: () => void) {
-    this.clientFila.onConnect = () => {
-      console.log('WebSocket conectado - Fila');
-      this.clientFila.subscribe('/topic/fila', () => {
+    this.client.onConnect = () => {
+      console.log('WebSocket conectado');
+      this.client.subscribe('/topic/fila', () => {
         callback();
       });
     };
-    if (!this.clientFila.active) {
-      this.clientFila.activate();
+    if (!this.client.active) {
+      this.client.activate();
     }
   }
 
   conectarCorrida(callback: () => void) {
-    this.clientCorrida = new Client({
-      webSocketFactory: () =>
-        new SockJS('https://wolvesofdeliveryapi.onrender.com/wolvesofdeliveryAPI/ws'),
-      reconnectDelay: 0,
-    });
-
-    this.clientCorrida.onConnect = () => {
-      console.log('WebSocket conectado - Corrida');
-      this.clientCorrida!.subscribe('/topic/corrida', () => {
+    if (this.client.active) {
+      this.client.subscribe('/topic/corrida', () => {
         callback();
-        this.desconectarCorrida();
       });
-    };
-
-    this.clientCorrida.activate();
-  }
-
-  desconectarCorrida() {
-    if (this.clientCorrida) {
-      this.clientCorrida.deactivate();
-      this.clientCorrida = null;
+    } else {
+      this.client.onConnect = () => {
+        console.log('WebSocket conectado - Corrida');
+        this.client.subscribe('/topic/corrida', () => {
+          callback();
+        });
+      };
+      this.client.activate();
     }
   }
 
+  desconectarCorrida() {
+    // não precisa mais desconectar, o client é compartilhado
+  }
+
   desconectar() {
-    this.clientFila.deactivate();
-    this.desconectarCorrida();
+    this.client.deactivate();
   }
 }

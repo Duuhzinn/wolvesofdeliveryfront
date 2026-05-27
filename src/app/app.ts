@@ -64,8 +64,6 @@ export class App implements OnInit {
       //alert('corrida: ' + corridaId + 'Motorista: ' + motoristaId);
       this.usuarioService.postCriarCorrida(motoristaId, despachanteId).subscribe({
         next: (resp) => {
-          //alert("'sucesso: ' + resp");
-          alert('Corrida criada: ' + resp);
           console.log('Corrida criada:', resp);
           this.usuarioService.patchOcupado(Number(motoristaId)).subscribe({
             next: (resp) => console.log('Status atualizado:', resp),
