@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Client } from '@stomp/stompjs';
+import { Client, StompSubscription } from '@stomp/stompjs';
 import SockJS from 'sockjs-client';
 
 @Injectable({
@@ -7,6 +7,7 @@ import SockJS from 'sockjs-client';
 })
 export class WebsocketService {
   private client: Client;
+  private corridaSubscription: StompSubscription | null = null;
 
   constructor() {
     this.client = new Client({
@@ -29,23 +30,33 @@ export class WebsocketService {
   }
 
   conectarCorrida(callback: () => void) {
-    if (this.client.active) {
-      this.client.subscribe('/topic/corrida', () => {
+    const subscribe = () => {
+      if (this.corridaSubscription) {
+        this.corridaSubscription.unsubscribe();
+        this.corridaSubscription = null;
+      }
+      this.corridaSubscription = this.client.subscribe('/topic/corrida', () => {
         callback();
+        this.desconectarCorrida();
       });
+    };
+
+    if (this.client.active) {
+      subscribe();
     } else {
       this.client.onConnect = () => {
         console.log('WebSocket conectado - Corrida');
-        this.client.subscribe('/topic/corrida', () => {
-          callback();
-        });
+        subscribe();
       };
       this.client.activate();
     }
   }
 
   desconectarCorrida() {
-    // não precisa mais desconectar, o client é compartilhado
+    if (this.corridaSubscription) {
+      this.corridaSubscription.unsubscribe();
+      this.corridaSubscription = null;
+    }
   }
 
   desconectar() {
