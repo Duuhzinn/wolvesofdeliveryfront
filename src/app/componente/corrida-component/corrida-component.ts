@@ -99,7 +99,7 @@ export class CorridaComponent implements OnInit {
       this.modalChamandoMotorista = false;
       this.cdr.detectChanges();
       this.carregarCorridas();
-      //alert('Motorista aceitou a corrida!');
+      alert('Motorista aceitou a corrida!');
     });
   }
 
@@ -109,8 +109,9 @@ export class CorridaComponent implements OnInit {
 
     this.usuarioService.getConsultaPrimeiroMotorista().subscribe({
       next: (motoristaId) => {
-        if(motoristaId !== null){
+        if (motoristaId !== null) {
           const despachante = Number(localStorage.getItem('usuarioId'));
+
           this.usuarioService.patchChamandoMotorista(motoristaId).subscribe({
             next: () => {
               console.log('Motorista marcado como chamando:', motoristaId);
@@ -118,13 +119,30 @@ export class CorridaComponent implements OnInit {
 
               this.usuarioService.postEnviarNotificacao(motoristaId, despachante).subscribe({
                 next: (resp) => {
-                  //alert('Notificação enviada:' +  resp),
+                  //alert('Notificação enviada:' + resp);
                   this.escutaAceite();
-                },  
+
+                  this.timerSubscription = timer(7000, 7000).pipe(take(8)).subscribe({
+                    next: (index) => {
+                      console.log('Timer index:', index);
+                      this.usuarioService.postEnviarNotificacao(motoristaId, despachante).subscribe({
+                        next: (resp) => console.log('Renotificação enviada:', resp),
+                        error: (err) => console.log('Erro:', err),
+                      });
+                    },
+                    complete: () => {
+                      console.log('9 tentativas concluídas');
+                      this.usuarioService.patchMarcarOffline(motoristaId).subscribe();
+                      this.pararTudo();
+                      this.chamarMotorista();
+                    }
+                  });
+                },
                 error: (err) => console.log('Erro ao enviar notificação:', err),
-              })
+              });
             }
           });
+
         } else {
           //alert("Sem Motorista online")
           this.modalChamandoMotorista = false;
