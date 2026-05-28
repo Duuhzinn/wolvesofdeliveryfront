@@ -1,8 +1,7 @@
 import { CommonModule, isPlatformBrowser } from '@angular/common';
-import { ChangeDetectorRef, Component, HostListener, Inject, OnInit, PLATFORM_ID } from '@angular/core';
+import {ChangeDetectorRef, Component, HostListener, Inject, OnInit, PLATFORM_ID,} from '@angular/core';
 import { UsuarioService } from '../../service/usuario-service';
 import { Subscription, take, timer } from 'rxjs';
-import { Client } from '@stomp/stompjs';
 import { WebsocketService } from '../../service/websocket-service';
 import { ActivatedRoute } from '@angular/router';
 
@@ -20,12 +19,11 @@ export class CorridaComponent implements OnInit {
   statusCorrida: string = 'andamento';
 
   // PAGINAÇÃO - CONTROLE DAS PÁGINAS
-  paginaAtual: number = 0;     // PÁGINA ATUAL (COMEÇA NA 0)
-  totalPaginas: number = 0;    // TOTAL DE PÁGINAS QUE O BACKEND RETORNOU
+  paginaAtual: number = 0; // PÁGINA ATUAL (COMEÇA NA 0)
+  totalPaginas: number = 0; // TOTAL DE PÁGINAS QUE O BACKEND RETORNOU
   carregando: boolean = false; // EVITA CHAMAR DUAS VEZES AO MESMO TEMPO
 
   private timerSubscription: Subscription | null = null;
-  private stompClient: Client | null = null;
 
   corridas: any[] = [];
 
@@ -47,10 +45,10 @@ export class CorridaComponent implements OnInit {
 
   ngOnInit(): void {
     if (isPlatformBrowser(this.platformId)) {
-      this.route.paramMap.subscribe(params => {
+      this.route.paramMap.subscribe((params) => {
         this.statusCorrida = params.get('status') ?? 'andamento';
-        this.paginaAtual = 0;  // PAGINAÇÃO - RESETA A PÁGINA AO TROCAR DE ROTA
-        this.corridas = [];    // PAGINAÇÃO - LIMPA A LISTA AO TROCAR DE ROTA
+        this.paginaAtual = 0; // PAGINAÇÃO - RESETA A PÁGINA AO TROCAR DE ROTA
+        this.corridas = []; // PAGINAÇÃO - LIMPA A LISTA AO TROCAR DE ROTA
         this.carregarCorridas();
       });
     }
@@ -61,10 +59,14 @@ export class CorridaComponent implements OnInit {
   onScroll(): void {
     if (!isPlatformBrowser(this.platformId)) return;
     const posicaoAtual = window.innerHeight + window.scrollY; // POSIÇÃO ATUAL DA TELA
-    const alturaTotal = document.body.offsetHeight;           // ALTURA TOTAL DA PÁGINA
+    const alturaTotal = document.body.offsetHeight; // ALTURA TOTAL DA PÁGINA
 
     // SE CHEGOU PERTO DO FIM (100px) E NÃO ESTÁ CARREGANDO E AINDA TEM PÁGINAS
-    if (posicaoAtual >= alturaTotal - 100 && !this.carregando && this.paginaAtual < this.totalPaginas - 1) {
+    if (
+      posicaoAtual >= alturaTotal - 100 &&
+      !this.carregando &&
+      this.paginaAtual < this.totalPaginas - 1
+    ) {
       this.paginaAtual++; // PAGINAÇÃO - AVANÇA PARA A PRÓXIMA PÁGINA
       this.carregarCorridas();
     }
@@ -72,7 +74,7 @@ export class CorridaComponent implements OnInit {
 
   carregarCorridas() {
     if (this.carregando) return; // PAGINAÇÃO - SE JÁ ESTÁ CARREGANDO, IGNORA
-    this.carregando = true;      // PAGINAÇÃO - MARCA QUE ESTÁ CARREGANDO
+    this.carregando = true; // PAGINAÇÃO - MARCA QUE ESTÁ CARREGANDO
 
     const usuarioId = Number(localStorage.getItem('usuarioId'));
     const tipoUser = localStorage.getItem('tipoUser');
@@ -81,8 +83,8 @@ export class CorridaComponent implements OnInit {
     // PAGINAÇÃO - FUNÇÃO QUE PROCESSA O RETORNO DO BACKEND
     const next = (data: any) => {
       this.corridas = [...this.corridas, ...data.content]; // PAGINAÇÃO - ACUMULA AS CORRIDAS SEM APAGAR AS ANTERIORES
-      this.totalPaginas = data.totalPages;                 // PAGINAÇÃO - SALVA O TOTAL DE PÁGINAS
-      this.carregando = false;                             // PAGINAÇÃO - LIBERA PARA CARREGAR MAIS
+      this.totalPaginas = data.totalPages; // PAGINAÇÃO - SALVA O TOTAL DE PÁGINAS
+      this.carregando = false; // PAGINAÇÃO - LIBERA PARA CARREGAR MAIS
       this.cdr.detectChanges();
     };
     const error = (err: any) => {
@@ -92,15 +94,23 @@ export class CorridaComponent implements OnInit {
 
     if (tipoUser === 'CLIENTE') {
       if (finalizada) {
-        this.usuarioService.getCorridasClienteFinalizadas(usuarioId, this.paginaAtual).subscribe({ next, error });
+        this.usuarioService
+          .getCorridasClienteFinalizadas(usuarioId, this.paginaAtual)
+          .subscribe({ next, error });
       } else {
-        this.usuarioService.getCorridasClienteAndamento(usuarioId, this.paginaAtual).subscribe({ next, error });
+        this.usuarioService
+          .getCorridasClienteAndamento(usuarioId, this.paginaAtual)
+          .subscribe({ next, error });
       }
     } else if (tipoUser === 'MOTORISTA') {
       if (finalizada) {
-        this.usuarioService.getCorridasMotoristaFinalizadas(usuarioId, this.paginaAtual).subscribe({ next, error });
+        this.usuarioService
+          .getCorridasMotoristaFinalizadas(usuarioId, this.paginaAtual)
+          .subscribe({ next, error });
       } else {
-        this.usuarioService.getCorridasMotoristaAndamento(usuarioId, this.paginaAtual).subscribe({ next, error });
+        this.usuarioService
+          .getCorridasMotoristaAndamento(usuarioId, this.paginaAtual)
+          .subscribe({ next, error });
       }
     } else {
       if (finalizada) {
@@ -126,10 +136,7 @@ export class CorridaComponent implements OnInit {
       this.timerSubscription.unsubscribe();
       this.timerSubscription = null;
     }
-    if (this.stompClient) {
-      this.stompClient.deactivate();
-      this.stompClient = null;
-    }
+    this.websocketService.desconectarCorrida(); // DESCONECTA O WEBSOCKET CORRETAMENTE
   }
 
   private escutaAceite() {
@@ -143,7 +150,7 @@ export class CorridaComponent implements OnInit {
       this.modalChamandoMotorista = false;
       this.cdr.detectChanges();
       this.paginaAtual = 0; // PAGINAÇÃO - RESETA AO ACEITAR CORRIDA
-      this.corridas = [];   // PAGINAÇÃO - LIMPA A LISTA AO ACEITAR CORRIDA
+      this.corridas = []; // PAGINAÇÃO - LIMPA A LISTA AO ACEITAR CORRIDA
       this.carregarCorridas();
       //alert('Motorista aceitou a corrida!');
     });
@@ -168,41 +175,47 @@ export class CorridaComponent implements OnInit {
                   //alert('Notificação enviada:' + resp);
                   this.escutaAceite();
 
-                  this.timerSubscription = timer(7000, 7000).pipe(take(8)).subscribe({
-                    next: (index) => {
-                      console.log('Timer index:', index);
-                      this.usuarioService.postEnviarNotificacao(motoristaId, despachante).subscribe({
-                        next: (resp) => console.log('Renotificação enviada:', resp),
-                        error: (err) => console.log('Erro:', err),
-                      });
-                    },
-                    complete: () => {
-                      console.log('9 tentativas concluídas');
-                      this.usuarioService.patchMarcarOffline(motoristaId).subscribe();
-                      
-                      //NOTIFICA O MOTORISTA QUE ELE PERDEU A CORRIDA
-                      const corridaId = Number(localStorage.getItem('corridaId'));
-                      this.usuarioService.postEnviarNotificacaoPerdida(motoristaId, corridaId).subscribe({
-                        next: (resp) => console.log('Notificação de corrida perdida enviada:', resp),
-                        error: (err) => console.log('Erro ao enviar notificação perdida:', err),
-                      });
-                      this.pararTudo();
-                      this.chamarMotorista();
-                    }
-                  });
+                  this.timerSubscription = timer(7000, 7000)
+                    .pipe(take(8))
+                    .subscribe({
+                      next: (index) => {
+                        console.log('Timer index:', index);
+                        this.usuarioService
+                          .postEnviarNotificacao(motoristaId, despachante)
+                          .subscribe({
+                            next: (resp) => console.log('Renotificação enviada:', resp),
+                            error: (err) => console.log('Erro:', err),
+                          });
+                      },
+                      complete: () => {
+                        console.log('9 tentativas concluídas');
+                        this.usuarioService.patchMarcarOffline(motoristaId).subscribe();
+
+                        //NOTIFICA O MOTORISTA QUE ELE PERDEU A CORRIDA
+                        const corridaId = Number(localStorage.getItem('corridaId'));
+                        this.usuarioService
+                          .postEnviarNotificacaoPerdida(motoristaId, corridaId)
+                          .subscribe({
+                            next: (resp) =>
+                              console.log('Notificação de corrida perdida enviada:', resp),
+                            error: (err) => console.log('Erro ao enviar notificação perdida:', err),
+                          });
+                        this.pararTudo();
+                        this.chamarMotorista();
+                      },
+                    });
                 },
                 error: (err) => console.log('Erro ao enviar notificação:', err),
               });
-            }
+            },
           });
-
         } else {
           //alert("Sem Motorista online")
           this.modalChamandoMotorista = false;
           this.modalSemMotorista = true;
           this.cdr.detectChanges();
         }
-      }
+      },
     });
   }
 
@@ -211,7 +224,7 @@ export class CorridaComponent implements OnInit {
       next: (resp) => {
         console.log('Corrida atualizada:', resp);
         this.paginaAtual = 0; // PAGINAÇÃO - RESETA AO ATUALIZAR CORRIDA
-        this.corridas = [];   // PAGINAÇÃO - LIMPA A LISTA AO ATUALIZAR CORRIDA
+        this.corridas = []; // PAGINAÇÃO - LIMPA A LISTA AO ATUALIZAR CORRIDA
         this.carregarCorridas();
       },
       error: (err) => console.log('Erro ao atualizar corrida:', err),
