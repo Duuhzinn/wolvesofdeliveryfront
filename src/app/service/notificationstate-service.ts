@@ -20,4 +20,9 @@ export class NotificationStateService {
   fecharTelaCorrida() {
     this.corridaSubject.next(false);
   }
+
+  // NOTIFICA RECUSA
+  notificarRecusa() {
+    this.recusaSubject.next(true);
+  }
 }
