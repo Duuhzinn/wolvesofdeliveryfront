@@ -83,6 +83,7 @@ export class App implements OnInit {
         next: (resp) => {
           console.log('Corrida recusada:', resp);
           this.notificationState.fecharTelaCorrida();
+          this.notificationState.notificarRecusa(); // AVISA O CORRIDA COMPONENT
           this.cdr.detectChanges();
         },
         error: (err) => console.log('Erro ao recusar corrida:', err),

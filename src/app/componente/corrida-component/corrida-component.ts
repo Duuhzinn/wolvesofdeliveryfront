@@ -7,6 +7,7 @@ import {
   OnInit,
   PLATFORM_ID,
 } from '@angular/core';
+import { NotificationStateService } from '../../service/notificationstate-service';
 import { UsuarioService } from '../../service/usuario-service';
 import { Subscription, take, timer } from 'rxjs';
 import { WebsocketService } from '../../service/websocket-service';
@@ -38,6 +39,7 @@ export class CorridaComponent implements OnInit {
     private usuarioService: UsuarioService,
     private cdr: ChangeDetectorRef,
     private websocketService: WebsocketService,
+    private notificationState: NotificationStateService,
     private route: ActivatedRoute,
     @Inject(PLATFORM_ID) private platformId: Object,
   ) {}
@@ -57,6 +59,15 @@ export class CorridaComponent implements OnInit {
         this.paginaAtual = 0; // PAGINAÇÃO - RESETA A PÁGINA AO TROCAR DE ROTA
         this.corridas = []; // PAGINAÇÃO - LIMPA A LISTA AO TROCAR DE ROTA
         this.carregarCorridas();
+      });
+
+     // ESCUTA RECUSA DO MOTORISTA E REINICIA O TIMER
+      this.notificationState.recusa$.subscribe((recusou) => {
+        if (recusou) {
+          console.log('Motorista recusou — reiniciando timer');
+          this.pararTudo();
+          this.chamarMotorista();
+        }
       });
     }
   }
