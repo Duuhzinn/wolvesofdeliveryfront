@@ -179,6 +179,13 @@ export class CorridaComponent implements OnInit {
                     complete: () => {
                       console.log('9 tentativas concluídas');
                       this.usuarioService.patchMarcarOffline(motoristaId).subscribe();
+                      
+                      //NOTIFICA O MOTORISTA QUE ELE PERDEU A CORRIDA
+                      const corridaId = Number(localStorage.getItem('corridaId'));
+                      this.usuarioService.postEnviarNotificacaoPerdida(motoristaId, corridaId).subscribe({
+                        next: (resp) => console.log('Notificação de corrida perdida enviada:', resp),
+                        error: (err) => console.log('Erro ao enviar notificação perdida:', err),
+                      });
                       this.pararTudo();
                       this.chamarMotorista();
                     }
