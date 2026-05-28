@@ -55,6 +55,11 @@ export class FirebaseService {
                 navigator.vibrate([1000, 500, 1000]);
                 this.notificationState.mostrarTelaCorrida();
               }
+
+              // FECHA O MODAL QUANDO A CORRIDA FOR PERDIDA
+              if (payload.data?.['title'] === 'Corrida Perdida ❌') {
+                this.notificationState.fecharTelaCorrida();
+              }
               //alert(payload.notification?.title + '\n' + payload.notification?.body);
             });
           },
@@ -69,26 +74,30 @@ export class FirebaseService {
   }
 
   escutarNotificacoes() {
-  onMessage(messaging, (payload) => {
-    console.log('Mensagem recebida:', payload);
+    onMessage(messaging, (payload) => {
+      console.log('Mensagem recebida:', payload);
 
-    if (payload.data?.['title'] === 'Nova Corrida 🏍️') {
-      const corridaId = payload.data?.['corridaId'];
-      const despachanteId = payload.data?.['despachanteId'];
+      if (payload.data?.['title'] === 'Nova Corrida 🏍️') {
+        const corridaId = payload.data?.['corridaId'];
+        const despachanteId = payload.data?.['despachanteId'];
 
-      if (corridaId) {
-        localStorage.setItem('corridaId', corridaId);
-        console.log('CorridaId salvo:', corridaId);
+        if (corridaId) {
+          localStorage.setItem('corridaId', corridaId);
+          console.log('CorridaId salvo:', corridaId);
+        }
+        if (despachanteId) {
+          localStorage.setItem('despachanteId', despachanteId);
+          console.log('DespachanteId salvo:', despachanteId);
+        }
+
+        navigator.vibrate([1000, 500, 1000]);
+        this.notificationState.mostrarTelaCorrida();
       }
-      if (despachanteId) {
-        localStorage.setItem('despachanteId', despachanteId);
-        console.log('DespachanteId salvo:', despachanteId);
-      }
 
-      navigator.vibrate([1000, 500, 1000]);
-      this.notificationState.mostrarTelaCorrida();
-    }
-    //alert(payload.notification?.title + '\n' + payload.notification?.body);
-  });
-}
+      // FECHA O MODAL QUANDO A CORRIDA FOR PERDIDA
+      if (payload.data?.['title'] === 'Corrida Perdida ❌') {
+        this.notificationState.fecharTelaCorrida();
+      }
+    });
+  }
 }
