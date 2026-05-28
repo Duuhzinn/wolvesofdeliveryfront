@@ -3,6 +3,7 @@ import { UsuarioService } from '../../service/usuario-service';
 import { User } from '../../model/user';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { WebsocketService } from '../../service/websocket-service';
 
 @Component({
   selector: 'app-motorista-component',
@@ -18,6 +19,7 @@ export class MotoristaComponent implements OnInit {
 
   constructor(
     private usuarioservice: UsuarioService,
+    private websocketService: WebsocketService,
     private cdr: ChangeDetectorRef,
     @Inject(PLATFORM_ID) private platformId: Object,
   ) {}
@@ -25,6 +27,11 @@ export class MotoristaComponent implements OnInit {
   ngOnInit(): void {
     if (isPlatformBrowser(this.platformId)) {
       this.listarTodosMotorista();
+
+      // WEBSOCKET - ATUALIZA A LISTA QUANDO O STATUS DO MOTORISTA MUDAR
+      this.websocketService.conectar(() => {
+        this.listarTodosMotorista();
+      });
     }
   }
 
@@ -67,6 +74,4 @@ export class MotoristaComponent implements OnInit {
       });
     }
   }
-
-  
 }
