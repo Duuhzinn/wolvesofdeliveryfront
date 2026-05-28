@@ -66,7 +66,7 @@ export class CorridaComponent implements OnInit {
         if (recusou) {
           console.log('Motorista recusou — reiniciando timer');
           this.pararTudo();
-          this.chamarMotorista();
+          //this.chamarMotorista();
         }
       });
     }
