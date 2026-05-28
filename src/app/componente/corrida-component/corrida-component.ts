@@ -1,5 +1,12 @@
 import { CommonModule, isPlatformBrowser } from '@angular/common';
-import {ChangeDetectorRef, Component, HostListener, Inject, OnInit, PLATFORM_ID,} from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  HostListener,
+  Inject,
+  OnInit,
+  PLATFORM_ID,
+} from '@angular/core';
 import { UsuarioService } from '../../service/usuario-service';
 import { Subscription, take, timer } from 'rxjs';
 import { WebsocketService } from '../../service/websocket-service';
@@ -128,6 +135,7 @@ export class CorridaComponent implements OnInit {
 
   fecharModalSemMotorista() {
     this.modalSemMotorista = false;
+    this.cdr.detectChanges();
   }
 
   private pararTudo() {

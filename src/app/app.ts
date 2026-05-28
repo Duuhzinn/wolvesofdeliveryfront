@@ -53,10 +53,6 @@ export class App implements OnInit {
     return this.router.url !== '/login' && this.router.url !== '/';
   }
 
-  fecharModalCorrida() {
-    this.notificationState.fecharTelaCorrida();
-  }
-
   aceitarCorrida() {
     if (isPlatformBrowser(this.platformId)) {
       const motoristaId = Number(localStorage.getItem('usuarioId'));
@@ -75,6 +71,21 @@ export class App implements OnInit {
           this.router.navigate(['/chamarMotorista']);
         },
         error: (err) => console.log('Erro ao aceitar corrida:', err),
+      });
+    }
+  }
+
+  recusarCorrida() {
+    if (isPlatformBrowser(this.platformId)) {
+      const motoristaId = Number(localStorage.getItem('usuarioId'));
+      const despachanteId = Number(localStorage.getItem('despachanteId'));
+      this.usuarioService.patchRecusarCorrida(motoristaId, despachanteId).subscribe({
+        next: (resp) => {
+          console.log('Corrida recusada:', resp);
+          this.notificationState.fecharTelaCorrida();
+          this.cdr.detectChanges();
+        },
+        error: (err) => console.log('Erro ao recusar corrida:', err),
       });
     }
   }

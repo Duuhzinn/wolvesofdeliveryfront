@@ -24,6 +24,8 @@ public static get firstDrive(): string {return this.baseDriveURL + "/driverQueue
 public static callingDrive(id: number): string {return this.baseDriveURL + "/callingDrive/" + id }
 public static busy(id: any): string { return this.baseDriveURL + "/busy/" + id}
 public static signoffline(id: number): string {return this.baseDriveURL + "/signOffline/" + id}
+public static recusarCorrida(motoristaId: number, despachanteId: number): string {
+  return this.baseDriveURL + "/recusarCorrida/" + motoristaId + "/" + despachanteId}
 
 
 //BASE PARA MONTAR A REQUISIÇÕES DO PUSH NOTIFICATION
@@ -58,6 +60,9 @@ public static allRaceFinished(): string {return this.baseRaceURL + "/allRaceFini
 public static updateRace(corridaId: number): string{
     return this. baseRaceURL + "/updateRace/" + corridaId
 }
+
+
+
 //ESTATÍSTICAS POR ANO
 public static estatisticasCliente(clienteId: number, ano: number): string {
   return this.baseRaceURL + "/estatisticas/cliente/" + clienteId + "/" + ano;

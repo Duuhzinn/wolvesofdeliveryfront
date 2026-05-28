@@ -98,10 +98,7 @@ export class UsuarioService {
   postEnviarNotificacao(motoristaID: number, despachanteId: number): Observable<string> {
     const token = localStorage.getItem('tokenAutenticacao');
     const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
-    return this.http.post(
-      AppConstants.sendDrive(motoristaID, despachanteId),
-      {},
-      { headers, responseType: 'text' },
+    return this.http.post( AppConstants.sendDrive(motoristaID, despachanteId), {}, { headers, responseType: 'text' },
     );
   }
 
@@ -109,10 +106,7 @@ export class UsuarioService {
   patchChamandoMotorista(motoristaId: number): Observable<any> {
     const token = localStorage.getItem('tokenAutenticacao');
     const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
-    return this.http.patch(
-      AppConstants.callingDrive(motoristaId),
-      {},
-      { headers, responseType: 'text' },
+    return this.http.patch(AppConstants.callingDrive(motoristaId), {}, { headers, responseType: 'text' },
     );
   }
 
@@ -120,10 +114,7 @@ export class UsuarioService {
   postEnviarNotificacaoPerdida(motoristaID: number, corridaID: number): Observable<string> {
     const token = localStorage.getItem('tokenAutenticacao');
     const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
-    return this.http.post(
-      AppConstants.lostRace(motoristaID, corridaID),
-      {},
-      { headers, responseType: 'text' },
+    return this.http.post(AppConstants.lostRace(motoristaID, corridaID), {},{ headers, responseType: 'text' },
     );
   }
 
@@ -131,10 +122,15 @@ export class UsuarioService {
   postCriarCorrida(motoristaId: number, despachante: number): Observable<string> {
     const token = localStorage.getItem('tokenAutenticacao');
     const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
-    return this.http.post(
-      AppConstants.createRace(motoristaId, despachante),
-      {},
-      { headers, responseType: 'text' },
+    return this.http.post(AppConstants.createRace(motoristaId, despachante), {},{ headers, responseType: 'text' },
+    );
+  }
+
+  //RECUSA DO MOTORISTA NA CORRIDA NOTIFICADA
+  patchRecusarCorrida(motoristaId: number, despachante: number){  
+    const token = localStorage.getItem('tokenAutenticacao');
+    const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
+    return this.http.patch(AppConstants.recusarCorrida(motoristaId, despachante), {}, { headers, responseType: 'text' },
     );
   }
 
@@ -197,6 +193,8 @@ getCorridasClienteAndamento(clienteId: number, page: number): Observable<any> {
     const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
     return this.http.patch(AppConstants.updateRace(corridaId), {}, { headers, responseType: 'text' },);
   }
+
+
 
   //AQUI COMEÇA AS ESTASTISTICAS
     //ESTATÍSTICAS POR ANO - CLIENTE

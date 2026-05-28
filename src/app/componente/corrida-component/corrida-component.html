@@ -57,7 +57,7 @@
 
 <!-- MODAL SEM MOTORISTA -->
 <div class="modal-overlay" *ngIf="modalSemMotorista">
-  <div class="modal-dialog modal-sm modal-content-animated" (click)="$event.stopPropagation()">
+  <div class="modal-atencao" (click)="$event.stopPropagation()">
     <h3>⚠️ Atenção</h3>
     <p>Nenhum motorista online no momento.</p>
     <button class="btn-ok" (click)="fecharModalSemMotorista()">OK</button>
