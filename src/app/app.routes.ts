@@ -15,7 +15,7 @@ export const routes: Routes = [
     {path: 'usuarioList', component: UsuarioComponent},//DECLARA A ROTA PARA A PAGINA USUARIO
     {path: 'motoristaStatus', component: MotoristaComponent}, // DECLARA A ROTA PARA A PAGINA DE MOTORISTAS
     {path: 'ordemDaFila' , component: FilaComponent},// DECLARA A ROTA PARA A PAGINA DE ORDEM DA FILA MOTORISTAS
-    {path: 'chamarMotorista', component: CorridaComponent}// DECLARA A ROTA PARA CHAMAR O MOTORISTA
+    {path: 'corridas/:status', component: CorridaComponent} // DECLARA AS ROTAS PARA AS CORRIDAS
 ];
 
 

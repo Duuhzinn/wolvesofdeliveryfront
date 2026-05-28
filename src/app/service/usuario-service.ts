@@ -149,34 +149,74 @@ export class UsuarioService {
     );
   }
 
-  //LISTA TODAS AS CORRIDAS DOS CLIENTES
-  getCorridasCliente(clienteId: number): Observable<any> {
+//LISTA TODAS AS CORRIDAS DOS CLIENTES EM ANDAMENTO
+getCorridasClienteAndamento(clienteId: number, page: number): Observable<any> {
+  const token = localStorage.getItem('tokenAutenticacao');
+  const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
+  return this.http.get(`${AppConstants.raceDespatcherInProgress(clienteId)}?page=${page}&size=10`, { headers });
+}
+
+  //LISTA TODAS AS CORRIDAS DOS CLIENTES FINALIZADAS
+  getCorridasClienteFinalizadas(clienteId: number, page: number): Observable<any> {
     const token = localStorage.getItem('tokenAutenticacao');
     const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
-    return this.http.get(AppConstants.raceDespatcher(clienteId), { headers });
+    return this.http.get(`${AppConstants.raceDespatcherFinished(clienteId)}?page=${page}&size=10`, { headers });
   }
 
-  //LISTA TODAS AS CORRIDAS DOS CLIENTES
-  getCorridasMotorista(motoristaId: number): Observable<any> {
+  //LISTA TODAS AS CORRIDAS DOS MOTORISTAS EM ANDAMENTO
+  getCorridasMotoristaAndamento(motoristaId: number, page: number): Observable<any> {
     const token = localStorage.getItem('tokenAutenticacao');
     const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
-    return this.http.get(AppConstants.raceDrive(motoristaId), { headers });
+    return this.http.get(`${AppConstants.raceDriveInProgress(motoristaId)}?page=${page}&size=10`, { headers });
   }
-  //ATUALIZA TODAS AS CORRIDAS PARA OS ADM
-  getCorridasAdm(): Observable<any> {
+
+  //LISTA TODAS AS CORRIDAS DOS MOTORISTAS FINALIZADAS
+  getCorridasMotoristaFinalizadas(motoristaId: number, page: number): Observable<any> {
     const token = localStorage.getItem('tokenAutenticacao');
     const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
-    return this.http.get(AppConstants.allRace(), { headers });
+    return this.http.get(`${AppConstants.raceDriveFinished(motoristaId)}?page=${page}&size=10`, { headers });
+  }
+
+  //ATUALIZA TODAS AS CORRIDAS PARA OS ADM EM ANDAMENTO
+  getCorridasAdmAndamento(page: number): Observable<any> {
+    const token = localStorage.getItem('tokenAutenticacao');
+    const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
+    return this.http.get(`${AppConstants.allRaceInProgress()}?page=${page}&size=10`, { headers });
+  }
+
+  //LISTA TODAS AS CORRIDAS PARA OS ADM FINALIZADAS
+  getCorridasAdmFinalizadas(page: number): Observable<any> {
+    const token = localStorage.getItem('tokenAutenticacao');
+    const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
+    return this.http.get(`${AppConstants.allRaceFinished()}?page=${page}&size=10`, { headers });
   }
 
   //ATUALIZA AS CORRIDAS
   patchAtualizarCorrida(corridaId: number): Observable<any> {
     const token = localStorage.getItem('tokenAutenticacao');
     const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
-    return this.http.patch(
-      AppConstants.updateRace(corridaId),
-      {},
-      { headers, responseType: 'text' },
-    );
+    return this.http.patch(AppConstants.updateRace(corridaId), {}, { headers, responseType: 'text' },);
+  }
+
+  //AQUI COMEÇA AS ESTASTISTICAS
+    //ESTATÍSTICAS POR ANO - CLIENTE
+  getEstatisticasCliente(clienteId: number, ano: number): Observable<any> {
+    const token = localStorage.getItem('tokenAutenticacao');
+    const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
+    return this.http.get(AppConstants.estatisticasCliente(clienteId, ano), { headers });
+  }
+
+  //ESTATÍSTICAS POR ANO - MOTORISTA
+  getEstatisticasMotorista(motoristaId: number, ano: number): Observable<any> {
+    const token = localStorage.getItem('tokenAutenticacao');
+    const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
+    return this.http.get(AppConstants.estatisticasMotorista(motoristaId, ano), { headers });
+  }
+
+  //ESTATÍSTICAS POR ANO - ADM
+  getEstatisticasAdm(ano: number): Observable<any> {
+    const token = localStorage.getItem('tokenAutenticacao');
+    const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
+    return this.http.get(AppConstants.estatisticasAdm(ano), { headers });
   }
 }

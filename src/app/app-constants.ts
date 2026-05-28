@@ -29,28 +29,44 @@ public static signoffline(id: number): string {return this.baseDriveURL + "/sign
 //BASE PARA MONTAR A REQUISIÇÕES DO PUSH NOTIFICATION
 public static get basePushNotification(): string {return this.baseServidor + "/v1/pushnotification"}
 public static sendDrive(motoristaID: number, despachanteId: number): string {
-  return this.basePushNotification + "/send/" + motoristaID + "/" + despachanteId;
+  return this.basePushNotification + "/send/" + motoristaID + "/" + despachanteId
 }
 public static lostRace(motoristaID: number, corridaID: number): string {
-  return this.basePushNotification + "/lostRace/" + motoristaID + "/" + corridaID;
+  return this.basePushNotification + "/lostRace/" + motoristaID + "/" + corridaID
 }
 public static createRace(motoristaId: number, despachanteId: number): string {
-  return this.basePushNotification + "/createRace/" + motoristaId + "/" + despachanteId;
+  return this.basePushNotification + "/createRace/" + motoristaId + "/" + despachanteId
 }
 
 
 //BASE PARA MONTAR AS REQUISIÇÕES DA CORRIDA
 public static get baseRaceURL(): string {return this.baseServidor + "/v1/corrida"}
-
-public static raceDespatcher(clienteId: number): string{
-    return this.baseRaceURL + "/raceDespatcher/" + clienteId
+public static raceDespatcherInProgress(clienteId: number): string{
+  return this.baseRaceURL + "/raceDespatcher/" + clienteId
 }
-public static raceDrive(motoristaId: number): string{
-    return this.baseRaceURL + "/raceDrive/" + motoristaId
+public static raceDespatcherFinished(clienteId: number): string{
+  return this.baseRaceURL + "/raceDespatcherFinished/" + clienteId;
 }
-public static allRace(): string {return this.baseRaceURL + "/allRace"}
+public static raceDriveInProgress(motoristaId: number): string{
+  return this.baseRaceURL + "/raceDrive/" + motoristaId
+}
+public static raceDriveFinished(motoristaId: number): string{
+  return this.baseRaceURL + "/raceDriveFinished/" + motoristaId
+}
+public static allRaceInProgress(): string {return this.baseRaceURL + "/allRace"}
+public static allRaceFinished(): string {return this.baseRaceURL + "/allRaceFinished"};
 public static updateRace(corridaId: number): string{
     return this. baseRaceURL + "/updateRace/" + corridaId
+}
+//ESTATÍSTICAS POR ANO
+public static estatisticasCliente(clienteId: number, ano: number): string {
+  return this.baseRaceURL + "/estatisticas/cliente/" + clienteId + "/" + ano;
+}
+public static estatisticasMotorista(motoristaId: number, ano: number): string {
+  return this.baseRaceURL + "/estatisticas/motorista/" + motoristaId + "/" + ano;
+}
+public static estatisticasAdm(ano: number): string {
+  return this.baseRaceURL + "/estatisticas/adm/" + ano;
 }
 
 

@@ -1,26 +1,54 @@
 <div class="container">
+
+  <!-- CARDS DE ESTATÍSTICAS POR MÊS -->
   <div class="cards-container">
-
     <div class="motorista-card header-card">
-      <h2>MOTORISTAS</h2>
+      <h2>ESTATÍSTICAS</h2>
     </div>
 
-    <div class="motorista-card" *ngFor="let usuario of usuarios">
-      <div class="card-top">
-        <span class="card-id">#{{ usuario.id }}</span>
-        <span [ngClass]="{
-          'badge-online': usuario.status === 1,
-          'badge-ocupado': usuario.status === 2,
-          'badge-offline': usuario.status !== 1 && usuario.status !== 2
-        }">
-        {{ usuario.status === 1 ? 'ON-LINE' : usuario.status === 2 ? 'OCUPADO' : 'OFF-LINE' }}</span>
+    <div class="stat-card" *ngFor="let stat of estatisticas">
+      <div class="stat-card-header">
+        <span class="stat-mes">{{ stat.mes }}</span>
       </div>
-      <div class="card-body">
-        <p><i class="ti ti-user"></i> <span>{{ usuario.nome }}</span></p>
-        <p><i class="ti ti-phone"></i> {{ usuario.telefone }}</p>
-        <p><i class="ti ti-id-badge"></i> {{ usuario.tipoUser }}</p>
+      <div class="stat-card-body">
+
+        <div class="stat-destaque">
+          <span class="stat-destaque-label">FATURADO</span>
+          <span class="stat-destaque-valor">R$ {{ stat.totalFaturado | number:'1.2-2' }}</span>
+        </div>
+
+        <div class="stat-linha">
+          <i class="ti ti-checkup-list"></i>
+          <span>TOTAL CORRIDAS</span>
+          <span class="stat-valor">{{ stat.totalCorridas }}</span>
+        </div>
+
+        <div class="stat-linha">
+          <i class="ti ti-chart-bar"></i>
+          <span>MÉDIA DIÁRIA</span>
+          <span class="stat-valor">{{ stat.mediaDiaria | number:'1.1-1' }}</span>
+        </div>
+
+        <div class="stat-linha stat-perda">
+          <i class="ti ti-x"></i>
+          <span>PERDIDAS</span>
+          <span class="stat-valor">{{ stat.totalPerdidas }}</span>
+        </div>
+
+        <div class="stat-linha stat-recusada">
+          <i class="ti ti-ban"></i>
+          <span>RECUSADAS</span>
+          <span class="stat-valor">{{ stat.totalRecusadas }}</span>
+        </div>
+
+        <div class="stat-linha stat-top" *ngIf="isAdmin">
+          <i class="ti ti-star"></i>
+          <span>MOTORISTA TOP</span>
+          <span class="stat-valor">{{ stat.motoristaTop }}</span>
+        </div>
+
       </div>
     </div>
-
   </div>
+
 </div>

@@ -27,8 +27,8 @@
     <li class="dropdown">
       <a>Corridas <span class="chevron">▼</span></a>
       <ul class="dropdown-menu">
-        <li><a [routerLink]="['/chamarMotorista']">Chamar Motorista</a></li>
-        <li><a [routerLink]="['/corridasFinalizadas']">Finalizadas</a></li>
+        <li><a [routerLink]="['/corridas/andamento']">Chamar Motorista</a></li>
+        <li><a [routerLink]="['/corridas/finalizada']">Finalizadas</a></li>
       </ul>
     </li>
 
@@ -93,8 +93,8 @@
         Corridas <span class="chevron">▼</span>
       </a>
       <ul class="submenu-mobile" [class.open]="subAberto === 'corridas'">
-        <li><a [routerLink]="['/chamarMotorista']" (click)="toggleMenu()">Chamar Motorista</a></li>
-        <li><a [routerLink]="['/corridasFinalizadas']" (click)="toggleMenu()">Finalizadas</a></li>
+        <li><a [routerLink]="['/corridas/andamento']" (click)="toggleMenu()">Chamar Motorista</a></li>
+        <li><a [routerLink]="['/corridas/finalizada']" (click)="toggleMenu()">Finalizadas</a></li>
       </ul>
     </li>
 
