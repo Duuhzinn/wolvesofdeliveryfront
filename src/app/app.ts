@@ -76,13 +76,14 @@ export class App implements OnInit {
   }
 
   recusarCorrida() {
+    this.notificationState.fecharTelaCorrida();
+    
     if (isPlatformBrowser(this.platformId)) {
       const motoristaId = Number(localStorage.getItem('usuarioId'));
       const despachanteId = Number(localStorage.getItem('despachanteId'));
       this.usuarioService.patchRecusarCorrida(motoristaId, despachanteId).subscribe({
         next: (resp) => {
           console.log('Corrida recusada:', resp);
-          this.notificationState.fecharTelaCorrida();
           this.notificationState.notificarRecusa(); // AVISA O CORRIDA COMPONENT
           this.cdr.detectChanges();
         },
