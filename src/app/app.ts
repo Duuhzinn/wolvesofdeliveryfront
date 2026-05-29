@@ -54,6 +54,7 @@ export class App implements OnInit {
   }
 
   aceitarCorrida() {
+    this.notificationState.fecharTelaCorrida();
     if (isPlatformBrowser(this.platformId)) {
       const motoristaId = Number(localStorage.getItem('usuarioId'));
       const despachanteId = Number(localStorage.getItem('despachanteId'));
@@ -65,7 +66,6 @@ export class App implements OnInit {
             next: (resp) => console.log('Status atualizado:', resp),
             error: (err) => console.log('Erro ao atualizar status:', err),
           });
-          this.notificationState.fecharTelaCorrida();
           this.cdr.detectChanges();
           //REDIRECIONA PARA A ROTA DE CORRIDAS
           this.router.navigate(['/chamarMotorista']);

@@ -21,6 +21,7 @@ export class FirebaseService {
         vapidKey:
           'BFt6_3dNzUiTBpx8Y38YJwrprc2tiIxHXUD1DDfG2az95n5aFPOqmINuCZ1ZrHfr3aWQlU0akPsk_qvbnHPGllo',
       });
+      console.log('Token gerado:', token);
       const tokenFB = new TokenFB();
       tokenFB.token = token;
 
