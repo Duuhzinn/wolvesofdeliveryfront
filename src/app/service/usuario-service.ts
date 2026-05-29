@@ -127,10 +127,10 @@ export class UsuarioService {
   }
 
   //RECUSA DO MOTORISTA NA CORRIDA NOTIFICADA
-  patchRecusarCorrida(motoristaId: number, despachante: number){  
+  patchRecusarCorrida(motoristaId: number, corridaId: number, despachante: number){  
     const token = localStorage.getItem('tokenAutenticacao');
     const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
-    return this.http.patch(AppConstants.recusarCorrida(motoristaId, despachante), {}, { headers, responseType: 'text' },
+    return this.http.patch(AppConstants.recusarCorrida(motoristaId, corridaId, despachante), {}, { headers, responseType: 'text' },
     );
   }
 

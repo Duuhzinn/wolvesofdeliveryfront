@@ -12,6 +12,7 @@ import { UsuarioService } from '../../service/usuario-service';
 import { Subscription, take, timer } from 'rxjs';
 import { WebsocketService } from '../../service/websocket-service';
 import { ActivatedRoute } from '@angular/router';
+import { StompSubscription } from '@stomp/stompjs';
 
 @Component({
   selector: 'app-corrida-component',
@@ -32,6 +33,7 @@ export class CorridaComponent implements OnInit {
   carregando: boolean = false; // EVITA CHAMAR DUAS VEZES AO MESMO TEMPO
 
   private timerSubscription: Subscription | null = null;
+  private recusaSubscription: StompSubscription | null = null;
 
   corridas: any[] = [];
 
@@ -59,15 +61,6 @@ export class CorridaComponent implements OnInit {
         this.paginaAtual = 0; // PAGINAÇÃO - RESETA A PÁGINA AO TROCAR DE ROTA
         this.corridas = []; // PAGINAÇÃO - LIMPA A LISTA AO TROCAR DE ROTA
         this.carregarCorridas();
-      });
-
-     // ESCUTA RECUSA DO MOTORISTA E REINICIA O TIMER
-      this.notificationState.recusa$.subscribe((recusou) => {
-        if (recusou) {
-          console.log('Motorista recusou — reiniciando timer');
-          this.pararTudo();
-          //this.chamarMotorista();
-        }
       });
     }
   }
@@ -193,6 +186,7 @@ export class CorridaComponent implements OnInit {
                 next: (resp) => {
                   //alert('Notificação enviada:' + resp);
                   this.escutaAceite();
+                  this.escutaRecusa();
 
                   this.timerSubscription = timer(7000, 7000)
                     .pipe(take(8))
@@ -247,6 +241,17 @@ export class CorridaComponent implements OnInit {
         this.carregarCorridas();
       },
       error: (err) => console.log('Erro ao atualizar corrida:', err),
+    });
+  }
+
+  private escutaRecusa(){
+    this.recusaSubscription = this.websocketService.conectarRecusa(() => {
+      //CANCELA O TIMER ATUAL E REINICIA PARA O PROXIMO
+      if(this.timerSubscription){
+        this.timerSubscription.unsubscribe();
+        this.timerSubscription = null;
+      }
+      this.chamarMotorista();
     });
   }
 }

@@ -81,13 +81,13 @@ export class App implements OnInit {
     if (isPlatformBrowser(this.platformId)) {
       const motoristaId = Number(localStorage.getItem('usuarioId'));
       const despachanteId = Number(localStorage.getItem('despachanteId'));
-      this.usuarioService.patchRecusarCorrida(motoristaId, despachanteId).subscribe({
+      const corridaId = Number(localStorage.getItem('corridaId'));
+
+      this.usuarioService.patchRecusarCorrida(motoristaId, corridaId, despachanteId).subscribe({
         next: (resp) => {
           console.log('Corrida recusada:', resp);
-          this.notificationState.notificarRecusa(); // AVISA O CORRIDA COMPONENT
           this.cdr.detectChanges();
-        },
-        error: (err) => console.log('Erro ao recusar corrida:', err),
+        }
       });
     }
   }

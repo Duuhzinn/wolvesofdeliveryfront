@@ -24,8 +24,8 @@ public static get firstDrive(): string {return this.baseDriveURL + "/driverQueue
 public static callingDrive(id: number): string {return this.baseDriveURL + "/callingDrive/" + id }
 public static busy(id: any): string { return this.baseDriveURL + "/busy/" + id}
 public static signoffline(id: number): string {return this.baseDriveURL + "/signOffline/" + id}
-public static recusarCorrida(motoristaId: number, despachanteId: number): string {
-  return this.baseDriveURL + "/recusarCorrida/" + motoristaId + "/" + despachanteId}
+public static recusarCorrida(motoristaId: number, corridaId: number, despachanteId: number): string {
+  return this.baseDriveURL + "/recusarCorrida/" + motoristaId + "/" + corridaId + "/" + despachanteId}
 
 
 //BASE PARA MONTAR A REQUISIÇÕES DO PUSH NOTIFICATION

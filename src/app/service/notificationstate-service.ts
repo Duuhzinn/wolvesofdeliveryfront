@@ -1,6 +1,6 @@
 // notification-state.service.ts
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Subject} from 'rxjs';
+import { BehaviorSubject} from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -8,10 +8,6 @@ import { BehaviorSubject, Subject} from 'rxjs';
 export class NotificationStateService {
   private corridaSubject = new BehaviorSubject<boolean>(false);
   corrida$ = this.corridaSubject.asObservable();
-
-  // AVISA O CORRIDA COMPONENT QUE HOUVE RECUSA
-  private recusaSubject = new Subject<boolean>();
-  recusa$ = this.recusaSubject.asObservable();
 
   mostrarTelaCorrida() {
     this.corridaSubject.next(true);
@@ -21,8 +17,4 @@ export class NotificationStateService {
     this.corridaSubject.next(false);
   }
 
-  // NOTIFICA RECUSA
-  notificarRecusa() {
-    this.recusaSubject.next(true);
-  }
 }

@@ -62,4 +62,27 @@ export class WebsocketService {
   desconectar() {
     this.client.deactivate();
   }
+
+  // ESCUTA O TOPIC DE RECUSA DO MOTORISTA
+  conectarRecusa(callback: () => void): StompSubscription | null {
+    // FUNÇÃO QUE FAZ A INSCRIÇÃO NO TOPIC /topic/recusa
+    const subscribe = () => {
+      return this.client.subscribe('/topic/recusa', () => {
+        callback(); // EXECUTA O QUE FOR PASSADO (ex: reiniciar o timer)
+      });
+    };
+
+    if (this.client.active) {
+      // SE JÁ ESTÁ CONECTADO, INSCREVE DIRETO
+      return subscribe();
+    } else {
+      // SE NÃO ESTÁ CONECTADO, AGUARDA A CONEXÃO E ENTÃO INSCREVE
+      this.client.onConnect = () => {
+        console.log('WebSocket conectado - Recusa');
+        subscribe();
+      };
+      this.client.activate(); // INICIA A CONEXÃO
+      return null; // RETORNA NULL PORQUE AINDA NÃO TEM SUBSCRIPTION
+    }
+  }
 }
