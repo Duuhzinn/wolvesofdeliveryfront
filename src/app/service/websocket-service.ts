@@ -65,24 +65,22 @@ export class WebsocketService {
 
   // ESCUTA O TOPIC DE RECUSA DO MOTORISTA
   conectarRecusa(callback: () => void): StompSubscription | null {
-    // FUNÇÃO QUE FAZ A INSCRIÇÃO NO TOPIC /topic/recusa
-    const subscribe = () => {
-      return this.client.subscribe('/topic/recusa', () => {
-        callback(); // EXECUTA O QUE FOR PASSADO (ex: reiniciar o timer)
-      });
-    };
-
     if (this.client.active) {
       // SE JÁ ESTÁ CONECTADO, INSCREVE DIRETO
-      return subscribe();
+      return this.client.subscribe('/topic/recusa', () => {
+        callback();
+      });
     } else {
-      // SE NÃO ESTÁ CONECTADO, AGUARDA A CONEXÃO E ENTÃO INSCREVE
-      this.client.onConnect = () => {
-        console.log('WebSocket conectado - Recusa');
-        subscribe();
-      };
-      this.client.activate(); // INICIA A CONEXÃO
-      return null; // RETORNA NULL PORQUE AINDA NÃO TEM SUBSCRIPTION
+      // AGUARDA A CONEXÃO JÁ INICIADA PELO conectarCorrida
+      const interval = setInterval(() => {
+        if (this.client.active) {
+          clearInterval(interval);
+          this.client.subscribe('/topic/recusa', () => {
+            callback();
+          });
+        }
+      }, 500);
+      return null;
     }
   }
 }
