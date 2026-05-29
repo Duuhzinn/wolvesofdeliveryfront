@@ -32,11 +32,6 @@ export class Home implements OnInit {
   }
 
   carregarEstatisticas() {
-    if (!sessionStorage.getItem('reloaded')) {
-      sessionStorage.setItem('reloaded', 'true');
-      window.location.reload();
-      return;
-    }
     const ano = new Date().getFullYear();
     const usuarioId = Number(localStorage.getItem('usuarioId'));
     const tipoUser = localStorage.getItem('tipoUser');
