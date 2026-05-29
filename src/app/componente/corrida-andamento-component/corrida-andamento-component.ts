@@ -51,11 +51,20 @@ export class CorridaAndamentoComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     if (isPlatformBrowser(this.platformId)) {
       this.carregarCorridas();
+      this.websocketService.conectarAtualizacao(() => {
+        setTimeout(() => {
+          this.paginaAtual = 0;
+          this.corridas = [];
+          this.carregarCorridas();
+          this.cdr.detectChanges();
+        }, 0);
+      });
     }
   }
 
   ngOnDestroy(): void {
     this.pararTudo();
+    this.websocketService.desconectarAtualizacao();
   }
 
   @HostListener('window:scroll', [])
@@ -99,9 +108,13 @@ export class CorridaAndamentoComponent implements OnInit, OnDestroy {
     };
 
     if (tipoUser === 'CLIENTE') {
-      this.usuarioService.getCorridasClienteAndamento(usuarioId, this.paginaAtual).subscribe({ next, error });
+      this.usuarioService
+        .getCorridasClienteAndamento(usuarioId, this.paginaAtual)
+        .subscribe({ next, error });
     } else if (tipoUser === 'MOTORISTA') {
-      this.usuarioService.getCorridasMotoristaAndamento(usuarioId, this.paginaAtual).subscribe({ next, error });
+      this.usuarioService
+        .getCorridasMotoristaAndamento(usuarioId, this.paginaAtual)
+        .subscribe({ next, error });
     } else {
       this.usuarioService.getCorridasAdmAndamento(this.paginaAtual).subscribe({ next, error });
     }
@@ -133,13 +146,15 @@ export class CorridaAndamentoComponent implements OnInit, OnDestroy {
 
     // CALLBACK DE ACEITE
     const onAceite = () => {
-      this.aguardandoAceite = false;
-      this.pararTudo();
-      this.modalChamandoMotorista = false;
-      this.cdr.detectChanges();
-      this.paginaAtual = 0;
-      this.corridas = [];
-      this.carregarCorridas();
+      setTimeout(() => {
+        this.aguardandoAceite = false;
+        this.pararTudo();
+        this.modalChamandoMotorista = false;
+        this.paginaAtual = 0;
+        this.corridas = [];
+        this.carregarCorridas();
+        this.cdr.detectChanges();
+      }, 0);
     };
 
     // CALLBACK DE RECUSA
@@ -175,19 +190,24 @@ export class CorridaAndamentoComponent implements OnInit, OnDestroy {
                     .pipe(take(8))
                     .subscribe({
                       next: () => {
-                        this.usuarioService.postEnviarNotificacao(motoristaId, despachante).subscribe({
-                          next: (resp) => console.log('Renotificação enviada:', resp),
-                          error: (err) => console.log('Erro:', err),
-                        });
+                        this.usuarioService
+                          .postEnviarNotificacao(motoristaId, despachante)
+                          .subscribe({
+                            next: (resp) => console.log('Renotificação enviada:', resp),
+                            error: (err) => console.log('Erro:', err),
+                          });
                       },
                       complete: () => {
                         this.usuarioService.patchMarcarOffline(motoristaId).subscribe();
 
                         const corridaId = Number(localStorage.getItem('corridaId'));
-                        this.usuarioService.postEnviarNotificacaoPerdida(motoristaId, corridaId).subscribe({
-                          next: (resp) => console.log('Notificação de corrida perdida enviada:', resp),
-                          error: (err) => console.log('Erro ao enviar notificação perdida:', err),
-                        });
+                        this.usuarioService
+                          .postEnviarNotificacaoPerdida(motoristaId, corridaId)
+                          .subscribe({
+                            next: (resp) =>
+                              console.log('Notificação de corrida perdida enviada:', resp),
+                            error: (err) => console.log('Erro ao enviar notificação perdida:', err),
+                          });
                         this.pararTudo();
                         this.chamarMotorista();
                       },

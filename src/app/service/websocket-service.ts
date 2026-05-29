@@ -78,4 +78,34 @@ export class WebsocketService {
   desconectar() {
     this.client.deactivate();
   }
+
+  private atualizacaoSubscription: StompSubscription | null = null;
+  conectarAtualizacao(callback: () => void) {
+    const subscribe = () => {
+      if (this.atualizacaoSubscription) {
+        this.atualizacaoSubscription.unsubscribe();
+        this.atualizacaoSubscription = null;
+      }
+      this.atualizacaoSubscription = this.client.subscribe('/topic/corrida', () => {
+        callback();
+      });
+    };
+
+    if(this.client.active){
+      subscribe();
+    } else {
+      this.client.onConnect = () => {
+        console.log('WebSocket conectado - Atualização');
+        subscribe();
+      };
+      this.client.activate();
+    }
+  }
+
+  desconectarAtualizacao() {
+    if (this.atualizacaoSubscription) {
+      this.atualizacaoSubscription.unsubscribe();
+      this.atualizacaoSubscription = null;
+    }
+  }
 }
