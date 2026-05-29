@@ -68,7 +68,7 @@ export class App implements OnInit {
           });
           this.cdr.detectChanges();
           //REDIRECIONA PARA A ROTA DE CORRIDAS
-          this.router.navigate(['/chamarMotorista']);
+          this.router.navigate(['/corridas', 'andamento']);
         },
         error: (err) => console.log('Erro ao aceitar corrida:', err),
       });
