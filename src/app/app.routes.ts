@@ -4,7 +4,8 @@ import { Login } from './login/login';
 import { UsuarioComponent } from './componente/usuario-component/usuario-component';
 import { MotoristaComponent } from './componente/motorista-component/motorista-component';
 import { FilaComponent } from './componente/fila-component/fila-component';
-import { CorridaComponent } from './componente/corrida-component/corrida-component';
+import { CorridaFinalizadaComponent } from './componente/corrida-finalizada-component/corrida-finalizada-component';
+import { CorridaAndamentoComponent } from './componente/corrida-andamento-component/corrida-andamento-component';
 
 //DECLARANDO ROTAS
 export const routes: Routes = [
@@ -15,7 +16,8 @@ export const routes: Routes = [
     {path: 'usuarioList', component: UsuarioComponent},//DECLARA A ROTA PARA A PAGINA USUARIO
     {path: 'motoristaStatus', component: MotoristaComponent}, // DECLARA A ROTA PARA A PAGINA DE MOTORISTAS
     {path: 'ordemDaFila' , component: FilaComponent},// DECLARA A ROTA PARA A PAGINA DE ORDEM DA FILA MOTORISTAS
-    {path: 'corridas/:status', component: CorridaComponent} // DECLARA AS ROTAS PARA AS CORRIDAS
+    {path: 'corridas/andamento', component: CorridaAndamentoComponent}, // DECLARA AS ROTAS PARA AS CORRIDAS
+    {path: 'corridas/finalizada', component: CorridaFinalizadaComponent} // DECLARA AS ROTAS PARA AS CORRIDAS
 ];
 
 
