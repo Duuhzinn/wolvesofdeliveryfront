@@ -245,13 +245,20 @@ export class CorridaComponent implements OnInit {
   }
 
   private escutaRecusa(){
+    //CANCELA O SUBCRIPTION ANTES DE CRIAR UMA NOVA
+    if (this.recusaSubscription) {
+        this.recusaSubscription.unsubscribe();
+        this.recusaSubscription = null;
+    }
+
     this.recusaSubscription = this.websocketService.conectarRecusa(() => {
-      //CANCELA O TIMER ATUAL E REINICIA PARA O PROXIMO
-      if(this.timerSubscription){
-        this.timerSubscription.unsubscribe();
-        this.timerSubscription = null;
-      }
-      this.chamarMotorista();
+        //CANCELA O TIMER ATUAL E REINICIA PARA O PROXIMO
+        if (this.timerSubscription) {
+            this.timerSubscription.unsubscribe();
+            this.timerSubscription = null;
+        }
+        this.aguardandoAceite = false; //RESETA PARA O PROXIMO MOTORISTA PODER SER ESCUTADO
+        this.chamarMotorista();
     });
   }
 }
