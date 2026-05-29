@@ -8,6 +8,7 @@ import SockJS from 'sockjs-client';
 export class WebsocketService {
   private client: Client;
   private corridaSubscription: StompSubscription | null = null;
+  private recusaSubscription: StompSubscription | null = null;
 
   constructor() {
     this.client = new Client({
@@ -29,15 +30,26 @@ export class WebsocketService {
     }
   }
 
-  conectarCorrida(callback: () => void) {
+  conectarCorrida(callbackAceite: () => void, callbackRecusa: () => void) {
     const subscribe = () => {
+      // LIMPA SUBSCRIPTIONS ANTIGAS
       if (this.corridaSubscription) {
         this.corridaSubscription.unsubscribe();
         this.corridaSubscription = null;
       }
+      if (this.recusaSubscription) {
+        this.recusaSubscription.unsubscribe();
+        this.recusaSubscription = null;
+      }
+
+      // INSCREVE NOS DOIS TOPICS DE UMA VEZ
       this.corridaSubscription = this.client.subscribe('/topic/corrida', () => {
-        callback();
+        callbackAceite();
         this.desconectarCorrida();
+      });
+
+      this.recusaSubscription = this.client.subscribe('/topic/recusa', () => {
+        callbackRecusa();
       });
     };
 
@@ -57,30 +69,13 @@ export class WebsocketService {
       this.corridaSubscription.unsubscribe();
       this.corridaSubscription = null;
     }
+    if (this.recusaSubscription) {
+      this.recusaSubscription.unsubscribe();
+      this.recusaSubscription = null;
+    }
   }
 
   desconectar() {
     this.client.deactivate();
-  }
-
-  // ESCUTA O TOPIC DE RECUSA DO MOTORISTA
-  conectarRecusa(callback: () => void): StompSubscription | null {
-    if (this.client.active) {
-      // SE JÁ ESTÁ CONECTADO, INSCREVE DIRETO
-      return this.client.subscribe('/topic/recusa', () => {
-        callback();
-      });
-    } else {
-      // AGUARDA A CONEXÃO JÁ INICIADA PELO conectarCorrida
-      const interval = setInterval(() => {
-        if (this.client.active) {
-          clearInterval(interval);
-          this.client.subscribe('/topic/recusa', () => {
-            callback();
-          });
-        }
-      }, 500);
-      return null;
-    }
   }
 }

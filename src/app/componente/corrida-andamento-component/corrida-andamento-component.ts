@@ -12,7 +12,6 @@ import { NotificationStateService } from '../../service/notificationstate-servic
 import { UsuarioService } from '../../service/usuario-service';
 import { Subscription, take, timer } from 'rxjs';
 import { WebsocketService } from '../../service/websocket-service';
-import { StompSubscription } from '@stomp/stompjs';
 
 @Component({
   selector: 'app-corrida-andamento-component',
@@ -30,7 +29,6 @@ export class CorridaAndamentoComponent implements OnInit, OnDestroy {
   carregando: boolean = false;
 
   private timerSubscription: Subscription | null = null;
-  private recusaSubscription: StompSubscription | null = null;
 
   corridas: any[] = [];
 
@@ -58,9 +56,6 @@ export class CorridaAndamentoComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.pararTudo();
-    if (this.recusaSubscription) {
-      this.recusaSubscription.unsubscribe();
-    }
   }
 
   @HostListener('window:scroll', [])
@@ -131,12 +126,13 @@ export class CorridaAndamentoComponent implements OnInit, OnDestroy {
     this.websocketService.desconectarCorrida();
   }
 
-  private escutaAceite() {
+  private escutarWebSocket() {
     if (!isPlatformBrowser(this.platformId)) return;
     if (this.aguardandoAceite) return;
     this.aguardandoAceite = true;
 
-    this.websocketService.conectarCorrida(() => {
+    // CALLBACK DE ACEITE
+    const onAceite = () => {
       this.aguardandoAceite = false;
       this.pararTudo();
       this.modalChamandoMotorista = false;
@@ -144,7 +140,19 @@ export class CorridaAndamentoComponent implements OnInit, OnDestroy {
       this.paginaAtual = 0;
       this.corridas = [];
       this.carregarCorridas();
-    });
+    };
+
+    // CALLBACK DE RECUSA
+    const onRecusa = () => {
+      if (this.timerSubscription) {
+        this.timerSubscription.unsubscribe();
+        this.timerSubscription = null;
+      }
+      this.aguardandoAceite = false;
+      this.chamarMotorista();
+    };
+
+    this.websocketService.conectarCorrida(onAceite, onRecusa);
   }
 
   chamarMotorista() {
@@ -159,15 +167,14 @@ export class CorridaAndamentoComponent implements OnInit, OnDestroy {
           this.usuarioService.patchChamandoMotorista(motoristaId).subscribe({
             next: () => {
               this.usuarioService.postEnviarNotificacao(motoristaId, despachante).subscribe({
-                next: (resp) => {
-                  //alert('Notificação enviada:' + resp);
-                  this.escutaAceite();
-                  this.escutaRecusa();
+                next: () => {
+                  //alert('Notificação enviada');
+                  this.escutarWebSocket();
 
                   this.timerSubscription = timer(7000, 7000)
                     .pipe(take(8))
                     .subscribe({
-                      next: (index) => {
+                      next: () => {
                         this.usuarioService.postEnviarNotificacao(motoristaId, despachante).subscribe({
                           next: (resp) => console.log('Renotificação enviada:', resp),
                           error: (err) => console.log('Erro:', err),
@@ -209,22 +216,6 @@ export class CorridaAndamentoComponent implements OnInit, OnDestroy {
         this.carregarCorridas();
       },
       error: (err) => console.log('Erro ao atualizar corrida:', err),
-    });
-  }
-
-  private escutaRecusa() {
-    if (this.recusaSubscription) {
-      this.recusaSubscription.unsubscribe();
-      this.recusaSubscription = null;
-    }
-
-    this.recusaSubscription = this.websocketService.conectarRecusa(() => {
-      if (this.timerSubscription) {
-        this.timerSubscription.unsubscribe();
-        this.timerSubscription = null;
-      }
-      this.aguardandoAceite = false;
-      this.chamarMotorista();
     });
   }
 }
