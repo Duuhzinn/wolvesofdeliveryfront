@@ -33,9 +33,9 @@ export class LoginService {
             localStorage.setItem('tipoUser', usuarioLogado.tipoUser);
             //SALVANDO O TOKEN COM USUARIO LOGADO NO BANCO
             this.firebaseService.requestPermission(usuarioLogado.id);
+            this.router.navigate(['home']);
           });
 
-        this.router.navigate(['home']);
       },
       (error) => {
         console.log('Erro ao fazer login', error);
