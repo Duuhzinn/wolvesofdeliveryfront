@@ -57,9 +57,8 @@ public static raceDriveFinished(motoristaId: number): string{
 }
 public static allRaceInProgress(): string {return this.baseRaceURL + "/allRace"}
 public static allRaceFinished(): string {return this.baseRaceURL + "/allRaceFinished"};
-public static updateRace(corridaId: number): string{
-    return this. baseRaceURL + "/updateRace/" + corridaId
-}
+public static updateRace(corridaId: number): string{return this.baseRaceURL + "/updateRace/" + corridaId}
+public static cancelCall(motoristaAtual: number): string {return this.baseRaceURL + "/cancelCall/" + motoristaAtual}
 
 
 

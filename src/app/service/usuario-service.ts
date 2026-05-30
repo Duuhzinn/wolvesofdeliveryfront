@@ -194,6 +194,13 @@ getCorridasClienteAndamento(clienteId: number, page: number): Observable<any> {
     return this.http.patch(AppConstants.updateRace(corridaId), {}, { headers, responseType: 'text' },);
   }
 
+  //CANCELA A CHAMADA DO MOTORISTA
+  patchCancelarChamada(motoristaAtual: number): Observable<any>{
+    const token = localStorage.getItem('tokenAutenticacao');
+    const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
+    return this.http.patch(AppConstants.cancelCall(motoristaAtual), {}, { headers, responseType: 'text' }, )
+  }
+
 
 
   //AQUI COMEÇA AS ESTASTISTICAS

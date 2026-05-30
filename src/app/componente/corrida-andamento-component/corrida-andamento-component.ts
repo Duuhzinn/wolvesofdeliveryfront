@@ -28,6 +28,8 @@ export class CorridaAndamentoComponent implements OnInit, OnDestroy {
   totalPaginas: number = 0;
   carregando: boolean = false;
 
+  motoristaAtual: number | null = null;
+
   private timerSubscription: Subscription | null = null;
 
   corridas: any[] = [];
@@ -123,6 +125,11 @@ export class CorridaAndamentoComponent implements OnInit, OnDestroy {
   cancelarCorrida() {
     this.pararTudo();
     this.modalChamandoMotorista = false;
+
+    if(this.motoristaAtual !== null){
+      this.usuarioService.patchCancelarChamada(this.motoristaAtual).subscribe();
+      this.motoristaAtual = null
+    }
   }
 
   fecharModalSemMotorista() {
@@ -170,6 +177,7 @@ export class CorridaAndamentoComponent implements OnInit, OnDestroy {
     this.websocketService.conectarCorrida(onAceite, onRecusa);
   }
 
+  
   chamarMotorista() {
     this.modalChamandoMotorista = true;
     this.cdr.detectChanges();
@@ -177,6 +185,7 @@ export class CorridaAndamentoComponent implements OnInit, OnDestroy {
     this.usuarioService.getConsultaPrimeiroMotorista().subscribe({
       next: (motoristaId) => {
         if (motoristaId !== null) {
+          this.motoristaAtual = motoristaId //SALVA O MOTORISTA ATUAL NA VARIAVEL
           const despachante = Number(localStorage.getItem('usuarioId'));
 
           this.usuarioService.patchChamandoMotorista(motoristaId).subscribe({

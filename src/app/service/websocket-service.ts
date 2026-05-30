@@ -9,6 +9,7 @@ export class WebsocketService {
   private client: Client;
   private corridaSubscription: StompSubscription | null = null;
   private recusaSubscription: StompSubscription | null = null;
+  private cancelamentoSubscription: StompSubscription | null = null;
 
   constructor() {
     this.client = new Client({
@@ -106,6 +107,26 @@ export class WebsocketService {
     if (this.atualizacaoSubscription) {
       this.atualizacaoSubscription.unsubscribe();
       this.atualizacaoSubscription = null;
+    }
+  }
+
+  escutarCancelamento(callback: () => void): void {
+    const subscribe = () => {
+      if (this.cancelamentoSubscription) {
+        this.cancelamentoSubscription.unsubscribe();
+        this.cancelamentoSubscription = null;
+      }
+      this.cancelamentoSubscription = this.client.subscribe('/topic/cancelarChamada', () => {
+        callback();
+      });
+    };
+    if(this.client.active){
+      subscribe();
+    } else {
+      this.client.onConnect = () => {
+      subscribe();
+      };
+      this.client.activate();
     }
   }
 }

@@ -7,6 +7,7 @@ import { Navbar } from './shared/navbar/navbar';
 import { FirebaseService } from './service/firebase-service';
 import { NotificationStateService } from './service/notificationstate-service';
 import { UsuarioService } from './service/usuario-service';
+import { WebsocketService } from './service/websocket-service';
 
 @Component({
   selector: 'app-root',
@@ -25,6 +26,7 @@ export class App implements OnInit {
     private firebaseService: FirebaseService,
     private notificationState: NotificationStateService,
     private usuarioService: UsuarioService,
+    private websocketService: WebsocketService,
     private cdr: ChangeDetectorRef,
     @Inject(PLATFORM_ID) private platformId: Object,
   ) {
@@ -47,6 +49,11 @@ export class App implements OnInit {
         this.cdr.detectChanges();
       }
     });
+
+    this.websocketService.escutarCancelamento(() => {
+      this.notificationState.fecharTelaCorrida();
+      this.cdr.detectChanges();
+    })
   }
 
   mostrarNavbar(): boolean {
