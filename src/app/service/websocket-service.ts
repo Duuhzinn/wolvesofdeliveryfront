@@ -10,6 +10,10 @@ export class WebsocketService {
   private corridaSubscription: StompSubscription | null = null;
   private recusaSubscription: StompSubscription | null = null;
   private cancelamentoSubscription: StompSubscription | null = null;
+  private atualizacaoSubscription: StompSubscription | null = null;
+
+  // CALLBACKS REGISTRADOS
+  private onConnectCallbacks: (() => void)[] = [];
 
   constructor() {
     this.client = new Client({
@@ -17,23 +21,35 @@ export class WebsocketService {
         new SockJS('https://wolvesofdeliveryapi.onrender.com/wolvesofdeliveryAPI/ws'),
       reconnectDelay: 5000,
     });
-  }
 
-  conectar(callback: () => void) {
+    // ÚNICO onConnect - CHAMA TODOS OS CALLBACKS REGISTRADOS
     this.client.onConnect = () => {
       console.log('WebSocket conectado');
-      this.client.subscribe('/topic/fila', () => {
-        callback();
-      });
+      this.onConnectCallbacks.forEach(cb => cb());
     };
-    if (!this.client.active) {
-      this.client.activate();
+  }
+
+  private ativarSeNecessario(callback: () => void) {
+    if (this.client.active) {
+      callback();
+    } else {
+      this.onConnectCallbacks.push(callback);
+      if (!this.client.active) {
+        this.client.activate();
+      }
     }
   }
 
+  conectar(callback: () => void) {
+    this.ativarSeNecessario(() => {
+      this.client.subscribe('/topic/fila', () => {
+        callback();
+      });
+    });
+  }
+
   conectarCorrida(callbackAceite: () => void, callbackRecusa: () => void) {
-    const subscribe = () => {
-      // LIMPA SUBSCRIPTIONS ANTIGAS
+    this.ativarSeNecessario(() => {
       if (this.corridaSubscription) {
         this.corridaSubscription.unsubscribe();
         this.corridaSubscription = null;
@@ -43,7 +59,6 @@ export class WebsocketService {
         this.recusaSubscription = null;
       }
 
-      // INSCREVE NOS DOIS TOPICS DE UMA VEZ
       this.corridaSubscription = this.client.subscribe('/topic/corrida', () => {
         callbackAceite();
         this.desconectarCorrida();
@@ -52,17 +67,7 @@ export class WebsocketService {
       this.recusaSubscription = this.client.subscribe('/topic/recusa', () => {
         callbackRecusa();
       });
-    };
-
-    if (this.client.active) {
-      subscribe();
-    } else {
-      this.client.onConnect = () => {
-        console.log('WebSocket conectado - Corrida');
-        subscribe();
-      };
-      this.client.activate();
-    }
+    });
   }
 
   desconectarCorrida() {
@@ -80,9 +85,8 @@ export class WebsocketService {
     this.client.deactivate();
   }
 
-  private atualizacaoSubscription: StompSubscription | null = null;
   conectarAtualizacao(callback: () => void) {
-    const subscribe = () => {
+    this.ativarSeNecessario(() => {
       if (this.atualizacaoSubscription) {
         this.atualizacaoSubscription.unsubscribe();
         this.atualizacaoSubscription = null;
@@ -90,17 +94,7 @@ export class WebsocketService {
       this.atualizacaoSubscription = this.client.subscribe('/topic/corrida', () => {
         callback();
       });
-    };
-
-    if (this.client.active) {
-      subscribe();
-    } else {
-      this.client.onConnect = () => {
-        console.log('WebSocket conectado - Atualização');
-        subscribe();
-      };
-      this.client.activate();
-    }
+    });
   }
 
   desconectarAtualizacao() {
@@ -111,7 +105,7 @@ export class WebsocketService {
   }
 
   escutarCancelamento(callback: () => void): void {
-    const subscribe = () => {
+    this.ativarSeNecessario(() => {
       if (this.cancelamentoSubscription) {
         this.cancelamentoSubscription.unsubscribe();
         this.cancelamentoSubscription = null;
@@ -119,19 +113,6 @@ export class WebsocketService {
       this.cancelamentoSubscription = this.client.subscribe('/topic/cancelarChamada', () => {
         callback();
       });
-    };
-
-    // GARANTE QUE VAI INSCREVER QUANDO CONECTAR
-    const originalOnConnect = this.client.onConnect;
-    this.client.onConnect = (frame) => {
-      if (originalOnConnect) originalOnConnect.call(this.client, frame);
-      subscribe();
-    };
-
-    if (this.client.active) {
-      subscribe();
-    } else {
-      this.client.activate();
-    }
+    });
   }
-}
+} 
