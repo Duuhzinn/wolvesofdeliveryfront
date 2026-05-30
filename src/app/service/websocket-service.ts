@@ -92,7 +92,7 @@ export class WebsocketService {
       });
     };
 
-    if(this.client.active){
+    if (this.client.active) {
       subscribe();
     } else {
       this.client.onConnect = () => {
@@ -120,12 +120,17 @@ export class WebsocketService {
         callback();
       });
     };
-    if(this.client.active){
+
+    // GARANTE QUE VAI INSCREVER QUANDO CONECTAR
+    const originalOnConnect = this.client.onConnect;
+    this.client.onConnect = (frame) => {
+      if (originalOnConnect) originalOnConnect.call(this.client, frame);
+      subscribe();
+    };
+
+    if (this.client.active) {
       subscribe();
     } else {
-      this.client.onConnect = () => {
-      subscribe();
-      };
       this.client.activate();
     }
   }
