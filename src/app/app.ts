@@ -40,6 +40,17 @@ export class App implements OnInit {
         this.router.navigate(['login']);
       } else {
         this.firebaseService.escutarNotificacoes();
+
+        // LÊ OS PARAMS DA URL (quando vem do clique na notificação)
+        const params = new URLSearchParams(window.location.search);
+        const corridaId = params.get('corridaId');
+        const despachanteId = params.get('despachanteId');
+
+        if (corridaId && despachanteId) {
+          localStorage.setItem('corridaId', corridaId);
+          localStorage.setItem('despachanteId', despachanteId);
+          this.notificationState.mostrarTelaCorrida();
+        }
       }
     }
 
@@ -53,7 +64,7 @@ export class App implements OnInit {
     this.websocketService.escutarCancelamento(() => {
       this.notificationState.fecharTelaCorrida();
       this.cdr.detectChanges();
-    })
+    });
   }
 
   mostrarNavbar(): boolean {
@@ -62,6 +73,7 @@ export class App implements OnInit {
 
   aceitarCorrida() {
     this.notificationState.fecharTelaCorrida();
+    window.history.replaceState({}, '', '/home'); //limpa os query params
     if (isPlatformBrowser(this.platformId)) {
       const motoristaId = Number(localStorage.getItem('usuarioId'));
       const despachanteId = Number(localStorage.getItem('despachanteId'));
@@ -84,7 +96,8 @@ export class App implements OnInit {
 
   recusarCorrida() {
     this.notificationState.fecharTelaCorrida();
-    
+    window.history.replaceState({}, '', '/home'); //limpa os query params
+
     if (isPlatformBrowser(this.platformId)) {
       const motoristaId = Number(localStorage.getItem('usuarioId'));
       const despachanteId = Number(localStorage.getItem('despachanteId'));
@@ -94,7 +107,7 @@ export class App implements OnInit {
         next: (resp) => {
           console.log('Corrida recusada:', resp);
           this.cdr.detectChanges();
-        }
+        },
       });
     }
   }
