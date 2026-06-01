@@ -23,8 +23,6 @@ messaging.onBackgroundMessage((payload) => {
     badge: '/icons/icon-72x72.png',
     vibrate: [1000, 500, 1000, 500, 1000, 500, 1000],
     requireInteraction: true,
-    tag: 'nova-corrida',
-    renotify: true,
     data: {
       url: '/home',
       corridaId: payload.data.corridaId,
