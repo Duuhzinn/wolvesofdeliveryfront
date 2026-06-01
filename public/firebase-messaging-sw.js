@@ -16,9 +16,11 @@ const messaging = firebase.messaging();
 messaging.onBackgroundMessage((payload) => {
   console.log('Mensagem em background recebida:', payload);
 
-  const notificationTitle = payload.data.title;
+  const notificationTitle = payload.notification?.title || payload.data.title;
+  const notificationBody = payload.notification?.body || payload.data.body;
+
   const notificationOptions = {
-    body: payload.data.body,
+    body: notificationBody,
     icon: '/icons/icon-192x192.png',
     badge: '/icons/icon-72x72.png',
     vibrate: [1000, 500, 1000, 500, 1000, 500, 1000],
@@ -39,17 +41,19 @@ messaging.onBackgroundMessage((payload) => {
 self.addEventListener('notificationclick', function(event) {
   event.notification.close();
   const { corridaId, despachanteId } = event.notification.data;
-  const urlToOpen = self.location.origin + `/home?corridaId=${corridaId}&despachanteId=${despachanteId}`;
+  const urlToOpen = `/home?corridaId=${corridaId}&despachanteId=${despachanteId}`;
 
   event.waitUntil(
     clients.matchAll({ type: 'window', includeUncontrolled: true }).then((clientList) => {
       for (const client of clientList) {
         if ('focus' in client) {
-          return client.navigate(urlToOpen)
-          .then(() => client.focus());
+          client.navigate(urlToOpen);
+          return client.focus();
         }
       }
-      return clients.openWindow(urlToOpen);
+      if (clients.openWindow) {
+        return clients.openWindow(urlToOpen);
+      }
     })
   );
 });
