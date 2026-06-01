@@ -39,19 +39,17 @@ messaging.onBackgroundMessage((payload) => {
 self.addEventListener('notificationclick', function(event) {
   event.notification.close();
   const { corridaId, despachanteId } = event.notification.data;
-  const urlToOpen = `/home?corridaId=${corridaId}&despachanteId=${despachanteId}`;
+  const urlToOpen = self.location.origin + `/home?corridaId=${corridaId}&despachanteId=${despachanteId}`;
 
   event.waitUntil(
     clients.matchAll({ type: 'window', includeUncontrolled: true }).then((clientList) => {
       for (const client of clientList) {
         if ('focus' in client) {
-          client.navigate(urlToOpen);
-          return client.focus();
+          return client.navigate(urlToOpen)
+          .then(() => client.focus());
         }
       }
-      if (clients.openWindow) {
-        return clients.openWindow(urlToOpen);
-      }
+      return clients.openWindow(urlToOpen);
     })
   );
 });
