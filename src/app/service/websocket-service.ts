@@ -30,7 +30,7 @@ export class WebsocketService {
   }
 
   private ativarSeNecessario(callback: () => void) {
-    if (this.client.active) {
+    if (this.client.connected) {
       callback();
     } else {
       this.onConnectCallbacks.push(callback);
