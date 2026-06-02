@@ -43,6 +43,7 @@
       <a>Relatórios <span class="chevron">▼</span></a>
       <ul class="dropdown-menu">
         <li><a [routerLink]="['/relatorioCorrida']">Corridas</a></li>
+        <li><a [routerLink]="['/relatorioMotoristas']">Motoristas</a></li>
       </ul>
     </li>
     }
@@ -117,6 +118,7 @@
       </a>
       <ul class="submenu-mobile" [class.open]="subAberto === 'relatorios'">
         <li><a [routerLink]="['/relatorioCorrida']" (click)="toggleMenu()">Corridas</a></li>
+        <li><a [routerLink]="['/relatorioMotoristas']" (click)="toggleMenu()">Motoristas</a></li>
       </ul>
     </li>
     }
