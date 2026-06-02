@@ -15,6 +15,10 @@
       </div>
       <div class="stat-card-body">
 
+        @if (stat.carregando) {
+        <div class="carregando">Carregando...</div>
+        } @else {
+
         <div class="stat-destaque">
           <span class="stat-destaque-label">FATURADO</span>
           <span class="stat-destaque-valor">R$ {{ stat.totalFaturado | number:'1.2-2' }}</span>
@@ -48,6 +52,8 @@
         </div>
         }
 
+        }
+
         <!-- MINI FILTRO -->
         <div class="mini-filtro">
           <div class="mini-filtro-inputs">
@@ -64,9 +70,9 @@
           </div>
           <div class="mini-filtro-btns">
             @if (stat.dataInicio && stat.dataFim && stat.dataInicio <= stat.dataFim) {
-                <button class="btn-mini-buscar" (click)="pesquisarPorData(stat)" [disabled]="stat.carregando">
-                {{ stat.carregando ? 'BUSCANDO' : 'Filtrar' }}
-                </button>
+            <button class="btn-mini-buscar" (click)="pesquisarPorData(stat)" [disabled]="stat.carregando">
+              Filtrar
+            </button>
             }
             @if (stat.filtrado) {
             <button class="btn-mini-limpar" (click)="limparFiltro(stat)">Limpar</button>

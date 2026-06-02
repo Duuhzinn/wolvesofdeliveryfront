@@ -1,1 +1,54 @@
-<p>ranking-motoristas-component works!</p>
+<div class="container">
+  <div class="cards-container">
+
+    <div class="header-card motorista-card">
+      <h2>RANKING DE MOTORISTAS</h2>
+      <div class="filtro-global">
+        <div class="filtro-grupo">
+          <label>De:</label>
+          <input type="date" [(ngModel)]="dataInicio" class="form-control"/>
+        </div>
+        <div class="filtro-grupo">
+          <label>Até:</label>
+          <input type="date" [(ngModel)]="dataFim" class="form-control"/>
+        </div>
+        @if (dataInicio && dataFim && dataInicio <= dataFim) {
+        <button class="btn-buscar" (click)="pesquisar()" [disabled]="carregando">
+          {{ carregando ? 'BUSCANDO...' : 'Pesquisar' }}
+        </button>
+        }
+      </div>
+    </div>
+
+    @for (motorista of motoristas; track motorista.id; let i = $index) {
+    <div class="stat-card">
+      <div class="stat-card-header">
+        <div class="ranking-pos">
+          @if (i === 0) { <span class="medal ouro">🥇</span> }
+          @else if (i === 1) { <span class="medal prata">🥈</span> }
+          @else if (i === 2) { <span class="medal bronze">🥉</span> }
+          @else { <span class="pos-numero">{{ i + 1 }}º</span> }
+        </div>
+        <span class="stat-mes">{{ motorista.nome }}</span>
+      </div>
+      <div class="stat-card-body">
+        <div class="stat-destaque">
+          <span class="stat-destaque-label">FATURADO</span>
+          <span class="stat-destaque-valor">R$ {{ motorista.totalFaturado | number:'1.2-2' }}</span>
+        </div>
+        <div class="stat-linha">
+          <i class="ti ti-checkup-list"></i>
+          <span>TOTAL CORRIDAS</span>
+          <span class="stat-valor">{{ motorista.totalCorridas }}</span>
+        </div>
+        <div class="stat-linha">
+          <i class="ti ti-chart-bar"></i>
+          <span>MÉDIA DIÁRIA</span>
+          <span class="stat-valor">{{ motorista.mediaDiaria | number:'1.1-1' }}</span>
+        </div>
+      </div>
+    </div>
+    }
+
+  </div>
+</div>

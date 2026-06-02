@@ -203,3 +203,10 @@
 @media (max-width: 600px) {
   .stat-card { flex: 1 1 100%; }
 }
+
+.carregando {
+  text-align: center;
+  color: #888;
+  font-size: 13px;
+  padding: 10px 0;
+}

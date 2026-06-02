@@ -7,6 +7,8 @@ import { FilaComponent } from './componente/fila-component/fila-component';
 import { CorridaFinalizadaComponent } from './componente/corrida-finalizada-component/corrida-finalizada-component';
 import { CorridaAndamentoComponent } from './componente/corrida-andamento-component/corrida-andamento-component';
 import { RelatorioMotoristasComponent } from './componente/relatorio-motoristas-component/relatorio-motoristas-component';
+import { RankingMotoristasComponent } from './componente/ranking-motoristas-component/ranking-motoristas-component';
+import { RelatoriosComponent } from './componente/relatorios-component/relatorios-component';
 
 //DECLARANDO ROTAS
 export const routes: Routes = [
@@ -19,7 +21,9 @@ export const routes: Routes = [
     {path: 'ordemDaFila' , component: FilaComponent},// DECLARA A ROTA PARA A PAGINA DE ORDEM DA FILA MOTORISTAS
     {path: 'corridas/andamento', component: CorridaAndamentoComponent}, // DECLARA AS ROTAS PARA AS CORRIDAS
     {path: 'corridas/finalizada', component: CorridaFinalizadaComponent}, // DECLARA AS ROTAS PARA AS CORRIDAS
-    {path: 'relatorioMotoristas', component: RelatorioMotoristasComponent},
+    {path: 'relatorioCorrida', component: RelatoriosComponent}, // DECLARA AS ROTAS PARA OS RELATORIOS DOS MOTORISTAS
+    {path: 'relatorioMotoristas', component: RelatorioMotoristasComponent}, // DECLARA AS ROTAS PARA OS RELATORIOS DOS MOTORISTAS
+    {path: 'rankingMotoristas', component: RankingMotoristasComponent}, // DECLARA AS ROTAS PARA OS RELATORIOS DOS RANKING DO MOTORISTA
 ];
 
 
