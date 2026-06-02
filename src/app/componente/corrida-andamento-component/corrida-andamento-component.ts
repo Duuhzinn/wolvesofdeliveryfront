@@ -195,32 +195,19 @@ export class CorridaAndamentoComponent implements OnInit, OnDestroy {
                   //alert('Notificação enviada');
                   this.escutarWebSocket();
 
-                  this.timerSubscription = timer(7000, 7000)
-                    .pipe(take(8))
-                    .subscribe({
-                      next: () => {
-                        this.usuarioService
-                          .postEnviarNotificacao(motoristaId, despachante)
-                          .subscribe({
-                            next: (resp) => console.log('Renotificação enviada:', resp),
-                            error: (err) => console.log('Erro:', err),
-                          });
-                      },
-                      complete: () => {
-                        this.usuarioService.patchMarcarOffline(motoristaId).subscribe();
-
-                        const corridaId = Number(localStorage.getItem('corridaId'));
-                        this.usuarioService
-                          .postEnviarNotificacaoPerdida(motoristaId, corridaId)
-                          .subscribe({
-                            next: (resp) =>
-                              console.log('Notificação de corrida perdida enviada:', resp),
-                            error: (err) => console.log('Erro ao enviar notificação perdida:', err),
-                          });
-                        this.pararTudo();
-                        this.chamarMotorista();
-                      },
-                    });
+                  // AGUARDA 1 MINUTO SEM RENOTIFICAR
+                  this.timerSubscription = timer(60000).subscribe({
+                    next: () => {
+                      this.usuarioService.patchMarcarOffline(motoristaId).subscribe();
+                      const corridaId = Number(localStorage.getItem('corridaId'));
+                      this.usuarioService.postEnviarNotificacaoPerdida(motoristaId, corridaId).subscribe({
+                         next: (resp) => console.log('Notificação de corrida perdida enviada:', resp),
+                         error: (err) => console.log('Erro ao enviar notificação perdida:', err),
+                      });
+                      this.pararTudo();
+                      this.chamarMotorista();
+                    },
+                  });
                 },
                 error: (err) => console.log('Erro ao enviar notificação:', err),
               });

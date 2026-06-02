@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "888457105343",
+    "project_id": "wolvesofdelivery-a6e2a",
+    "storage_bucket": "wolvesofdelivery-a6e2a.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:888457105343:android:5e00d118ae6ec857a51b0a",
+        "android_client_info": {
+          "package_name": "com.wolvesofdelivery.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAS0jZgqJF6dIjw_J0AoEc6BanQZ7Ab71g"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

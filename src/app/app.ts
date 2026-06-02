@@ -8,6 +8,9 @@ import { FirebaseService } from './service/firebase-service';
 import { NotificationStateService } from './service/notificationstate-service';
 import { UsuarioService } from './service/usuario-service';
 import { WebsocketService } from './service/websocket-service';
+import { Capacitor } from '@capacitor/core';
+import { PushNotifications } from '@capacitor/push-notifications';
+import { Haptics } from '@capacitor/haptics';
 
 @Component({
   selector: 'app-root',
@@ -20,6 +23,7 @@ import { WebsocketService } from './service/websocket-service';
 export class App implements OnInit {
   protected readonly title = signal('wolvesofdelivery');
   corrida$: any;
+  private static listenersRegistrados = false;
 
   constructor(
     private router: Router,
@@ -31,17 +35,56 @@ export class App implements OnInit {
     @Inject(PLATFORM_ID) private platformId: Object,
   ) {
     this.corrida$ = this.notificationState.corrida$;
+
+    if (Capacitor.isNativePlatform() && !App.listenersRegistrados) {
+      App.listenersRegistrados = true;
+      this.registrarListenersNativos();
+    }
+  }
+
+  private registrarListenersNativos() {
+    PushNotifications.addListener('pushNotificationReceived', (notification) => {
+      const title = notification.data?.['title'] ?? notification.title ?? '';
+      const data = notification.data;
+      if (title === 'Nova Corrida 🏍️') {
+        const corridaId = data?.['corridaId'];
+        const despachanteId = data?.['despachanteId'];
+        if (corridaId) localStorage.setItem('corridaId', corridaId);
+        if (despachanteId) localStorage.setItem('despachanteId', despachanteId);
+        Haptics.vibrate({ duration: 1000 });
+        this.notificationState.mostrarTelaCorrida();
+        this.cdr.detectChanges();
+      }
+      if (title === 'Corrida Perdida ❌') {
+        this.notificationState.fecharTelaCorrida();
+        PushNotifications.removeAllDeliveredNotifications();
+        this.cdr.detectChanges();
+      }
+    });
+
+    PushNotifications.addListener('pushNotificationActionPerformed', (action) => {
+      const data = action.notification.data;
+      const title = data?.['title'] ?? action.notification.title ?? '';
+      if (title === 'Nova Corrida 🏍️') {
+        const corridaId = data?.['corridaId'];
+        const despachanteId = data?.['despachanteId'];
+        if (corridaId) localStorage.setItem('corridaId', corridaId);
+        if (despachanteId) localStorage.setItem('despachanteId', despachanteId);
+        setTimeout(() => {
+          this.notificationState.mostrarTelaCorrida();
+          this.cdr.detectChanges();
+        }, 1000);
+      }
+    });
   }
 
   ngOnInit(): void {
     if (isPlatformBrowser(this.platformId)) {
-      //this.firebaseService.requestPermission();
       if (localStorage.getItem('tokenAutenticacao') == null) {
         this.router.navigate(['login']);
       } else {
         this.firebaseService.escutarNotificacoes();
 
-        // LÊ OS PARAMS DA URL (quando vem do clique na notificação)
         const params = new URLSearchParams(window.location.search);
         const corridaId = params.get('corridaId');
         const despachanteId = params.get('despachanteId');
@@ -56,7 +99,6 @@ export class App implements OnInit {
 
     this.notificationState.corrida$.subscribe((mostrar) => {
       if (mostrar) {
-        navigator.vibrate([1000, 500, 1000]);
         this.cdr.detectChanges();
       }
     });
@@ -73,7 +115,8 @@ export class App implements OnInit {
 
   aceitarCorrida() {
     this.notificationState.fecharTelaCorrida();
-    window.history.replaceState({}, '', '/home'); //limpa os query params
+    PushNotifications.removeAllDeliveredNotifications();
+    window.history.replaceState({}, '', '/home');
     if (isPlatformBrowser(this.platformId)) {
       const motoristaId = Number(localStorage.getItem('usuarioId'));
       const despachanteId = Number(localStorage.getItem('despachanteId'));
@@ -86,7 +129,6 @@ export class App implements OnInit {
             error: (err) => console.log('Erro ao atualizar status:', err),
           });
           this.cdr.detectChanges();
-          //REDIRECIONA PARA A ROTA DE CORRIDAS
           this.router.navigate(['/corridas', 'andamento']);
         },
         error: (err) => console.log('Erro ao aceitar corrida:', err),
@@ -96,7 +138,8 @@ export class App implements OnInit {
 
   recusarCorrida() {
     this.notificationState.fecharTelaCorrida();
-    window.history.replaceState({}, '', '/home'); //limpa os query params
+    PushNotifications.removeAllDeliveredNotifications();
+    window.history.replaceState({}, '', '/home');
 
     if (isPlatformBrowser(this.platformId)) {
       const motoristaId = Number(localStorage.getItem('usuarioId'));

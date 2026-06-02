@@ -224,4 +224,14 @@ getCorridasClienteAndamento(clienteId: number, page: number): Observable<any> {
     const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
     return this.http.get(AppConstants.estatisticasAdm(ano), { headers });
   }
+
+  // ESTATÍSTICAS POR PERÍODO
+  getEstatisticasPorPeriodo(inicio: string, fim: string, clienteId?: number, motoristaId?: number): Observable<any> {
+    const token = localStorage.getItem('tokenAutenticacao');
+    const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
+    let url = `${AppConstants.baseRaceURL}/estatisticas/periodo?inicio=${inicio}&fim=${fim}`;
+    if (clienteId) url += `&clienteId=${clienteId}`;
+    if (motoristaId) url += `&motoristaId=${motoristaId}`;
+    return this.http.get(url, { headers });
+  }
 }

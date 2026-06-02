@@ -8,6 +8,7 @@
   <ul class="navbar-menu">
     <li><a [routerLink]="['/home']" routerLinkActive="active">Dashboard</a></li>
 
+    @if (isAdmin || isCliente || isMotorista) {
     <li class="dropdown">
       <a>Clientes <span class="chevron">▼</span></a>
       <ul class="dropdown-menu">
@@ -15,7 +16,9 @@
         <li><a [routerLink]="['/historicoCorridas']">Histórico de Corridas</a></li>
       </ul>
     </li>
+    }
 
+    @if (isAdmin || isCliente || isMotorista) {
     <li class="dropdown">
       <a>Motorista <span class="chevron">▼</span></a>
       <ul class="dropdown-menu">
@@ -23,7 +26,9 @@
         <li><a [routerLink]="['/ordemDaFila']">Ordem da Fila</a></li>
       </ul>
     </li>
+    }
 
+    @if (isAdmin || isCliente || isMotorista) {
     <li class="dropdown">
       <a>Corridas <span class="chevron">▼</span></a>
       <ul class="dropdown-menu">
@@ -31,20 +36,25 @@
         <li><a [routerLink]="['/corridas/finalizada']">Finalizadas</a></li>
       </ul>
     </li>
+    }
 
+    @if (isAdmin || isCliente || isMotorista) {
     <li class="dropdown">
       <a>Relatórios <span class="chevron">▼</span></a>
       <ul class="dropdown-menu">
-        <li><a [routerLink]="['/relatorioCorrida']">Corrida</a></li>
+        <li><a [routerLink]="['/relatorioCorrida']">Corridas</a></li>
       </ul>
     </li>
+    }
 
+    @if (isAdmin || isCliente || isMotorista) {
     <li class="dropdown">
       <a>Configurações <span class="chevron">▼</span></a>
       <ul class="dropdown-menu">
         <li><a [routerLink]="['/usuarioList']">Usuários</a></li>
       </ul>
     </li>
+    }
 
     <li class="sair"><a (click)="sair()">Sair</a></li>
   </ul>
@@ -64,30 +74,31 @@
   <ul>
     <li><a [routerLink]="['/home']" (click)="toggleMenu()">Dashboard</a></li>
 
+    @if (isAdmin || isCliente || isMotorista) {
     <li>
       <a (click)="toggleSub('clientes')" [class.open]="subAberto === 'clientes'">
         Clientes <span class="chevron">▼</span>
       </a>
       <ul class="submenu-mobile" [class.open]="subAberto === 'clientes'">
         <li><a [routerLink]="['/clienteCadastro']" (click)="toggleMenu()">Cadastrar</a></li>
-        <li>
-          <a [routerLink]="['/historicoCorridas']" (click)="toggleMenu()">Histórico de Corridas</a>
-        </li>
+        <li><a [routerLink]="['/historicoCorridas']" (click)="toggleMenu()">Histórico de Corridas</a></li>
       </ul>
     </li>
+    }
 
+    @if (isAdmin || isCliente || isMotorista) {
     <li>
       <a (click)="toggleSub('motorista')" [class.open]="subAberto === 'motorista'">
         Motorista <span class="chevron">▼</span>
       </a>
       <ul class="submenu-mobile" [class.open]="subAberto === 'motorista'">
-        <li>
-          <a [routerLink]="['/motoristaStatus']" (click)="toggleMenu()">Controle de Status</a>
-        </li>
+        <li><a [routerLink]="['/motoristaStatus']" (click)="toggleMenu()">Controle de Status</a></li>
         <li><a [routerLink]="['/ordemDaFila']" (click)="toggleMenu()">Ordem da Fila</a></li>
       </ul>
     </li>
+    }
 
+    @if (isAdmin || isCliente || isMotorista) {
     <li>
       <a (click)="toggleSub('corridas')" [class.open]="subAberto === 'corridas'">
         Corridas <span class="chevron">▼</span>
@@ -97,16 +108,20 @@
         <li><a [routerLink]="['/corridas/finalizada']" (click)="toggleMenu()">Finalizadas</a></li>
       </ul>
     </li>
+    }
 
+    @if (isAdmin || isCliente || isMotorista) {
     <li>
       <a (click)="toggleSub('relatorios')" [class.open]="subAberto === 'relatorios'">
         Relatórios <span class="chevron">▼</span>
       </a>
       <ul class="submenu-mobile" [class.open]="subAberto === 'relatorios'">
-        <li><a [routerLink]="['/relatorioCorrida']" (click)="toggleMenu()">Corrida</a></li>
+        <li><a [routerLink]="['/relatorioCorrida']" (click)="toggleMenu()">Corridas</a></li>
       </ul>
     </li>
+    }
 
+    @if (isAdmin || isCliente || isMotorista) {
     <li>
       <a (click)="toggleSub('config')" [class.open]="subAberto === 'config'">
         Configurações <span class="chevron">▼</span>
@@ -115,6 +130,7 @@
         <li><a [routerLink]="['/usuarioList']" (click)="toggleMenu()">Usuários</a></li>
       </ul>
     </li>
+    }
 
     <li class="sair-mobile"><a (click)="sair()">Sair</a></li>
   </ul>

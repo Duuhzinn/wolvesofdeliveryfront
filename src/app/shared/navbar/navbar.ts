@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, Inject, PLATFORM_ID } from '@angular/core';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 
 @Component({
@@ -14,7 +14,18 @@ export class Navbar {
   menuAberto = false;
   subAberto: string | null = null;
  
-  constructor(private router: Router) {}
+  constructor(private router: Router,
+     @Inject(PLATFORM_ID) private platformId: Object
+  ) {}
+
+  get tipoUser(): string {
+    if (!isPlatformBrowser(this.platformId)) return '';
+    return localStorage.getItem('tipoUser') ?? '';
+  }
+
+  get isAdmin(): boolean { return this.tipoUser === 'ADMIN'; }
+  get isCliente(): boolean { return this.tipoUser === 'CLIENTE'; }
+  get isMotorista(): boolean { return this.tipoUser === 'MOTORISTA'; }
  
   toggleMenu(): void {
     this.menuAberto = !this.menuAberto;

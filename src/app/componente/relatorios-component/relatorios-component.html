@@ -1,1 +1,82 @@
-<p>rrelatorios-component works!</p>
+<div class="container">
+  <div class="cards-container">
+
+    <div class="motorista-card header-card">
+      <h2>RELATÓRIO GERAL</h2>
+    </div>
+
+    @for (stat of estatisticas; track stat.mes) {
+    <div class="stat-card">
+      <div class="stat-card-header">
+        <span class="stat-mes">{{ stat.mes }}</span>
+        @if (stat.filtrado) {
+        <span class="filtro-ativo-badge">filtrado</span>
+        }
+      </div>
+      <div class="stat-card-body">
+
+        <div class="stat-destaque">
+          <span class="stat-destaque-label">FATURADO</span>
+          <span class="stat-destaque-valor">R$ {{ stat.totalFaturado | number:'1.2-2' }}</span>
+        </div>
+
+        <div class="stat-linha">
+          <i class="ti ti-checkup-list"></i>
+          <span>TOTAL CORRIDAS</span>
+          <span class="stat-valor">{{ stat.totalCorridas }}</span>
+        </div>
+        <div class="stat-linha">
+          <i class="ti ti-chart-bar"></i>
+          <span>MÉDIA DIÁRIA</span>
+          <span class="stat-valor">{{ stat.mediaDiaria | number:'1.1-1' }}</span>
+        </div>
+        <div class="stat-linha stat-perda">
+          <i class="ti ti-x"></i>
+          <span>PERDIDAS</span>
+          <span class="stat-valor">{{ stat.totalPerdidas }}</span>
+        </div>
+        <div class="stat-linha stat-recusada">
+          <i class="ti ti-ban"></i>
+          <span>RECUSADAS</span>
+          <span class="stat-valor">{{ stat.totalRecusadas }}</span>
+        </div>
+        @if (isAdmin) {
+        <div class="stat-linha stat-top">
+          <i class="ti ti-star"></i>
+          <span>MOTORISTA TOP</span>
+          <span class="stat-valor">{{ stat.motoristaTop }}</span>
+        </div>
+        }
+
+        <!-- MINI FILTRO -->
+        <div class="mini-filtro">
+          <div class="mini-filtro-inputs">
+            <input type="date"
+              [(ngModel)]="stat.dataInicio"
+              [min]="getMinDate(stat.mesNumero)"
+              [max]="getMaxDate(stat.mesNumero)"
+              class="mini-input"/>
+            <input type="date"
+              [(ngModel)]="stat.dataFim"
+              [min]="getMinDate(stat.mesNumero)"
+              [max]="getMaxDate(stat.mesNumero)"
+              class="mini-input"/>
+          </div>
+          <div class="mini-filtro-btns">
+            @if (stat.dataInicio && stat.dataFim && stat.dataInicio <= stat.dataFim) {
+                <button class="btn-mini-buscar" (click)="pesquisarPorData(stat)" [disabled]="stat.carregando">
+                {{ stat.carregando ? 'BUSCANDO' : 'Filtrar' }}
+                </button>
+            }
+            @if (stat.filtrado) {
+            <button class="btn-mini-limpar" (click)="limparFiltro(stat)">Limpar</button>
+            }
+          </div>
+        </div>
+
+      </div>
+    </div>
+    }
+
+  </div>
+</div>

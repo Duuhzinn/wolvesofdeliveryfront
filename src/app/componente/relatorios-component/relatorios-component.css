@@ -1,0 +1,205 @@
+.container {
+  padding: 30px;
+  max-width: 100%;
+  margin: 0 auto;
+}
+
+.cards-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  padding: 16px;
+}
+
+.motorista-card {
+  background: #fff;
+  border: 0.5px solid #ddd;
+  border-radius: 12px;
+  padding: 16px;
+  flex: 1 1 220px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.header-card {
+  flex: 1 1 100%;
+}
+
+.header-card h2 {
+  color: #333;
+  font-size: 2rem;
+  font-weight: 600;
+  margin: 0;
+  letter-spacing: 0.05em;
+}
+
+@media (max-width: 600px) {
+  .container { padding: 15px; }
+  .motorista-card { flex: 1 1 100%; }
+}
+
+/* CARDS DE ESTATÍSTICAS */
+.stat-card {
+  background: #fff;
+  border: 0.5px solid #ddd;
+  border-radius: 12px;
+  flex: 1 1 220px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.stat-card-header {
+  background: #534AB7;
+  padding: 14px 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.stat-mes {
+  color: #fff;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+}
+
+.filtro-ativo-badge {
+  background: rgba(255,255,255,0.2);
+  color: #fff;
+  font-size: 10px;
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+}
+
+.stat-card-body {
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.stat-destaque {
+  background: #f0eeff;
+  border-radius: 8px;
+  padding: 10px 14px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4px;
+}
+
+.stat-destaque-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: #534AB7;
+  letter-spacing: 0.06em;
+}
+
+.stat-destaque-valor {
+  font-size: 18px;
+  font-weight: 700;
+  color: #534AB7;
+}
+
+.stat-linha {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: #555;
+}
+
+.stat-linha i {
+  font-size: 15px;
+  color: #534AB7;
+  width: 18px;
+}
+
+.stat-linha span:nth-child(2) {
+  flex: 1;
+}
+
+.stat-valor {
+  font-weight: 600;
+  color: #333;
+}
+
+.stat-perda i { color: #e74c3c; }
+.stat-recusada i { color: #e67e22; }
+.stat-top i { color: #f1c40f; }
+
+/* MINI FILTRO */
+.mini-filtro {
+  margin-top: 8px;
+  border-top: 0.5px solid #eee;
+  padding-top: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.mini-filtro-inputs {
+  display: flex;
+  gap: 6px;
+}
+
+.mini-input {
+  flex: 1;
+  height: 32px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  padding: 4px 6px;
+  font-size: 11px;
+  color: #333;
+}
+
+.mini-filtro-btns {
+  display: flex;
+  gap: 6px;
+}
+
+.btn-mini-buscar {
+  flex: 1;
+  background-color: #323261;
+  color: #fff;
+  border: none;
+  padding: 6px 14px;
+  border-radius: 8px;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.btn-mini-buscar:hover {
+  background-color: #4a4a8f;
+  transform: translateY(-1px);
+}
+
+.btn-mini-buscar:disabled {
+  opacity: 0.6;
+}
+
+.btn-mini-limpar {
+  flex: 1;
+  background-color: #323261;
+  color: #fff;
+  border: none;
+  padding: 6px 14px;
+  border-radius: 8px;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.btn-mini-limpar:hover {
+  background-color: #4a4a8f;
+  transform: translateY(-1px);
+}
+
+@media (max-width: 600px) {
+  .stat-card { flex: 1 1 100%; }
+}
