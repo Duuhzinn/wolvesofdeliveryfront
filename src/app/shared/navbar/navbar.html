@@ -120,7 +120,7 @@
       <ul class="submenu-mobile" [class.open]="subAberto === 'relatorios'">
         <li><a [routerLink]="['/relatorioCorrida']" (click)="toggleMenu()">Corridas</a></li>
         <li><a [routerLink]="['/relatorioMotoristas']" (click)="toggleMenu()">Motoristas</a></li>
-        <li><a [routerLink]="['/rankingMotoristas']">Ranking Motoristas</a></li>
+        <li><a [routerLink]="['/rankingMotoristas']" (click)="toggleMenu()">Ranking Motoristas</a></li>
       </ul>
     </li>
     }

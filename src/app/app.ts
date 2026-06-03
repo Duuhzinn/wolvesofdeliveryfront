@@ -119,9 +119,9 @@ export class App implements OnInit {
     window.history.replaceState({}, '', '/home');
     if (isPlatformBrowser(this.platformId)) {
       const motoristaId = Number(localStorage.getItem('usuarioId'));
-      const despachanteId = Number(localStorage.getItem('despachanteId'));
+      const corridaId = Number(localStorage.getItem('corridaId'));
       //alert('corrida: ' + corridaId + 'Motorista: ' + motoristaId);
-      this.usuarioService.postCriarCorrida(motoristaId, despachanteId).subscribe({
+      this.usuarioService.patchAceitarCorrida(corridaId).subscribe({
         next: (resp) => {
           console.log('Corrida criada:', resp);
           this.usuarioService.patchOcupado(Number(motoristaId)).subscribe({

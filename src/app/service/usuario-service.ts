@@ -119,10 +119,10 @@ export class UsuarioService {
   }
 
   //ACEITE DO MOTORISTA NAS CORRIDAS NOTIFICADAS
-  postCriarCorrida(motoristaId: number, despachante: number): Observable<string> {
+  patchAceitarCorrida(corridaId: number): Observable<string> {
     const token = localStorage.getItem('tokenAutenticacao');
     const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
-    return this.http.post(AppConstants.createRace(motoristaId, despachante), {},{ headers, responseType: 'text' },
+    return this.http.patch(AppConstants.acceptRace(corridaId), {},{ headers, responseType: 'text' },
     );
   }
 
