@@ -94,12 +94,10 @@ export class UsuarioService {
     return this.http.get<number>(AppConstants.firstDrive, { headers });
   }
 
-  //ENVIAR A NOTIFICAÇÃO PARA O MOTORISTA DA VEZ
-  postEnviarNotificacao(motoristaID: number, despachanteId: number): Observable<string> {
+  postEnviarNotificacao(motoristaID: number, despachanteId: number): Observable<any> {
     const token = localStorage.getItem('tokenAutenticacao');
     const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
-    return this.http.post( AppConstants.sendDrive(motoristaID, despachanteId), {}, { headers, responseType: 'text' },
-    );
+    return this.http.post(AppConstants.sendDrive(motoristaID, despachanteId), {}, { headers });
   }
 
   //CHAMANDO O MOTORISTA DA VEZ

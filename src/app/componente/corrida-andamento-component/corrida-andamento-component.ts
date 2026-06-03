@@ -191,8 +191,9 @@ export class CorridaAndamentoComponent implements OnInit, OnDestroy {
           this.usuarioService.patchChamandoMotorista(motoristaId).subscribe({
             next: () => {
               this.usuarioService.postEnviarNotificacao(motoristaId, despachante).subscribe({
-                next: () => {
+                next: (resp) => {
                   //alert('Notificação enviada');
+                  localStorage.setItem('corridaId', resp.corridaId);
                   this.escutarWebSocket();
 
                   // AGUARDA 1 MINUTO SEM RENOTIFICAR
