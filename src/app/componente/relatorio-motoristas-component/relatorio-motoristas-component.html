@@ -25,24 +25,40 @@
         </div>
 
         <div class="stat-linha">
-          <i class="ti ti-checkup-list"></i>
+          <span class="icone">📦</span>
           <span>TOTAL CORRIDAS</span>
           <span class="stat-valor">{{ motorista.totalCorridas }}</span>
         </div>
         <div class="stat-linha">
-          <i class="ti ti-chart-bar"></i>
+          <span class="icone">📊</span>
           <span>MÉDIA DIÁRIA</span>
           <span class="stat-valor">{{ motorista.mediaDiaria | number:'1.1-1' }}</span>
         </div>
         <div class="stat-linha stat-perda">
-          <i class="ti ti-x"></i>
+          <span class="icone">❌</span>
           <span>PERDIDAS</span>
           <span class="stat-valor">{{ motorista.totalPerdidas }}</span>
         </div>
         <div class="stat-linha stat-recusada">
-          <i class="ti ti-ban"></i>
+          <span class="icone">🚫</span>
           <span>RECUSADAS</span>
           <span class="stat-valor">{{ motorista.totalRecusadas }}</span>
+        </div>
+        <div class="stat-linha">
+          <span class="icone">🏆</span>
+          <span>APROVEITAMENTO</span>
+          <span class="stat-valor" [ngClass]="{
+            'aproveitamento-verde': motorista.aproveitamento >= 75,
+            'aproveitamento-amarelo': motorista.aproveitamento >= 50 && motorista.aproveitamento < 75,
+            'aproveitamento-vermelho': motorista.aproveitamento < 50
+          }">{{ motorista.aproveitamento | number:'1.1-1' }}%</span>
+        </div>
+        <div class="aproveitamento-bar">
+          <div class="aproveitamento-fill" [style.width.%]="motorista.aproveitamento" [ngClass]="{
+            'fill-verde': motorista.aproveitamento >= 75,
+            'fill-amarelo': motorista.aproveitamento >= 50 && motorista.aproveitamento < 75,
+            'fill-vermelho': motorista.aproveitamento < 50
+          }"></div>
         </div>
 
         }

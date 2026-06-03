@@ -30,6 +30,11 @@ export class RelatoriosComponent implements OnInit {
     return '';
   }
 
+  get isCliente(): boolean {
+    if (isPlatformBrowser(this.platformId)) return localStorage.getItem('tipoUser') === 'CLIENTE';
+    return false;
+  }
+
   ngOnInit() {
     if (isPlatformBrowser(this.platformId)) this.carregarEstatisticas();
   }
@@ -41,6 +46,7 @@ export class RelatoriosComponent implements OnInit {
     if (this.tipoUser === 'CLIENTE') {
       this.usuarioService.getEstatisticasCliente(usuarioId, ano).subscribe({
         next: (data: any) => {
+          console.log(data)
           this.estatisticas = this.filtrarMeses(data);
           this.cdr.detectChanges();
         },
@@ -49,6 +55,7 @@ export class RelatoriosComponent implements OnInit {
     } else if (this.tipoUser === 'MOTORISTA') {
       this.usuarioService.getEstatisticasMotorista(usuarioId, ano).subscribe({
         next: (data: any) => {
+          console.log(data)
           this.estatisticas = this.filtrarMeses(data);
           this.cdr.detectChanges();
         },
@@ -57,6 +64,7 @@ export class RelatoriosComponent implements OnInit {
     } else {
       this.usuarioService.getEstatisticasAdm(ano).subscribe({
         next: (data: any) => {
+          console.log(data)
           this.estatisticas = this.filtrarMeses(data);
           this.cdr.detectChanges();
         },

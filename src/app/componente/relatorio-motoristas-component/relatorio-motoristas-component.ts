@@ -63,6 +63,7 @@ export class RelatorioMotoristasComponent implements OnInit {
           motorista.mediaDiaria = data.mediaDiaria;
           motorista.totalPerdidas = data.totalPerdidas;
           motorista.totalRecusadas = data.totalRecusadas;
+          motorista.aproveitamento = data.aproveitamento;
           motorista.carregando = false;
           this.cdr.detectChanges();
         },
@@ -85,6 +86,7 @@ export class RelatorioMotoristasComponent implements OnInit {
         motorista.mediaDiaria = data.mediaDiaria;
         motorista.totalPerdidas = data.totalPerdidas;
         motorista.totalRecusadas = data.totalRecusadas;
+        motorista.aproveitamento = data.aproveitamento;
         motorista.carregando = false;
         motorista.filtrado = true;
         this.cdr.detectChanges();

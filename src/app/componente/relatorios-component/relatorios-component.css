@@ -210,3 +210,30 @@
   font-size: 13px;
   padding: 10px 0;
 }
+
+.aproveitamento-verde { color: green; font-weight: bold; }
+.aproveitamento-amarelo { color: orange; font-weight: bold; }
+.aproveitamento-vermelho { color: red; font-weight: bold; }
+
+.icone {
+  font-size: 15px;
+  width: 18px;
+  text-align: center;
+}
+
+.aproveitamento-bar {
+  height: 6px;
+  background: #e0e0e0;
+  border-radius: 3px;
+  overflow: hidden;
+  margin-top: 2px;
+}
+
+.aproveitamento-fill {
+  height: 100%;
+  border-radius: 3px;
+}
+
+.fill-verde    { background: green; }
+.fill-amarelo  { background: orange; }
+.fill-vermelho { background: red; }

@@ -212,3 +212,45 @@
   .motorista-card { flex: 1 1 100%; }
   .stat-card { flex: 1 1 100%; }
 }
+.aproveitamento-bar {
+  height: 6px;
+  background: #e0e0e0;
+  border-radius: 3px;
+  overflow: hidden;
+  margin-top: 2px;
+}
+
+.aproveitamento-fill {
+  height: 100%;
+  border-radius: 3px;
+}
+
+.aproveitamento-verde    { color: green; font-weight: 600; }
+.aproveitamento-amarelo  { color: orange; font-weight: 600; }
+.aproveitamento-vermelho { color: red; font-weight: 600; }
+
+.fill-verde    { background: green; }
+.fill-amarelo  { background: orange; }
+.fill-vermelho { background: red; }
+
+.pts-badge {
+  background: #EEEDFE;
+  color: #3C3489;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 6px 14px;
+  border-radius: 8px;
+  text-align: center;
+  margin-top: 4px;
+}
+
+.pts-badge.gold {
+  background: #FAEEDA;
+  color: #633806;
+}
+
+.icone {
+  font-size: 15px;
+  width: 18px;
+  text-align: center;
+}

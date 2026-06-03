@@ -31,8 +31,8 @@ export class RankingMotoristasComponent implements OnInit {
   }
 
   carregarRankingInicial() {
-    const inicio = `${this.anoAtual}-01-01`;
     const ultimoDia = new Date(this.anoAtual, this.mesAtual, 0).getDate();
+    const inicio = `${this.anoAtual}-${String(this.mesAtual).padStart(2, '0')}-01`;
     const fim = `${this.anoAtual}-${String(this.mesAtual).padStart(2, '0')}-${ultimoDia}`;
     this.buscarRanking(inicio, fim);
   }
@@ -55,11 +55,15 @@ export class RankingMotoristasComponent implements OnInit {
               totalCorridas: stat.totalCorridas,
               totalFaturado: stat.totalFaturado,
               mediaDiaria: stat.mediaDiaria,
+              totalPerdidas: stat.totalPerdidas,
+              totalRecusadas: stat.totalRecusadas,
+              aproveitamento: stat.aproveitamento,
+              pontuacao: stat.totalCorridas - stat.totalPerdidas - stat.totalRecusadas
             }))
         );
 
         Promise.all(requests).then((resultado: any[]) => {
-          this.motoristas = resultado.sort((a, b) => b.totalCorridas - a.totalCorridas);
+          this.motoristas = resultado.sort((a, b) => b.pontuacao - a.pontuacao);
           this.carregando = false;
           this.pesquisado = true;
           this.cdr.detectChanges();

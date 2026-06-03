@@ -2,7 +2,7 @@
   <div class="cards-container">
 
     <div class="header-card motorista-card">
-      <h2>RANKING DE MOTORISTAS</h2>
+      <h2>RANKING DE MOTORISTAS MENSAL</h2>
       <div class="filtro-global">
         <div class="filtro-grupo">
           <label>De:</label>
@@ -21,12 +21,12 @@
     </div>
 
     @for (motorista of motoristas; track motorista.id; let i = $index) {
-    <div class="stat-card">
+    <div class="stat-card" [class.gold-card]="i === 0">
       <div class="stat-card-header">
         <div class="ranking-pos">
-          @if (i === 0) { <span class="medal ouro">🥇</span> }
-          @else if (i === 1) { <span class="medal prata">🥈</span> }
-          @else if (i === 2) { <span class="medal bronze">🥉</span> }
+          @if (i === 0) { <span class="medal">🥇</span> }
+          @else if (i === 1) { <span class="medal">🥈</span> }
+          @else if (i === 2) { <span class="medal">🥉</span> }
           @else { <span class="pos-numero">{{ i + 1 }}º</span> }
         </div>
         <span class="stat-mes">{{ motorista.nome }}</span>
@@ -37,14 +37,45 @@
           <span class="stat-destaque-valor">R$ {{ motorista.totalFaturado | number:'1.2-2' }}</span>
         </div>
         <div class="stat-linha">
-          <i class="ti ti-checkup-list"></i>
+          <span class="icone">📦</span>
           <span>TOTAL CORRIDAS</span>
           <span class="stat-valor">{{ motorista.totalCorridas }}</span>
         </div>
         <div class="stat-linha">
-          <i class="ti ti-chart-bar"></i>
+          <span class="icone">📊</span>
           <span>MÉDIA DIÁRIA</span>
           <span class="stat-valor">{{ motorista.mediaDiaria | number:'1.1-1' }}</span>
+        </div>
+        <div class="stat-linha stat-perda">
+          <span class="icone">❌</span>
+          <span>PERDIDAS</span>
+          <span class="stat-valor">{{ motorista.totalPerdidas }}</span>
+        </div>
+        <div class="stat-linha stat-recusada">
+          <span class="icone">🚫</span>
+          <span>RECUSADAS</span>
+          <span class="stat-valor">{{ motorista.totalRecusadas }}</span>
+        </div>
+        
+        <div class="stat-linha">
+          <span class="icone">🏆</span>
+          <span>APROVEITAMENTO</span>
+          <span class="stat-valor" [ngClass]="{
+            'aproveitamento-verde': motorista.aproveitamento >= 75,
+            'aproveitamento-amarelo': motorista.aproveitamento >= 50 && motorista.aproveitamento < 75,
+            'aproveitamento-vermelho': motorista.aproveitamento < 50
+          }">{{ motorista.aproveitamento | number:'1.1-1' }}%</span>
+        </div>
+        <div class="aproveitamento-bar">
+          <div class="aproveitamento-fill" [style.width.%]="motorista.aproveitamento" [ngClass]="{
+            'fill-verde': motorista.aproveitamento >= 75,
+            'fill-amarelo': motorista.aproveitamento >= 50 && motorista.aproveitamento < 75,
+            'fill-vermelho': motorista.aproveitamento < 50
+          }"></div>
+        </div>
+        
+        <div class="pts-badge" [class.gold]="i === 0">
+          {{ motorista.pontuacao }} pontos
         </div>
       </div>
     </div>

@@ -20,33 +20,51 @@
         } @else {
 
         <div class="stat-destaque">
-          <span class="stat-destaque-label">FATURADO</span>
+          <span class="stat-destaque-label">PAGO</span>
           <span class="stat-destaque-valor">R$ {{ stat.totalFaturado | number:'1.2-2' }}</span>
         </div>
 
         <div class="stat-linha">
-          <i class="ti ti-checkup-list"></i>
+          <span class="icone">📦</span>
           <span>TOTAL CORRIDAS</span>
           <span class="stat-valor">{{ stat.totalCorridas }}</span>
         </div>
         <div class="stat-linha">
-          <i class="ti ti-chart-bar"></i>
+          <span class="icone">📊</span>
           <span>MÉDIA DIÁRIA</span>
           <span class="stat-valor">{{ stat.mediaDiaria | number:'1.1-1' }}</span>
         </div>
-        <div class="stat-linha stat-perda">
-          <i class="ti ti-x"></i>
-          <span>PERDIDAS</span>
-          <span class="stat-valor">{{ stat.totalPerdidas }}</span>
+        @if (!isCliente) {
+          <div class="stat-linha stat-perda">
+            <span class="icone">❌</span>
+            <span>PERDIDAS</span>
+            <span class="stat-valor">{{ stat.totalPerdidas }}</span>
+          </div>
+          <div class="stat-linha stat-recusada">
+            <span class="icone">🚫</span>
+            <span>RECUSADAS</span>
+            <span class="stat-valor">{{ stat.totalRecusadas }}</span>
+          </div>
+        }
+        <div class="stat-linha">
+          <span class="icone">🏆</span>
+          <span>APROVEITAMENTO APP</span>
+          <span class="stat-valor" [ngClass]="{
+            'aproveitamento-verde': stat.aproveitamento >= 75,
+            'aproveitamento-amarelo': stat.aproveitamento >= 50 && stat.aproveitamento < 75,
+            'aproveitamento-vermelho': stat.aproveitamento < 50
+          }">{{ stat.aproveitamento | number:'1.1-1' }}%</span>
         </div>
-        <div class="stat-linha stat-recusada">
-          <i class="ti ti-ban"></i>
-          <span>RECUSADAS</span>
-          <span class="stat-valor">{{ stat.totalRecusadas }}</span>
+        <div class="aproveitamento-bar">
+          <div class="aproveitamento-fill" [style.width.%]="stat.aproveitamento" [ngClass]="{
+            'fill-verde': stat.aproveitamento >= 75,
+            'fill-amarelo': stat.aproveitamento >= 50 && stat.aproveitamento < 75,
+            'fill-vermelho': stat.aproveitamento < 50
+          }"></div>
         </div>
         @if (isAdmin) {
         <div class="stat-linha stat-top">
-          <i class="ti ti-star"></i>
+          <span class="icone">⭐</span>
           <span>MOTORISTA TOP</span>
           <span class="stat-valor">{{ stat.motoristaTop }}</span>
         </div>
