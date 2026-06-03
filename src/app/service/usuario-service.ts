@@ -118,6 +118,14 @@ export class UsuarioService {
     );
   }
 
+  //EXPIRA A CORRIDA MARCADO-A COMO CANCELADA
+  patchExpirarCorrida(corridaID: number): Observable<string>{
+    const token = localStorage.getItem('tokenAutenticacao');
+    const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
+    return this.http.patch(AppConstants.expireRace(corridaID), {}, { headers, responseType: 'text' }
+    );
+  }
+
   //ACEITE DO MOTORISTA NAS CORRIDAS NOTIFICADAS
   patchAceitarCorrida(corridaId: number): Observable<string> {
     const token = localStorage.getItem('tokenAutenticacao');

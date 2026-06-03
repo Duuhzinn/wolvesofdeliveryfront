@@ -200,10 +200,19 @@ export class CorridaAndamentoComponent implements OnInit, OnDestroy {
                     next: () => {
                       this.usuarioService.patchMarcarOffline(motoristaId).subscribe();
                       const corridaId = Number(localStorage.getItem('corridaId'));
+                      
+                      //ENVIAR A NOTIFICACAO DE CORRIDA PERDIDA E EXPIRA A CORRIDA
                       this.usuarioService.postEnviarNotificacaoPerdida(motoristaId, corridaId).subscribe({
-                         next: (resp) => console.log('Notificação de corrida perdida enviada:', resp),
-                         error: (err) => console.log('Erro ao enviar notificação perdida:', err),
+                         next: (resp: any) => console.log('Notificação de corrida perdida enviada:', resp),
+                         error: (err: any) => console.log('Erro ao enviar notificação perdida:', err),
                       });
+                      
+                      //EXPIRA A DORRIDA
+                      this.usuarioService.patchExpirarCorrida(corridaId).subscribe({
+                        next: (resp: any) => console.log('Corrida expirada!'),
+                        error: (err: any) => console.log('Erro ao expirar corrida:', err),
+                      });
+
                       this.pararTudo();
                       this.chamarMotorista();
                     },

@@ -27,7 +27,6 @@ public static signoffline(id: number): string {return this.baseDriveURL + "/sign
 public static recusarCorrida(motoristaId: number, corridaId: number, despachanteId: number): string {
   return this.baseDriveURL + "/recusarCorrida/" + motoristaId + "/" + corridaId + "/" + despachanteId}
 
-
 //BASE PARA MONTAR A REQUISIÇÕES DO PUSH NOTIFICATION
 public static get basePushNotification(): string {return this.baseServidor + "/v1/pushnotification"}
 public static sendDrive(motoristaID: number, despachanteId: number): string {
@@ -59,7 +58,7 @@ public static allRaceInProgress(): string {return this.baseRaceURL + "/allRace"}
 public static allRaceFinished(): string {return this.baseRaceURL + "/allRaceFinished"};
 public static updateRace(corridaId: number): string{return this.baseRaceURL + "/updateRace/" + corridaId}
 public static cancelCall(motoristaAtual: number): string {return this.baseRaceURL + "/cancelCall/" + motoristaAtual}
-
+public static expireRace(corridaId: number): string{return this.baseRaceURL + "/expireRace/" + corridaId}
 
 
 //ESTATÍSTICAS POR ANO
