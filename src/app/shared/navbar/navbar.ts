@@ -1,6 +1,7 @@
 import { Component, Inject, PLATFORM_ID } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
+import { UsuarioService } from '../../service/usuario-service';
 
 @Component({
   selector: 'app-navbar',
@@ -15,7 +16,8 @@ export class Navbar {
   subAberto: string | null = null;
  
   constructor(private router: Router,
-     @Inject(PLATFORM_ID) private platformId: Object
+    private usuarioService: UsuarioService,
+    @Inject(PLATFORM_ID) private platformId: Object
   ) {}
 
   get tipoUser(): string {
@@ -39,8 +41,25 @@ export class Navbar {
   }
  
   sair(): void {
-    // Limpe o token/sessão aqui se necessário
-    // localStorage.removeItem('token');
-    this.router.navigate(['/login']);
+    if (isPlatformBrowser(this.platformId)) {
+      const tipoUser = localStorage.getItem('tipoUser');
+      const usuarioId = Number(localStorage.getItem('usuarioId'));
+
+      if (tipoUser === 'CLIENTE' || tipoUser === 'ADMIN') {
+        this.usuarioService.patchStatusUsuario(usuarioId, 0).subscribe({
+          next: () => {
+            localStorage.clear();
+            this.router.navigate(['/login']);
+          },
+          error: () => {
+            localStorage.clear();
+            this.router.navigate(['/login']);
+          }
+        });
+      } else {
+        localStorage.clear();
+        this.router.navigate(['/login']);
+      }
+    }
   }
 }

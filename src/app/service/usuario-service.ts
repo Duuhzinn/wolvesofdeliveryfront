@@ -94,6 +94,7 @@ export class UsuarioService {
     return this.http.get<number>(AppConstants.firstDrive, { headers });
   }
 
+  //EVIA A NOTIFICAÇÂO CRIANDO A CORRIDA
   postEnviarNotificacao(motoristaID: number, despachanteId: number): Observable<any> {
     const token = localStorage.getItem('tokenAutenticacao');
     const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
@@ -151,12 +152,12 @@ export class UsuarioService {
     );
   }
 
-//LISTA TODAS AS CORRIDAS DOS CLIENTES EM ANDAMENTO
-getCorridasClienteAndamento(clienteId: number, page: number): Observable<any> {
-  const token = localStorage.getItem('tokenAutenticacao');
-  const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
-  return this.http.get(`${AppConstants.raceDespatcherInProgress(clienteId)}?page=${page}&size=10`, { headers });
-}
+  //LISTA TODAS AS CORRIDAS DOS CLIENTES EM ANDAMENTO
+  getCorridasClienteAndamento(clienteId: number, page: number): Observable<any> {
+    const token = localStorage.getItem('tokenAutenticacao');
+    const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
+    return this.http.get(`${AppConstants.raceDespatcherInProgress(clienteId)}?page=${page}&size=10`, { headers });
+  }
 
   //LISTA TODAS AS CORRIDAS DOS CLIENTES FINALIZADAS
   getCorridasClienteFinalizadas(clienteId: number, page: number): Observable<any> {
@@ -207,6 +208,19 @@ getCorridasClienteAndamento(clienteId: number, page: number): Observable<any> {
     return this.http.patch(AppConstants.cancelCall(motoristaAtual), {}, { headers, responseType: 'text' }, )
   }
 
+  //CHAMANDO A DASHBOARD DO ADMIN
+  getDashboardAdmin(usuarioId: number): Observable<any>{
+    const token = localStorage.getItem('tokenAutenticacao');
+    const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
+    return this.http.get(AppConstants.dashBoardAdmin(usuarioId), { headers },)
+  }
+  
+  //SETAR O STATUS DO USUARIO QUANDO LOGAR
+  patchStatusUsuario(id: number, status: number): Observable<any> {
+    const token = localStorage.getItem('tokenAutenticacao');
+    const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
+    return this.http.patch(AppConstants.statusUsuario(id, status), {}, { headers });
+  }
 
 
   //AQUI COMEÇA AS ESTASTISTICAS

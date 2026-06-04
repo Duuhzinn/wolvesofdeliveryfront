@@ -25,7 +25,11 @@ public static callingDrive(id: number): string {return this.baseDriveURL + "/cal
 public static busy(id: any): string { return this.baseDriveURL + "/busy/" + id}
 public static signoffline(id: number): string {return this.baseDriveURL + "/signOffline/" + id}
 public static recusarCorrida(motoristaId: number, corridaId: number, despachanteId: number): string {
-  return this.baseDriveURL + "/recusarCorrida/" + motoristaId + "/" + corridaId + "/" + despachanteId}
+  return this.baseDriveURL + "/recusarCorrida/" + motoristaId + "/" + corridaId + "/" + despachanteId
+}
+public static statusUsuario(id: number, status: number): string {
+  return this.baseUserURL + "/status/" + id + "/" + status
+}
 
 //BASE PARA MONTAR A REQUISIÇÕES DO PUSH NOTIFICATION
 public static get basePushNotification(): string {return this.baseServidor + "/v1/pushnotification"}
@@ -70,6 +74,12 @@ public static estatisticasMotorista(motoristaId: number, ano: number): string {
 }
 public static estatisticasAdm(ano: number): string {
   return this.baseRaceURL + "/estatisticas/adm/" + ano;
+}
+
+//DASHBOAR ADMIN CLIENTE E MOTORISTA
+public static get baseDashBoardURL(): string {return this.baseServidor + "/v1/dashboard"}
+public static dashBoardAdmin(usuarioId: number): string{
+  return this.baseDashBoardURL + "/admin/" + usuarioId
 }
 
 

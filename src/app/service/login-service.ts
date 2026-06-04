@@ -4,6 +4,7 @@ import { AppConstants } from '../app-constants';
 import { Router } from '@angular/router';
 import { FirebaseService } from './firebase-service';
 import { User } from '../model/user';
+import { UsuarioService } from './usuario-service';
 
 @Injectable({
   providedIn: 'root',
@@ -12,7 +13,8 @@ export class LoginService {
   constructor(
     private http: HttpClient,
     private router: Router,
-    private firebaseService: FirebaseService
+    private firebaseService: FirebaseService,
+    private usuarioService: UsuarioService
   ) {}
 
   //CAPTURANDO O TOKEN DE AUTENTICAÇÃO PARA INICIAR O SISTEMA
@@ -31,6 +33,15 @@ export class LoginService {
             console.log('Usuario logado:', usuarioLogado);
             localStorage.setItem('usuarioId', usuarioLogado.id.toString());
             localStorage.setItem('tipoUser', usuarioLogado.tipoUser);
+
+            // SETA ONLINE SE FOR CLIENTE OU ADMIN
+            if (usuarioLogado.tipoUser === 'CLIENTE' || usuarioLogado.tipoUser === 'ADMIN') {
+              this.usuarioService.patchStatusUsuario(usuarioLogado.id, 1).subscribe({
+                next: () => console.log('Status atualizado para online'),
+                error: (err: any) => console.log(err),
+              });
+            }
+
             //SALVANDO O TOKEN COM USUARIO LOGADO NO BANCO
             this.firebaseService.requestPermission(usuarioLogado.id);
             this.router.navigate(['home']);
