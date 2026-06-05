@@ -1,34 +1,89 @@
-/* Fundo da tela na cor que você escolheu */
-.fundo-tela {
-  background-color: #3D3A6B; 
+.login-fundo {
+  background-color: #3B3870;
   width: 100%;
   height: 100vh;
-  margin: 0;
-  padding: 0;
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 20px;
+  box-sizing: border-box;
 }
 
-/* Tamanho da imagem diminuído conforme você pediu */
-.logo-card {
-  width: 300px;  /* Ajuste esse valor para o tamanho que achar melhor */
+.login-card {
+  background: #fff;
+  border-radius: 16px;
+  padding: 40px 36px;
+  width: 100%;
+  max-width: 400px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.login-logo {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 8px;
+}
+
+.login-logo img {
+  width: 220px;
   height: auto;
-  display: block;
-  margin: 0 auto 15px auto; /* Centraliza e dá um espaço pro título Login */
   border-radius: 8px;
 }
 
-/* Estilo do Card */
-form {
-  background-color: #ffffff !important;
-  border-radius: 15px;
-  padding: 30px;
-  width: 100%;
-  max-width: 400px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+.login-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
 }
 
-label, h2 {
-  color: #333 !important;
+.login-field label {
+  font-size: 11px;
+  font-weight: 700;
+  color: #888;
+  letter-spacing: 0.1em;
+}
+
+.login-field input {
+  padding: 12px 14px;
+  border: 1.5px solid #e0e0e0;
+  border-radius: 10px;
+  font-size: 14px;
+  color: #333;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.login-field input:focus {
+  border-color: #534AB7;
+}
+
+.login-field input::placeholder {
+  color: #bbb;
+}
+
+.login-card button[type="submit"] {
+  background: #534AB7;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  padding: 14px;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  transition: background 0.2s;
+  margin-top: 4px;
+}
+
+.login-card button[type="submit"]:hover {
+  background: #3B3870;
+}
+
+@media (max-width: 480px) {
+  .login-card {
+    padding: 30px 24px;
+  }
 }
