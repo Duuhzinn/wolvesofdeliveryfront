@@ -224,12 +224,20 @@ export class UsuarioService {
 
 
   //AQUI COMEÇA AS ESTASTISTICAS
-    //ESTATÍSTICAS POR ANO - CLIENTE
+
+  //ESTATÍSTICAS POR ANO - CLIENTE
   getEstatisticasCliente(clienteId: number, ano: number): Observable<any> {
     const token = localStorage.getItem('tokenAutenticacao');
     const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
     return this.http.get(AppConstants.estatisticasCliente(clienteId, ano), { headers });
   }
+
+  //ESTASTISTICAS DE CORRIDAS DO CLIENTE
+getCorridasDespachanteFinalizada(usuarioId: number, page: number): Observable<any>{
+  const token = localStorage.getItem('tokenAutenticacao');
+  const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
+  return this.http.get(`${AppConstants.raceDespatcherFinished(usuarioId)}?page=${page}&size=10`, { headers });
+}
 
   //ESTATÍSTICAS POR ANO - MOTORISTA
   getEstatisticasMotorista(motoristaId: number, ano: number): Observable<any> {
@@ -254,4 +262,6 @@ export class UsuarioService {
     if (motoristaId) url += `&motoristaId=${motoristaId}`;
     return this.http.get(url, { headers });
   }
+
+
 }

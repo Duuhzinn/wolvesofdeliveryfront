@@ -58,4 +58,120 @@
 
   }
 
+  @if (tipoUser === 'CLIENTE') {
+
+  <div class="dashboard-header">
+    <span class="dashboard-icon">🏪</span>
+    <span class="dashboard-nome">MOVIMENTO DO DIA ATUAL</span>
+  </div>
+
+  @if (dashboardCliente) {
+  <div class="dashboard-row">
+    <div class="dashboard-destaque">
+      <span class="destaque-label">💰 PAGO HOJE</span>
+      <span class="destaque-valor">R$ {{ dashboardCliente.totalFaturado | number:'1.2-2' }}</span>
+    </div>
+    <div class="dashboard-destaque">
+      <span class="destaque-label">📦 CORRIDAS HOJE</span>
+      <span class="destaque-valor">{{ dashboardCliente.totalCorridas }}</span>
+    </div>
+    <div class="dashboard-destaque">
+      <span class="destaque-label">🏆 APROVEITAMENTO</span>
+      <span class="destaque-valor" [ngClass]="{
+        'aproveitamento-verde': dashboardCliente.aproveitamento >= 75,
+        'aproveitamento-amarelo': dashboardCliente.aproveitamento >= 50 && dashboardCliente.aproveitamento < 75,
+        'aproveitamento-vermelho': dashboardCliente.aproveitamento < 50
+      }">{{ dashboardCliente.aproveitamento | number:'1.1-1' }}%</span>
+    </div>
+  </div>
+  }
+
+  <div class="dashboard-row">
+    <div class="dashboard-online-card corridas-hoje-card" (scroll)="onCorridasScroll($event)">
+      <span class="online-titulo">🏍️ CORRIDAS FINALIZADAS HOJE ({{ corridasHoje.length }})</span>
+
+      @if (corridasHoje.length === 0 && !corridasCarregando) {
+      <span class="online-vazio">Nenhuma corrida finalizada hoje.</span>
+      } @else {
+      <div class="corridas-lista">
+        @for (corrida of corridasHoje; track corrida.id) {
+        <div class="corrida-item">
+          <span class="corrida-motorista">🏍️ {{ corrida.motorista?.nome ?? 'Motorista não informado' }}</span>
+          <span class="corrida-endereco">📍 {{ corrida.endereco_entrega ?? 'Endereço não informado' }}</span>
+          <span class="corrida-hora"><i class="ti ti-clock"></i> {{ corrida.data_chamada | date:'HH:mm' }}</span>
+        </div>
+        }
+        @if (corridasCarregando) {
+        <span class="online-vazio">Carregando...</span>
+        }
+      </div>
+      }
+
+    </div>
+  </div>
+
+  }
+
+  @if (tipoUser === 'MOTORISTA') {
+
+  <div class="dashboard-header">
+    <span class="dashboard-icon">🏍️</span>
+    <span class="dashboard-nome">MEU DIA</span>
+  </div>
+
+  @if (dashboardMotorista) {
+  <div class="dashboard-row">
+    <div class="dashboard-destaque">
+      <span class="destaque-label">💰 FATURADO HOJE</span>
+      <span class="destaque-valor">R$ {{ dashboardMotorista.totalFaturado | number:'1.2-2' }}</span>
+    </div>
+    <div class="dashboard-destaque">
+      <span class="destaque-label">📦 CORRIDAS HOJE</span>
+      <span class="destaque-valor">{{ dashboardMotorista.totalCorridas }}</span>
+    </div>
+    <div class="dashboard-destaque">
+      <span class="destaque-label">❌ PERDIDAS</span>
+      <span class="destaque-valor">{{ dashboardMotorista.totalPerdidas }}</span>
+    </div>
+    <div class="dashboard-destaque">
+      <span class="destaque-label">🚫 RECUSADAS</span>
+      <span class="destaque-valor">{{ dashboardMotorista.totalRecusadas }}</span>
+    </div>
+    <div class="dashboard-destaque">
+      <span class="destaque-label">🏆 APROVEITAMENTO</span>
+      <span class="destaque-valor" [ngClass]="{
+        'aproveitamento-verde': dashboardMotorista.aproveitamento >= 75,
+        'aproveitamento-amarelo': dashboardMotorista.aproveitamento >= 50 && dashboardMotorista.aproveitamento < 75,
+        'aproveitamento-vermelho': dashboardMotorista.aproveitamento < 50
+      }">{{ dashboardMotorista.aproveitamento | number:'1.1-1' }}%</span>
+    </div>
+  </div>
+  }
+
+  <div class="dashboard-row">
+    <div class="dashboard-online-card corridas-hoje-card" (scroll)="onCorridasMotoristaScroll($event)">
+      <span class="online-titulo">🏍️ CORRIDAS FINALIZADAS HOJE ({{ corridasMotoristasHoje.length }})</span>
+
+      @if (corridasMotoristasHoje.length === 0 && !corridasMotoristaCarregando) {
+      <span class="online-vazio">Nenhuma corrida finalizada hoje.</span>
+      } @else {
+      <div class="corridas-lista">
+        @for (corrida of corridasMotoristasHoje; track corrida.id) {
+        <div class="corrida-item">
+          <span class="corrida-motorista">🏪 {{ corrida.cliente?.nome ?? 'Cliente não informado' }}</span>
+          <span class="corrida-endereco">📍 {{ corrida.endereco_entrega ?? 'Endereço não informado' }}</span>
+          <span class="corrida-hora"><i class="ti ti-clock"></i> {{ corrida.termino_corrida | date:'HH:mm' }}</span>
+        </div>
+        }
+        @if (corridasMotoristaCarregando) {
+        <span class="online-vazio">Carregando...</span>
+        }
+      </div>
+      }
+
+    </div>
+  </div>
+
+  }
+
 </div>

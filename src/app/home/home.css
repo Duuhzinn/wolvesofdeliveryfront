@@ -105,3 +105,85 @@
   .dashboard-destaque { flex: 1 1 100%; }
   .dashboard-online-card { flex: 1 1 100%; }
 }
+
+.aproveitamento-verde { color: #22c55e; font-weight: 700; }
+.aproveitamento-amarelo { color: #f59e0b; font-weight: 700; }
+.aproveitamento-vermelho { color: #ef4444; font-weight: 700; }
+
+.corridas-hoje-card {
+  flex: 1 1 100%;
+}
+
+.corridas-lista {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.corrida-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #f0eeff;
+  border-radius: 10px;
+  padding: 10px 14px;
+  gap: 12px;
+}
+
+.corrida-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.corrida-motorista {
+  font-size: 15px;
+  font-weight: 700;
+  color: #333;
+}
+
+.corrida-endereco {
+  font-size: 14px;
+  color: #666;
+}
+
+.corrida-meta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+  white-space: nowrap;
+}
+
+.corrida-hora {
+  font-size: 14px;
+  font-weight: 600;
+  color: #534AB7;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.corridas-hoje-card {
+  flex: 1 1 100%;
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.corrida-status {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  padding: 2px 8px;
+  border-radius: 20px;
+}
+
+.status-finalizada {
+  background: #dcfce7;
+  color: #16a34a;
+}
+
+@media (max-width: 600px) {
+  .corrida-item { flex-direction: column; align-items: flex-start; }
+  .corrida-meta { align-items: flex-start; }
+}
