@@ -57,7 +57,8 @@
       type="text"
       class="input-endereco"
       [(ngModel)]="enderecoEntrega"
-      placeholder="Rua, Número"
+      (input)="enderecoEntrega = enderecoEntrega.toUpperCase()"
+      placeholder="RUA, NÚMERO"
     />
     <div class="modal-endereco-btns">
       <button class="btn-Fechar" (click)="fecharModalEndereco()">Cancelar</button>
