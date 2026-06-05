@@ -1,13 +1,12 @@
 <div class="container">
   <div class="cards-container">
 
-    <div class="corrida-card header-card">
+    <div class="motorista-card header-card">
       <h2>USUÁRIOS CADASTRADOS</h2>
-      <div class="input-group input-busca mt-2">
-        <input type="text" class="form-control" placeholder="Digite o nome do usuário..."
-          [(ngModel)]="nome"/>
-        <button class="btn btn-buscar" (click)="consultarUserNome()">Pesquisar</button>
-        <button class="btn btn-novo" (click)="chamarModalNovo()">Novo</button>
+      <div class="input-busca">
+        <input type="text" placeholder="Digite o nome do usuário..." [(ngModel)]="nome"/>
+        <button class="btn-buscar" (click)="consultarUserNome()">Pesquisar</button>
+        <button class="btn-novo" (click)="chamarModalNovo()">Novo</button>
       </div>
       <div class="filtro-abas">
         <button [class.aba-ativa]="filtroAtivo === 'ADMIN'" (click)="filtroAtivo = 'ADMIN'; consultaTodosUsuarios()">Admin</button>
@@ -16,126 +15,112 @@
       </div>
     </div>
 
-    
-      <div class="corrida-card" *ngFor="let usuario of usuarios">
-        <div class="card-top">
-          <span class="card-id">#{{ usuario.id }}</span>
-          <span [ngClass]="{
-            'tipo-admin': usuario.tipoUser === 'ADMIN',
-            'tipo-cliente': usuario.tipoUser === 'CLIENTE',
-            'tipo-motorista': usuario.tipoUser === 'MOTORISTA'
-          }">{{ usuario.tipoUser }}</span>
-        </div>
-        <div class="card-body">
-          <p class="card-label">DADOS</p>
-          <p><i class="ti ti-user" aria-hidden="true"></i> <span>{{ usuario.nome }}</span></p>
-          <p><i class="ti ti-mail" aria-hidden="true"></i> <span>{{ usuario.email }}</span></p>
-          <p><i class="ti ti-phone" aria-hidden="true"></i> <span>{{ usuario.telefone }}</span></p>
-          <p class="card-label">ENDEREÇO</p>
-          <p><i class="ti ti-map-pin" aria-hidden="true"></i> <span>{{ usuario.endereco }}</span></p>
-        </div>
-        <div class="card-footer">
-          <button class="btn-editar" (click)="chamarModalEdit(usuario.id)">Editar</button>
-        </div>
+    @for (usuario of usuarios; track usuario.id) {
+    <div class="corrida-card">
+      <div class="card-top">
+        <span class="card-id">#{{ usuario.id }}</span>
+        <span [ngClass]="{
+          'tipo-admin': usuario.tipoUser === 'ADMIN',
+          'tipo-cliente': usuario.tipoUser === 'CLIENTE',
+          'tipo-motorista': usuario.tipoUser === 'MOTORISTA'
+        }">{{ usuario.tipoUser }}</span>
       </div>
-    
+      <div class="card-body">
+        <p class="card-label">DADOS</p>
+        <p><i class="ti ti-user"></i> <span>{{ usuario.nome }}</span></p>
+        <p><i class="ti ti-mail"></i> <span>{{ usuario.email }}</span></p>
+        <p><i class="ti ti-phone"></i> <span>{{ usuario.telefone }}</span></p>
+        <p class="card-label">ENDEREÇO</p>
+        <p><i class="ti ti-map-pin"></i> <span>{{ usuario.endereco }}</span></p>
+      </div>
+      <div class="card-footer">
+        <button class="btn-editar" (click)="chamarModalEdit(usuario.id)">Editar</button>
+      </div>
+    </div>
+    }
 
   </div>
 </div>
 
 <!-- MODAL EDIÇÃO/INSERÇÃO -->
 <div class="modal-overlay" *ngIf="modalInsertEdit">
-  <div class="modal-dialog modal-lg modal-content-animated">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">USUÁRIO</h5>
-        <button type="button" class="close" (click)="fecharModal()"><span>&times;</span></button>
-      </div>
-      <div class="modal-body">
-        <form #userForm="ngForm">
-          <div class="input-container-flex">
-            <div class="field-group group-id">
-              <label class="form-label">ID</label>
-              <input type="text" class="form-control" name="id" [(ngModel)]="usuario.id" readonly/>
-            </div>
-            <div class="field-group group-nome">
-              <label class="form-label">NOME</label>
-              <input type="text" class="form-control" name="nome" [(ngModel)]="usuario.nome" placeholder="Nome completo"/>
-            </div>
+  <div class="driver-modal modal-lg" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h5 class="modal-title">USUÁRIO</h5>
+      <button type="button" class="close" (click)="fecharModal()"><span>&times;</span></button>
+    </div>
+    <div class="modal-body">
+      <form #userForm="ngForm">
+        <div class="input-container-flex">
+          <div class="field-group group-id">
+            <label class="form-label">ID</label>
+            <input type="text" class="form-control" name="id" [(ngModel)]="usuario.id" readonly/>
           </div>
-          <div class="input-container-flex mt-3">
-            <div class="field-group group-full">
-              <label class="form-label">ENDEREÇO</label>
-              <input type="text" class="form-control" name="endereco" [(ngModel)]="usuario.endereco" placeholder="Rua, Número - Bairro"/>
-            </div>
+          <div class="field-group group-nome">
+            <label class="form-label">NOME</label>
+            <input type="text" class="form-control" name="nome" [(ngModel)]="usuario.nome" placeholder="Nome completo"/>
           </div>
-          <div class="input-container-flex mt-3">
-            <div class="field-group group-full">
-              <label class="form-label">E-MAIL</label>
-              <input type="email" class="form-control" name="email" [(ngModel)]="usuario.email" placeholder="exemplo@exemplo"/>
-            </div>
-            <div class="field-group group-tipo">
-              <label class="form-label">TIPO DO USUÁRIO</label>
-              <select class="form-control" name="tipoUser" [(ngModel)]="usuario.tipoUser">
-                <option value="" disabled selected>Selecione...</option>
-                <option value="ADMIN">ADMINISTRADOR</option>
-                <option value="CLIENTE">CLIENTE</option>
-                <option value="MOTORISTA">MOTORISTA</option>
-              </select>
-            </div>
+        </div>
+        <div class="input-container-flex mt-3">
+          <div class="field-group group-full">
+            <label class="form-label">ENDEREÇO</label>
+            <input type="text" class="form-control" name="endereco" [(ngModel)]="usuario.endereco" placeholder="Rua, Número - Bairro"/>
           </div>
-          <div class="input-container-flex mt-3">
-            <div class="field-group group-3-col">
-              <label class="form-label">TELEFONE</label>
-              <input type="text" class="form-control" name="telefone" [(ngModel)]="usuario.telefone" placeholder="(00) 00000-0000"/>
-            </div>
-            <div class="field-group group-3-col">
-              <label class="form-label">LOGIN</label>
-              <input type="text" class="form-control" name="login" [(ngModel)]="usuario.login" placeholder="exemplo.exemplo"/>
-            </div>
-            <div class="field-group group-3-col">
-              <label class="form-label">SENHA</label>
-              <input type="password" class="form-control" name="senha" [(ngModel)]="usuario.senha" placeholder="******"/>
-            </div>
+        </div>
+        <div class="input-container-flex mt-3">
+          <div class="field-group group-full">
+            <label class="form-label">E-MAIL</label>
+            <input type="email" class="form-control" name="email" [(ngModel)]="usuario.email" placeholder="exemplo@exemplo"/>
           </div>
-        </form>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-Fechar" (click)="fecharModal()">Fechar</button>
-        <button type="button" class="btn btn-Salvar" (click)="salvarUser()">Salvar</button>
-      </div>
+          <div class="field-group group-tipo">
+            <label class="form-label">TIPO DO USUÁRIO</label>
+            <select class="form-control" name="tipoUser" [(ngModel)]="usuario.tipoUser">
+              <option value="" disabled selected>Selecione...</option>
+              <option value="ADMIN">ADMINISTRADOR</option>
+              <option value="CLIENTE">CLIENTE</option>
+              <option value="MOTORISTA">MOTORISTA</option>
+            </select>
+          </div>
+        </div>
+        <div class="input-container-flex mt-3">
+          <div class="field-group group-3-col">
+            <label class="form-label">TELEFONE</label>
+            <input type="text" class="form-control" name="telefone" [(ngModel)]="usuario.telefone" placeholder="(00) 00000-0000"/>
+          </div>
+          <div class="field-group group-3-col">
+            <label class="form-label">LOGIN</label>
+            <input type="text" class="form-control" name="login" [(ngModel)]="usuario.login" placeholder="exemplo.exemplo"/>
+          </div>
+          <div class="field-group group-3-col">
+            <label class="form-label">SENHA</label>
+            <input type="password" class="form-control" name="senha" [(ngModel)]="usuario.senha" placeholder="******"/>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn-Fechar" (click)="fecharModal()">Fechar</button>
+      <button type="button" class="btn-Salvar" (click)="salvarUser()">Salvar</button>
     </div>
   </div>
 </div>
 
 <!-- MODAL SUCESSO -->
 <div class="modal-overlay" *ngIf="modalSucess">
-  <div class="modal-dialog modal-sm modal-content-animated">
-    <div class="modal-content text-center">
-      <div class="modal-body p-4">
-        <div class="success-icon"><span class="check-symbol">✓</span></div>
-        <h3 class="mt-3">Sucesso!</h3>
-        <p class="text-muted">O usuário foi salvo com sucesso no sistema.</p>
-      </div>
-      <div class="modal-footer justify-content-center">
-        <button type="button" class="btn-Salvar" (click)="fecharModal()">Ok, entendi!</button>
-      </div>
-    </div>
+  <div class="modal-atencao" (click)="$event.stopPropagation()">
+    <div class="success-icon"><span>✓</span></div>
+    <h3>Sucesso!</h3>
+    <p>O usuário foi salvo com sucesso no sistema.</p>
+    <button type="button" class="btn-Salvar" (click)="fecharModal()">Ok, entendi!</button>
   </div>
 </div>
 
 <!-- MODAL ERRO -->
 <div class="modal-overlay" *ngIf="modalErro" (click)="fecharModal()">
-  <div class="modal-dialog modal-sm modal-content-animated">
-    <div class="modal-content text-center">
-      <div class="modal-body p-4">
-        <div class="error-icon"><span class="error-symbol">!</span></div>
-        <h3 class="mt-3">Atenção!</h3>
-        <p class="text-muted">Não foi possível localizar este usuário na lista.</p>
-      </div>
-      <div class="modal-footer justify-content-center">
-        <button type="button" class="btn-Fechar" (click)="fecharModal()">Tentar novamente</button>
-      </div>
-    </div>
+  <div class="modal-atencao" (click)="$event.stopPropagation()">
+    <div class="error-icon"><span>!</span></div>
+    <h3>Atenção!</h3>
+    <p>Não foi possível localizar este usuário na lista.</p>
+    <button type="button" class="btn-Fechar" (click)="fecharModal()">Tentar novamente</button>
   </div>
 </div>

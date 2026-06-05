@@ -1,33 +1,35 @@
 <div class="container">
   <div class="cards-container">
 
-    <div class="corrida-card header-card">
+    <div class="motorista-card header-card">
       <h2>CORRIDAS FINALIZADAS</h2>
-      <div class="input-group input-busca mt-2">
-        <input type="text" class="form-control" placeholder="Digite o endereço da entrega..."/>
-        <button class="btn btn-buscar">Pesquisar</button>
+      <div class="input-busca">
+        <input type="text" placeholder="Digite o endereço da entrega..." />
+        <button class="btn-buscar">Pesquisar</button>
       </div>
     </div>
 
-    <div class="corrida-card" *ngFor="let corrida of corridas">
+    @for (corrida of corridas; track corrida.id) {
+    <div class="corrida-card">
       <div class="card-top">
         <span class="card-id">#{{ corrida.id }}</span>
         <span class="status-finalizada">{{ corrida.status_corrida }}</span>
       </div>
       <div class="card-body">
         <p class="card-label">CLIENTE</p>
-        <p><i class="ti ti-building-store" aria-hidden="true"></i> <span>{{ corrida.cliente?.nome }}</span></p>
+        <p><i class="ti ti-building-store"></i> <span>{{ corrida.cliente?.nome }}</span></p>
         <p class="card-label">ENTREGA</p>
-        <p><i class="ti ti-map-pin" aria-hidden="true"></i> {{ corrida.endereco_entrega }}</p>
+        <p><i class="ti ti-map-pin"></i> <span>{{ corrida.endereco_entrega }}</span></p>
         <p class="card-label">CORRIDA</p>
-        <p><i class="ti ti-clock" aria-hidden="true"></i> Chamada: {{ corrida.data_chamada | date:'dd/MM/yyyy HH:mm:ss' }}</p>
-        <p><i class="ti ti-check" aria-hidden="true"></i> Aceite: {{ corrida.data_aceite | date:'dd/MM/yyyy HH:mm:ss' }}</p>
-        <p><i class="ti ti-rocket" aria-hidden="true"></i> Início: {{ corrida.inicio_corrida | date:'dd/MM/yyyy HH:mm:ss' }}</p>
-        <p><i class="ti ti-flag" aria-hidden="true"></i> Término: {{ corrida.termino_corrida | date:'dd/MM/yyyy HH:mm:ss' }}</p>
+        <p><i class="ti ti-clock"></i> <span>Chamada: {{ corrida.data_chamada | date:'dd/MM/yyyy HH:mm:ss' }}</span></p>
+        <p><i class="ti ti-check"></i> <span>Aceite: {{ corrida.data_aceite | date:'dd/MM/yyyy HH:mm:ss' }}</span></p>
+        <p><i class="ti ti-rocket"></i> <span>Início: {{ corrida.inicio_corrida | date:'dd/MM/yyyy HH:mm:ss' }}</span></p>
+        <p><i class="ti ti-flag"></i> <span>Término: {{ corrida.termino_corrida | date:'dd/MM/yyyy HH:mm:ss' }}</span></p>
         <p class="card-label">MOTORISTA</p>
-        <p><i class="ti ti-motorbike" aria-hidden="true"></i> <span>{{ corrida.motorista?.nome }}</span></p>
+        <p><i class="ti ti-motorbike"></i> <span>{{ corrida.motorista?.nome }}</span></p>
       </div>
     </div>
+    }
 
   </div>
 </div>

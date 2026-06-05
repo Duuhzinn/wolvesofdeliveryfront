@@ -1,11 +1,12 @@
 <div class="container">
   <div class="cards-container">
 
-    <div class="corrida-card header-card">
+    <div class="motorista-card header-card">
       <h2>ORDEM DA FILA DOS MOTORISTAS</h2>
     </div>
 
-    <div class="corrida-card" *ngFor="let usuario of usuarios; let i = index">
+    @for (usuario of usuarios; track usuario.id; let i = $index) {
+    <div class="corrida-card">
       <div class="card-top">
         <span class="card-id">{{ i + 1 }}º da fila</span>
         <span [ngClass]="{
@@ -17,11 +18,12 @@
       </div>
       <div class="card-body">
         <p class="card-label">MOTORISTA</p>
-        <p><i class="ti ti-user" aria-hidden="true"></i> <span>{{ usuario.nome }}</span></p>
+        <p><i class="ti ti-user"></i> <span>{{ usuario.nome }}</span></p>
         <p class="card-label">CONTATO</p>
-        <p><i class="ti ti-phone" aria-hidden="true"></i> <span>{{ usuario.telefone }}</span></p>
+        <p><i class="ti ti-phone"></i> <span>{{ usuario.telefone }}</span></p>
       </div>
     </div>
+    }
 
   </div>
 </div>

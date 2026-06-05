@@ -8,7 +8,21 @@
   display: flex;
   flex-wrap: wrap;
   gap: 16px;
-  padding: 16px;
+}
+
+.motorista-card {
+  background: #534AB7;
+  border-radius: 12px;
+  padding: 16px 20px;
+  flex: 1 1 100%;
+}
+
+.motorista-card h2 {
+  color: #fff;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  margin: 0;
 }
 
 .corrida-card {
@@ -22,18 +36,6 @@
   gap: 8px;
 }
 
-.header-card {
-  flex: 1 1 100%;
-}
-
-.header-card h2 {
-  color: #333;
-  font-size: 2rem;
-  font-weight: 600;
-  margin: 0 0 12px 0;
-  letter-spacing: 0.05em;
-}
-
 .card-top {
   display: flex;
   justify-content: space-between;
@@ -43,22 +45,19 @@
 }
 
 .card-id {
-  font-size: 16px;
-  font-weight: 500;
+  font-size: 13px;
+  font-weight: 600;
   color: #534AB7;
 }
 
 .card-label {
-  display: block !important;
-  text-align: center !important;
   font-size: 11px;
   font-weight: 700;
   color: #888;
   letter-spacing: 0.1em;
-  margin: 8px 0 2px 0 !important;
+  margin: 8px 0 2px 0;
   border-top: 0.5px solid #eee;
   padding-top: 8px;
-  width: 100%;
 }
 
 .card-body p {
@@ -82,58 +81,92 @@
 }
 
 .status-online {
-  color: green;
-  font-weight: bold;
+  background: #dcfce7;
+  color: #16a34a;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 20px;
+  letter-spacing: 0.05em;
 }
 
 .status-ocupado {
-  color: orange;
-  font-weight: bold;
+  background: #fff3cd;
+  color: #d97706;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 20px;
+  letter-spacing: 0.05em;
 }
 
 .status-chamando {
-  color: blue;
-  font-weight: bold;
+  background: #dbeafe;
+  color: #2563eb;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 20px;
+  letter-spacing: 0.05em;
 }
 
 .status-offline {
-  color: red;
-  font-weight: bold;
+  background: #fee2e2;
+  color: #dc2626;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 20px;
+  letter-spacing: 0.05em;
 }
 
-.btn-editar,
-.btn-Salvar {
-  background-color: #323261;
+.btn-editar {
+  background-color: #534AB7;
   color: #fff;
   border: none;
-  padding: 6px 14px;
+  padding: 8px 14px;
   border-radius: 8px;
-  font-size: 0.8rem;
+  font-size: 12px;
+  font-weight: 600;
   cursor: pointer;
   transition: background-color 0.2s;
   width: 100%;
 }
 
-.btn-editar:hover,
+.btn-editar:hover {
+  background-color: #3B3870;
+}
+
+.btn-Salvar {
+  background-color: #534AB7;
+  color: #fff;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
 .btn-Salvar:hover {
-  background-color: #4a4a8f;
-  transform: translateY(-1px);
+  background-color: #3B3870;
 }
 
 .btn-Fechar {
-  background-color: #6c757d;
-  color: #fff;
+  background-color: #f1f1f1;
+  color: #555;
   border: none;
-  padding: 6px 14px;
+  padding: 8px 16px;
   border-radius: 8px;
-  font-size: 0.8rem;
+  font-size: 13px;
+  font-weight: 600;
   cursor: pointer;
   transition: background-color 0.2s;
 }
 
 .btn-Fechar:hover {
-  background-color: #5a6268;
-  transform: translateY(-1px);
+  background-color: #e0e0e0;
 }
 
 .modal-overlay {
@@ -168,16 +201,21 @@
 }
 
 .modal-title {
-  font-size: 1rem;
-  font-weight: 600;
+  font-size: 14px;
+  font-weight: 700;
   color: #333;
   margin: 0;
+  letter-spacing: 0.05em;
 }
 
 .modal-body {
   margin-bottom: 16px;
-  font-size: 0.9rem;
+  font-size: 13px;
   color: #555;
+}
+
+.modal-body strong {
+  color: #534AB7;
 }
 
 .modal-footer {

@@ -1,11 +1,12 @@
 <div class="container">
   <div class="cards-container">
 
-    <div class="corrida-card header-card">
+    <div class="motorista-card header-card">
       <h2>STATUS DOS MOTORISTAS</h2>
     </div>
 
-    <div class="corrida-card" *ngFor="let usuario of usuarios">
+    @for (usuario of usuarios; track usuario.id) {
+    <div class="corrida-card">
       <div class="card-top">
         <span class="card-id">#{{ usuario.id }}</span>
         <span [ngClass]="{
@@ -14,25 +15,27 @@
           'status-chamando': usuario.status === 3,
           'status-offline': usuario.status === 0
         }">
-          {{ usuario.status === 1 ? 'ON-LINE' : usuario.status === 2 ? 'OCUPADO' : 
-          usuario.status === 3 ? 'CHAMANDO' :'OFF-LINE' }}
+          {{ usuario.status === 1 ? 'ON-LINE' : usuario.status === 2 ? 'OCUPADO' :
+          usuario.status === 3 ? 'CHAMANDO' : 'OFF-LINE' }}
         </span>
       </div>
       <div class="card-body">
         <p class="card-label">MOTORISTA</p>
-        <p><i class="ti ti-user" aria-hidden="true"></i> <span>{{ usuario.nome }}</span></p>
+        <p><i class="ti ti-user"></i> <span>{{ usuario.nome }}</span></p>
         <p class="card-label">CONTATO</p>
-        <p><i class="ti ti-phone" aria-hidden="true"></i> <span>{{ usuario.telefone }}</span></p>
+        <p><i class="ti ti-phone"></i> <span>{{ usuario.telefone }}</span></p>
       </div>
-      <div class="card-footer" *ngIf="usuario.status !== 2">
+      @if (usuario.status !== 2) {
+      <div class="card-footer">
         <button class="btn-editar" (click)="chamarModalEdit(usuario)">Alterar Status</button>
       </div>
+      }
     </div>
+    }
 
   </div>
 </div>
 
-<!-- MODAL PARA EDICAO OU INSERÇÃO DO USUARIO-->
 <div class="modal-overlay" *ngIf="modalEditStatus">
   <div class="driver-modal" (click)="$event.stopPropagation()">
     <div class="modal-content">
@@ -43,11 +46,11 @@
         </button>
       </div>
       <div class="modal-body">
-        <p>Deseja alterar o status do motorista <strong style="color: red">{{ usuario.nome }}</strong>?</p>
+        <p>Deseja alterar o status de <strong>{{ usuario.nome }}</strong>?</p>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-Fechar" (click)="fecharModal()">Não</button>
-        <button type="button" class="btn btn-Salvar" (click)="salvarUser()">Sim</button>
+        <button type="button" class="btn-Fechar" (click)="fecharModal()">Não</button>
+        <button type="button" class="btn-Salvar" (click)="salvarUser()">Sim</button>
       </div>
     </div>
   </div>

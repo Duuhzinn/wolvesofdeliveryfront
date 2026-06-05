@@ -1,16 +1,16 @@
 <div class="container">
   <div class="cards-container">
 
-    <div class="header-card motorista-card">
+    <div class="motorista-card header-card">
       <h2>RANKING DE MOTORISTAS MENSAL</h2>
       <div class="filtro-global">
         <div class="filtro-grupo">
           <label>De:</label>
-          <input type="date" [(ngModel)]="dataInicio" class="form-control"/>
+          <input type="date" [(ngModel)]="dataInicio" />
         </div>
         <div class="filtro-grupo">
           <label>Até:</label>
-          <input type="date" [(ngModel)]="dataFim" class="form-control"/>
+          <input type="date" [(ngModel)]="dataFim" />
         </div>
         @if (dataInicio && dataFim && dataInicio <= dataFim) {
         <button class="btn-buscar" (click)="pesquisar()" [disabled]="carregando">
@@ -56,7 +56,6 @@
           <span>RECUSADAS</span>
           <span class="stat-valor">{{ motorista.totalRecusadas }}</span>
         </div>
-        
         <div class="stat-linha">
           <span class="icone">🏆</span>
           <span>APROVEITAMENTO</span>
@@ -73,7 +72,6 @@
             'fill-vermelho': motorista.aproveitamento < 50
           }"></div>
         </div>
-        
         <div class="pts-badge" [class.gold]="i === 0">
           {{ motorista.pontuacao }} pontos
         </div>

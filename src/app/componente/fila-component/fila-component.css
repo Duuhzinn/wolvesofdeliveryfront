@@ -8,7 +8,21 @@
   display: flex;
   flex-wrap: wrap;
   gap: 16px;
-  padding: 16px;
+}
+
+.motorista-card {
+  background: #534AB7;
+  border-radius: 12px;
+  padding: 16px 20px;
+  flex: 1 1 100%;
+}
+
+.motorista-card h2 {
+  color: #fff;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  margin: 0;
 }
 
 .corrida-card {
@@ -22,18 +36,6 @@
   gap: 8px;
 }
 
-.header-card {
-  flex: 1 1 100%;
-}
-
-.header-card h2 {
-  color: #333;
-  font-size: 2rem;
-  font-weight: 600;
-  margin: 0;
-  letter-spacing: 0.05em;
-}
-
 .card-top {
   display: flex;
   justify-content: space-between;
@@ -43,22 +45,19 @@
 }
 
 .card-id {
-  font-size: 16px;
-  font-weight: 500;
+  font-size: 13px;
+  font-weight: 600;
   color: #534AB7;
 }
 
 .card-label {
-  display: block !important;
-  text-align: center !important;
   font-size: 11px;
   font-weight: 700;
   color: #888;
   letter-spacing: 0.1em;
-  margin: 8px 0 2px 0 !important;
+  margin: 8px 0 2px 0;
   border-top: 0.5px solid #eee;
   padding-top: 8px;
-  width: 100%;
 }
 
 .card-body p {
@@ -76,13 +75,23 @@
 }
 
 .status-online {
-  color: green;
-  font-weight: bold;
+  background: #dcfce7;
+  color: #16a34a;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 20px;
+  letter-spacing: 0.05em;
 }
 
 .status-offline {
-  color: #888780;
-  font-weight: bold;
+  background: #f1f1f1;
+  color: #888;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 20px;
+  letter-spacing: 0.05em;
 }
 
 @media (max-width: 600px) {
