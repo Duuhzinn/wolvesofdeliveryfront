@@ -33,6 +33,7 @@ export class LoginService {
             console.log('Usuario logado:', usuarioLogado);
             localStorage.setItem('usuarioId', usuarioLogado.id.toString());
             localStorage.setItem('tipoUser', usuarioLogado.tipoUser);
+            localStorage.setItem('nome', usuarioLogado.nome);
 
             // SETA ONLINE SE FOR CLIENTE OU ADMIN
             if (usuarioLogado.tipoUser === 'CLIENTE' || usuarioLogado.tipoUser === 'ADMIN') {

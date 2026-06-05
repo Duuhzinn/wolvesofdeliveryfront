@@ -169,7 +169,67 @@
   background-color: #3B3870;
 }
 
+.btn-Salvar {
+  background-color: #534AB7;
+  color: #fff;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.btn-Salvar:hover {
+  background-color: #3B3870;
+}
+
+.btn-Fechar {
+  background-color: #f1f1f1;
+  color: #555;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.btn-Fechar:hover {
+  background-color: #e0e0e0;
+}
+
 /* MODAIS */
+.input-endereco {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1.5px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 13px;
+  color: #333;
+  outline: none;
+  transition: border-color 0.2s;
+  box-sizing: border-box;
+}
+
+.input-endereco:focus {
+  border-color: #534AB7;
+}
+
+.modal-endereco-btns {
+  display: flex;
+  gap: 8px;
+  width: 100%;
+  margin-top: 4px;
+}
+
+.modal-endereco-btns .btn-Fechar,
+.modal-endereco-btns .btn-Salvar {
+  flex: 1;
+}
+
 .modal-overlay {
   position: fixed;
   top: 0; left: 0;
@@ -275,19 +335,23 @@
   width: 300px;
   box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
   animation: modalUp 0.35s ease;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: center;
 }
 
 .modal-atencao h3 {
   font-size: 16px;
   font-weight: 700;
   color: #333;
-  margin-bottom: 10px;
+  margin: 0;
 }
 
 .modal-atencao p {
   font-size: 13px;
   color: #666;
-  margin-bottom: 16px;
+  margin: 0;
 }
 
 .btn-ok {
@@ -306,6 +370,23 @@
 .btn-ok:hover {
   background-color: #3B3870;
 }
+
+.btn-nav {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 12px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  text-decoration: none;
+  background: #e8f0fe;
+  color: #1a73e8;
+  margin-top: 4px;
+  transition: opacity 0.2s;
+}
+
+.btn-nav:hover { opacity: 0.85; }
 
 @keyframes modalUp {
   from { transform: translateY(40px) scale(0.95); opacity: 0; }

@@ -11,6 +11,7 @@ import { WebsocketService } from '../service/websocket-service';
 })
 export class Home implements OnInit {
   tipoUser: string = '';
+  nomeUsuario: string = '';
   dashboardAdmin: any = null;
   dashboardCliente: any = null;
   dashboardMotorista: any = null;
@@ -35,6 +36,7 @@ export class Home implements OnInit {
     if (isPlatformBrowser(this.platformId)) {
       this.tipoUser = localStorage.getItem('tipoUser') ?? '';
       this.usuarioId = Number(localStorage.getItem('usuarioId'));
+      this.nomeUsuario = localStorage.getItem('nome') ?? '';
 
       if (this.tipoUser === 'ADMIN') {
         this.carregarDashboard();

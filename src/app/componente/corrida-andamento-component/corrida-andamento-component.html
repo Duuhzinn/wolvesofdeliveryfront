@@ -7,7 +7,7 @@
         <input type="text" placeholder="Digite o endereço da entrega..." />
         <button class="btn-buscar">Pesquisar</button>
         @if (isCliente) {
-        <button class="btn-novo" (click)="chamarMotorista()">Chamar Motorista</button>
+        <button class="btn-novo" (click)="abrirModalEndereco()">Chamar Motorista</button>
         }
       </div>
     </div>
@@ -26,6 +26,9 @@
         <p><i class="ti ti-building-store"></i> <span>{{ corrida.cliente?.nome }}</span></p>
         <p class="card-label">ENTREGA</p>
         <p><i class="ti ti-map-pin"></i> <span>{{ corrida.endereco_entrega }}</span></p>
+        <a [href]="'geo:0,0?q=' + encodeURIComponent(corrida.endereco_entrega)" class="btn-nav">
+          <i class="ti ti-navigation"></i> Navegar
+        </a>
         <p class="card-label">CORRIDA</p>
         <p><i class="ti ti-clock"></i> <span>Chamada: {{ corrida.data_chamada | date:'dd/MM/yyyy HH:mm:ss' }}</span></p>
         <p><i class="ti ti-check"></i> <span>Aceite: {{ corrida.data_aceite | date:'dd/MM/yyyy HH:mm:ss' }}</span></p>
@@ -42,6 +45,24 @@
     </div>
     }
 
+  </div>
+</div>
+
+<!-- MODAL ENDEREÇO -->
+<div class="modal-overlay" *ngIf="modalEndereco">
+  <div class="modal-atencao" (click)="$event.stopPropagation()">
+    <h3>📍 Endereço de Entrega</h3>
+    <p>Informe o endereço antes de chamar o motorista.</p>
+    <input
+      type="text"
+      class="input-endereco"
+      [(ngModel)]="enderecoEntrega"
+      placeholder="Rua, Número"
+    />
+    <div class="modal-endereco-btns">
+      <button class="btn-Fechar" (click)="fecharModalEndereco()">Cancelar</button>
+      <button class="btn-Salvar" (click)="confirmarEndereco()" [disabled]="!enderecoEntrega">Chamar</button>
+    </div>
   </div>
 </div>
 

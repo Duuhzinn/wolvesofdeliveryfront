@@ -12,16 +12,19 @@ import { NotificationStateService } from '../../service/notificationstate-servic
 import { UsuarioService } from '../../service/usuario-service';
 import { Subscription, take, timer } from 'rxjs';
 import { WebsocketService } from '../../service/websocket-service';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-corrida-andamento-component',
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './corrida-andamento-component.html',
   styleUrl: './corrida-andamento-component.css',
 })
 export class CorridaAndamentoComponent implements OnInit, OnDestroy {
   modalChamandoMotorista: boolean = false;
   modalSemMotorista: boolean = false;
+  modalEndereco: boolean = false;
+  enderecoEntrega: string = '';
   private aguardandoAceite: boolean = false;
 
   paginaAtual: number = 0;
@@ -122,6 +125,28 @@ export class CorridaAndamentoComponent implements OnInit, OnDestroy {
     }
   }
 
+  abrirModalEndereco() {
+    this.enderecoEntrega = '';
+    this.modalEndereco = true;
+    this.cdr.detectChanges();
+  }
+
+  fecharModalEndereco() {
+    this.modalEndereco = false;
+    this.enderecoEntrega = '';
+    this.cdr.detectChanges();
+  }
+
+  confirmarEndereco() {
+  if (!this.enderecoEntrega) {
+    return;
+  } else {
+    this.modalEndereco = false;
+    this.chamarMotorista();
+    this.cdr.detectChanges();
+  }
+}
+
   cancelarCorrida() {
     this.pararTudo();
     this.modalChamandoMotorista = false;
@@ -190,7 +215,7 @@ export class CorridaAndamentoComponent implements OnInit, OnDestroy {
 
           this.usuarioService.patchChamandoMotorista(motoristaId).subscribe({
             next: () => {
-              this.usuarioService.postEnviarNotificacao(motoristaId, despachante).subscribe({
+              this.usuarioService.postEnviarNotificacao(motoristaId, despachante, this.enderecoEntrega).subscribe({
                 next: (resp) => {
                   //alert('Notificação enviada');
                   localStorage.setItem('corridaId', resp.corridaId);
@@ -243,5 +268,9 @@ export class CorridaAndamentoComponent implements OnInit, OnDestroy {
       },
       error: (err) => console.log('Erro ao atualizar corrida:', err),
     });
+  }
+
+  encodeURIComponent(str: string): string {
+    return encodeURIComponent(str);
   }
 }

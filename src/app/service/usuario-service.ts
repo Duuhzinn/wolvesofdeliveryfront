@@ -95,10 +95,10 @@ export class UsuarioService {
   }
 
   //EVIA A NOTIFICAÇÂO CRIANDO A CORRIDA
-  postEnviarNotificacao(motoristaID: number, despachanteId: number): Observable<any> {
+  postEnviarNotificacao(motoristaID: number, despachanteId: number, endereco: string): Observable<any> {
     const token = localStorage.getItem('tokenAutenticacao');
     const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
-    return this.http.post(AppConstants.sendDrive(motoristaID, despachanteId), {}, { headers });
+    return this.http.post(AppConstants.sendDrive(motoristaID, despachanteId), { endereco }, { headers });
   }
 
   //CHAMANDO O MOTORISTA DA VEZ

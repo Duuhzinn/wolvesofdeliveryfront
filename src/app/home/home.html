@@ -3,8 +3,8 @@
   @if (tipoUser === 'ADMIN' && dashboardAdmin) {
 
   <div class="dashboard-header">
-    <span class="dashboard-icon">👤</span>
-    <span class="dashboard-nome">{{ dashboardAdmin.nomeAdmin }}</span>
+    <span class="dashboard-icon">🧑</span>
+    <span class="dashboard-nome">{{ dashboardAdmin.nomeAdmin }} — ADMINISTRADOR</span>
   </div>
 
   <div class="dashboard-row">
@@ -61,8 +61,7 @@
   @if (tipoUser === 'CLIENTE') {
 
   <div class="dashboard-header">
-    <span class="dashboard-icon">🏪</span>
-    <span class="dashboard-nome">MOVIMENTO DO DIA ATUAL</span>
+    <span class="dashboard-nome">🏪 {{ nomeUsuario }} — MOVIMENTO DE HOJE</span>
   </div>
 
   @if (dashboardCliente) {
@@ -115,8 +114,7 @@
   @if (tipoUser === 'MOTORISTA') {
 
   <div class="dashboard-header">
-    <span class="dashboard-icon">🏍️</span>
-    <span class="dashboard-nome">MEU DIA</span>
+    <span class="dashboard-nome">🏍️ {{ nomeUsuario }} — MOVIMENTO DE HOJE</span>
   </div>
 
   @if (dashboardMotorista) {
