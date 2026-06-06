@@ -72,15 +72,11 @@ export class Home implements OnInit {
   }
 
   carregarDashboardCliente() {
-    const hoje = new Date();
-    const pad = (n: number) => String(n).padStart(2, '0');
-    const dataHoje = `${hoje.getFullYear()}-${pad(hoje.getMonth() + 1)}-${pad(hoje.getDate())}`;
-
-    this.usuarioService.getEstatisticasPorPeriodo(dataHoje, dataHoje, this.usuarioId, undefined).subscribe({
-      next: (data: any) => {
-        this.dashboardCliente = data;
-        this.cdr.detectChanges();
-      },
+    this.usuarioService.getDashboardCliente(this.usuarioId).subscribe({
+    next: (data: any) => {
+      this.dashboardCliente = data;
+      this.cdr.detectChanges();
+    },
       error: (err: any) => console.log(err),
     });
   }

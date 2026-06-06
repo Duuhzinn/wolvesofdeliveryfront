@@ -84,6 +84,9 @@ public static dashBoardAdmin(usuarioId: number): string{
 public static dasgBoardDrive(motoristaId: number): string{
   return this. baseDashBoardURL + "/motorista/" + motoristaId
 }
+public static dashBoardCliente(clienteId: number): string {
+  return this.baseDashBoardURL + "/cliente/" + clienteId;
+}
 
 
 
