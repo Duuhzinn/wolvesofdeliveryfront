@@ -36,7 +36,7 @@
   border: 0.5px solid #ddd;
   border-radius: 12px;
   padding: 16px 20px;
-  flex: 1 1 280px;
+  flex: 1 1 140px;
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -60,7 +60,7 @@
   border: 0.5px solid #ddd;
   border-radius: 12px;
   padding: 16px 20px;
-  flex: 1 1 280px;
+  flex: 1 1 140px;
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -85,6 +85,15 @@
   color: #333;
   font-weight: 500;
   padding: 6px 14px;
+  background: #f0eeff;
+  border-radius: 20px;
+}
+
+.online-item-sm {
+  font-size: 11px;
+  color: #333;
+  font-weight: 500;
+  padding: 4px 10px;
   background: #f0eeff;
   border-radius: 20px;
 }
@@ -159,8 +168,11 @@
 
 @media (max-width: 600px) {
   .container { padding: 15px; }
-  .dashboard-row { flex-direction: column; }
-  .dashboard-destaque { flex: 1 1 100%; }
-  .dashboard-online-card { flex: 1 1 100%; }
+  .destaque-label { font-size: 9px; }
+  .online-titulo { font-size: 9px; }
+  .destaque-valor { font-size: 22px; }
   .corrida-item { flex-direction: column; align-items: flex-start; }
+  .corrida-motorista { font-size: 12px; }
+  .corrida-endereco { font-size: 11px; }
+  .corrida-hora { font-size: 11px; }
 }

@@ -9,7 +9,7 @@
 
   <div class="dashboard-row">
     <div class="dashboard-destaque">
-      <span class="destaque-label">📦 CORRIDAS HOJE</span>
+      <span class="destaque-label">📦 CORRIDAS REALIZADAS</span>
       <span class="destaque-valor">{{ dashboardAdmin.corridasDia }}</span>
     </div>
     <div class="dashboard-destaque">
@@ -17,16 +17,39 @@
       <span class="destaque-valor">R$ {{ dashboardAdmin.faturamentoDia | number:'1.2-2' }}</span>
     </div>
     <div class="dashboard-destaque">
-      <span class="destaque-label">🏍️ MOTORISTAS CADASTRADOS</span>
-      <span class="destaque-valor">{{ dashboardAdmin.totalMotoristas }}</span>
+      <span class="destaque-label">❌ EXPIRADAS HOJE</span>
+      <span class="destaque-valor">{{ dashboardAdmin.expiradasDia }}</span>
     </div>
     <div class="dashboard-destaque">
-      <span class="destaque-label">🏪 CLIENTES CADASTRADOS</span>
-      <span class="destaque-valor">{{ dashboardAdmin.totalClientes }}</span>
+      <span class="destaque-label">🚫 RECUSADAS HOJE</span>
+      <span class="destaque-valor">{{ dashboardAdmin.recusadasDia }}</span>
     </div>
   </div>
 
   <div class="dashboard-row">
+    <div class="dashboard-destaque">
+      <span class="destaque-label">🏪 CLIENTES CADASTRADOS</span>
+      <span class="destaque-valor">{{ dashboardAdmin.totalClientes }}</span>
+    </div>
+    <div class="dashboard-online-card">
+      <span class="online-titulo">🟢 CLIENTES ONLINE ({{ dashboardAdmin.totalClientesOnline }})</span>
+      <div class="online-lista online-lista-scroll">
+        @if (dashboardAdmin.clientesOnline.length === 0) {
+        <span class="online-vazio">Nenhum cliente online</span>
+        } @else {
+        @for (nome of dashboardAdmin.clientesOnline; track nome) {
+        <div class="online-item-sm">{{ nome }}</div>
+        }
+        }
+      </div>
+    </div>
+  </div>
+
+  <div class="dashboard-row">
+    <div class="dashboard-destaque">
+      <span class="destaque-label">🏍️ MOTORISTAS CADASTRADOS</span>
+      <span class="destaque-valor">{{ dashboardAdmin.totalMotoristas }}</span>
+    </div>
     <div class="dashboard-online-card">
       <span class="online-titulo">🟢 MOTORISTAS ONLINE ({{ dashboardAdmin.totalMotoristasOnline }})</span>
       <div class="online-lista">
@@ -34,7 +57,7 @@
         <span class="online-vazio">Nenhum motorista online</span>
         } @else {
         @for (nome of dashboardAdmin.motoristasOnline; track nome) {
-        <div class="online-item">{{ nome }}</div>
+        <div class="online-item-sm">{{ nome }}</div>
         }
         }
       </div>
@@ -43,13 +66,25 @@
 
   <div class="dashboard-row">
     <div class="dashboard-online-card">
-      <span class="online-titulo">🟢 CLIENTES ONLINE ({{ dashboardAdmin.totalClientesOnline }})</span>
-      <div class="online-lista online-lista-scroll">
-        @if (dashboardAdmin.clientesOnline.length === 0) {
-        <span class="online-vazio">Nenhum cliente online</span>
+      <span class="online-titulo">🚫 MOTORISTAS QUE RECUSARAM ({{ dashboardAdmin.motoristasRecusaram.length }})</span>
+      <div class="online-lista">
+        @if (dashboardAdmin.motoristasRecusaram.length === 0) {
+        <span class="online-vazio">Nenhuma recusa hoje</span>
         } @else {
-        @for (nome of dashboardAdmin.clientesOnline; track nome) {
-        <div class="online-item">{{ nome }}</div>
+        @for (m of dashboardAdmin.motoristasRecusaram; track m.nome) {
+        <div class="online-item-sm">{{ m.nome }} ({{ m.quantidade }})</div>
+        }
+        }
+      </div>
+    </div>
+    <div class="dashboard-online-card">
+      <span class="online-titulo">❌ MOTORISTAS QUE PERDERAM ({{ dashboardAdmin.motoristasPerderem.length }})</span>
+      <div class="online-lista">
+        @if (dashboardAdmin.motoristasPerderem.length === 0) {
+        <span class="online-vazio">Nenhuma perda hoje</span>
+        } @else {
+        @for (m of dashboardAdmin.motoristasPerderem; track m.nome) {
+        <div class="online-item-sm">{{ m.nome }} ({{ m.quantidade }})</div>
         }
         }
       </div>
@@ -74,14 +109,7 @@
       <span class="destaque-label">📦 CORRIDAS HOJE</span>
       <span class="destaque-valor">{{ dashboardCliente.totalCorridas }}</span>
     </div>
-    <div class="dashboard-destaque">
-      <span class="destaque-label">🏆 APROVEITAMENTO</span>
-      <span class="destaque-valor" [ngClass]="{
-        'aproveitamento-verde': dashboardCliente.aproveitamento >= 75,
-        'aproveitamento-amarelo': dashboardCliente.aproveitamento >= 50 && dashboardCliente.aproveitamento < 75,
-        'aproveitamento-vermelho': dashboardCliente.aproveitamento < 50
-      }">{{ dashboardCliente.aproveitamento | number:'1.1-1' }}%</span>
-    </div>
+
   </div>
   }
 

@@ -40,7 +40,8 @@ export class Home implements OnInit {
 
       if (this.tipoUser === 'ADMIN') {
         this.carregarDashboard();
-        this.websocketService.conectar(() => {
+        // ATUALIZA DASHBOARD DO ADMIN VIA WEBSOCKET
+        this.websocketService.conectarDashboard(() => {
           this.carregarDashboard();
         });
       }
@@ -48,16 +49,34 @@ export class Home implements OnInit {
       if (this.tipoUser === 'CLIENTE') {
         this.carregarDashboardCliente();
         this.carregarCorridasHoje();
+        // ATUALIZA DASHBOARD DO CLIENTE VIA WEBSOCKET
+        this.websocketService.conectarDashboard(() => {
+          this.corridasHoje = [];
+          this.corridasPage = 0;
+          this.corridasUltimaPagina = false;
+          this.carregarDashboardCliente();
+          this.carregarCorridasHoje();
+        });
       }
 
       if (this.tipoUser === 'MOTORISTA') {
         this.carregarDashboardMotorista();
         this.carregarCorridasMotoristaHoje();
+        // ATUALIZA DASHBOARD DO MOTORISTA VIA WEBSOCKET
+        this.websocketService.conectarDashboard(() => {
+          this.corridasMotoristasHoje = [];
+          this.corridasMotoristaPage = 0;
+          this.corridasMotoristaUltimaPagina = false;
+          this.carregarDashboardMotorista();
+          this.carregarCorridasMotoristaHoje();
+        });
       }
     }
   }
 
   ngOnDestroy() {
+    // DESCONECTA TODOS OS LISTENERS AO SAIR DA DASHBOARD
+    this.websocketService.desconectarDashboard();
     this.websocketService.desconectar();
   }
 
@@ -73,10 +92,10 @@ export class Home implements OnInit {
 
   carregarDashboardCliente() {
     this.usuarioService.getDashboardCliente(this.usuarioId).subscribe({
-    next: (data: any) => {
-      this.dashboardCliente = data;
-      this.cdr.detectChanges();
-    },
+      next: (data: any) => {
+        this.dashboardCliente = data;
+        this.cdr.detectChanges();
+      },
       error: (err: any) => console.log(err),
     });
   }
@@ -118,7 +137,7 @@ export class Home implements OnInit {
 
   carregarDashboardMotorista() {
     this.usuarioService.getDashboardMotorista(this.usuarioId).subscribe({
-      next: (data: any)=>{
+      next: (data: any) => {
         this.dashboardMotorista = data;
         this.cdr.detectChanges();
       },

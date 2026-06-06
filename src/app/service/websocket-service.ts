@@ -11,6 +11,8 @@ export class WebsocketService {
   private recusaSubscription: StompSubscription | null = null;
   private cancelamentoSubscription: StompSubscription | null = null;
   private atualizacaoSubscription: StompSubscription | null = null;
+  private dashboardSubscription: StompSubscription | null = null;
+  private dashboardSubscription2: StompSubscription | null = null;
 
   // CALLBACKS REGISTRADOS
   private onConnectCallbacks: (() => void)[] = [];
@@ -115,4 +117,38 @@ export class WebsocketService {
       });
     });
   }
-} 
+
+  // ESCUTA CORRIDA E FILA PARA ATUALIZAR A DASHBOARD EM TEMPO REAL
+  conectarDashboard(callback: () => void) {
+    this.ativarSeNecessario(() => {
+      if (this.dashboardSubscription) {
+        this.dashboardSubscription.unsubscribe();
+        this.dashboardSubscription = null;
+      }
+      if (this.dashboardSubscription2) {
+        this.dashboardSubscription2.unsubscribe();
+        this.dashboardSubscription2 = null;
+      }
+      // ESCUTA FINALIZAÇÕES E ACEITES
+      this.dashboardSubscription = this.client.subscribe('/topic/corrida', () => {
+        callback();
+      });
+      // ESCUTA RECUSAS E EXPIRAÇÕES
+      this.dashboardSubscription2 = this.client.subscribe('/topic/fila', () => {
+        callback();
+      });
+    });
+  }
+
+  // DESCONECTA OS LISTENERS DA DASHBOARD
+  desconectarDashboard() {
+    if (this.dashboardSubscription) {
+      this.dashboardSubscription.unsubscribe();
+      this.dashboardSubscription = null;
+    }
+    if (this.dashboardSubscription2) {
+      this.dashboardSubscription2.unsubscribe();
+      this.dashboardSubscription2 = null;
+    }
+  }
+}
