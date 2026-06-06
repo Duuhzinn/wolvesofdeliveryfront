@@ -214,6 +214,13 @@ export class UsuarioService {
     const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
     return this.http.get(AppConstants.dashBoardAdmin(usuarioId), { headers },)
   }
+
+  //CHAMANDO A DASHBOARD DO MOTORISTA
+  getDashboardMotorista(motoristaId: number): Observable<any>{
+    const token = localStorage.getItem('tokenAutenticacao');
+    const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
+    return this.http.get(AppConstants.dasgBoardDrive(motoristaId), { headers })
+  }
   
   //SETAR O STATUS DO USUARIO QUANDO LOGAR
   patchStatusUsuario(id: number, status: number): Observable<any> {

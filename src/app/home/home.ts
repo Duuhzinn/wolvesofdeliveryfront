@@ -121,12 +121,8 @@ export class Home implements OnInit {
   }
 
   carregarDashboardMotorista() {
-    const hoje = new Date();
-    const pad = (n: number) => String(n).padStart(2, '0');
-    const dataHoje = `${hoje.getFullYear()}-${pad(hoje.getMonth() + 1)}-${pad(hoje.getDate())}`;
-
-    this.usuarioService.getEstatisticasPorPeriodo(dataHoje, dataHoje, undefined, this.usuarioId).subscribe({
-      next: (data: any) => {
+    this.usuarioService.getDashboardMotorista(this.usuarioId).subscribe({
+      next: (data: any)=>{
         this.dashboardMotorista = data;
         this.cdr.detectChanges();
       },

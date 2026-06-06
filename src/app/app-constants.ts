@@ -81,6 +81,9 @@ public static get baseDashBoardURL(): string {return this.baseServidor + "/v1/da
 public static dashBoardAdmin(usuarioId: number): string{
   return this.baseDashBoardURL + "/admin/" + usuarioId
 }
+public static dasgBoardDrive(motoristaId: number): string{
+  return this. baseDashBoardURL + "/motorista/" + motoristaId
+}
 
 
 
