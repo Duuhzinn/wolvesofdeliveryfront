@@ -1,0 +1,64 @@
+<div class="container">
+  <div class="cards-container">
+
+    <div class="motorista-card header-card">
+      <h2>MAIS OPÇÕES</h2>
+    </div>
+
+    @if (isAdmin) {
+    <div class="config-card" [routerLink]="['/relatorioCorrida']">
+      <span class="config-icon">📊</span>
+      <span class="config-titulo">Relatório de Corridas</span>
+      <span class="config-sub">Visualize as corridas por período</span>
+    </div>
+    <div class="config-card" [routerLink]="['/relatorioMotoristas']">
+      <span class="config-icon">🏍️</span>
+      <span class="config-titulo">Relatório de Motoristas</span>
+      <span class="config-sub">Estatísticas por motorista</span>
+    </div>
+    <div class="config-card" [routerLink]="['/rankingMotoristas']">
+      <span class="config-icon">🏆</span>
+      <span class="config-titulo">Ranking de Motoristas</span>
+      <span class="config-sub">Veja o ranking geral</span>
+    </div>
+    <div class="config-card" [routerLink]="['/usuarioList']">
+      <span class="config-icon">👥</span>
+      <span class="config-titulo">Usuários</span>
+      <span class="config-sub">Gerencie os usuários do sistema</span>
+    </div>
+    <div class="config-card">
+        <span class="config-icon">⚙️</span>
+        <span class="config-titulo">Configuração de Corrida</span>
+        <span class="config-sub">Valor e regras das corridas</span>
+    </div>
+    }
+
+    @if (isCliente) {
+    <div class="config-card" [routerLink]="['/relatorioCorrida']">
+      <span class="config-icon">📊</span>
+      <span class="config-titulo">Relatórios</span>
+      <span class="config-sub">Visualize suas corridas por período</span>
+    </div>
+    <div class="config-card">
+        <span class="config-icon">⚙️</span>
+        <span class="config-titulo">Configuração de Corrida</span>
+        <span class="config-sub">Valor e regras das corridas</span>
+    </div>
+    }
+
+    @if (isMotorista) {
+    <div class="config-card" [routerLink]="['/relatorioCorrida']">
+      <span class="config-icon">📊</span>
+      <span class="config-titulo">Relatórios</span>
+      <span class="config-sub">Visualize suas corridas por período</span>
+    </div>
+    }
+
+    <div class="config-card config-card-sair" (click)="sair()">
+      <span class="config-icon">🚪</span>
+      <span class="config-titulo config-titulo-sair">Sair</span>
+      <span class="config-sub">Encerrar sessão</span>
+    </div>
+
+  </div>
+</div>

@@ -9,6 +9,7 @@ import { CorridaAndamentoComponent } from './componente/corrida-andamento-compon
 import { RelatorioMotoristasComponent } from './componente/relatorio-motoristas-component/relatorio-motoristas-component';
 import { RankingMotoristasComponent } from './componente/ranking-motoristas-component/ranking-motoristas-component';
 import { RelatoriosComponent } from './componente/relatorios-component/relatorios-component';
+import { MaisComponent } from './componente/mais-component/mais-component';
 
 //DECLARANDO ROTAS
 export const routes: Routes = [
@@ -24,6 +25,7 @@ export const routes: Routes = [
     {path: 'relatorioCorrida', component: RelatoriosComponent}, // DECLARA AS ROTAS PARA OS RELATORIOS DOS MOTORISTAS
     {path: 'relatorioMotoristas', component: RelatorioMotoristasComponent}, // DECLARA AS ROTAS PARA OS RELATORIOS DOS MOTORISTAS
     {path: 'rankingMotoristas', component: RankingMotoristasComponent}, // DECLARA AS ROTAS PARA OS RELATORIOS DOS RANKING DO MOTORISTA
+    {path: 'configuracoes', component: MaisComponent} //DECLARA A ROTA PARA AS CONFIGURAÇÕES
 ];
 
 

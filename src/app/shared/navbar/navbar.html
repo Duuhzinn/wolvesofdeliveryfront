@@ -43,6 +43,7 @@
     <li class="dropdown">
       <a>Configurações <span class="chevron">▼</span></a>
       <ul class="dropdown-menu">
+        <li><a [routerLink]="['/configuracoes']">Gerais</a></li>
         <li><a [routerLink]="['/usuarioList']">Usuários</a></li>
       </ul>
     </li>
@@ -64,65 +65,6 @@
   </div>
 </nav>
 
-<!-- ===== TELA MAIS (mobile) ===== -->
-@if (maisAberto) {
-<div class="mais-tela" [class.mais-saindo]="maisFechar">
-  <div class="mais-header">
-    <span>Menu</span>
-    <button (click)="fecharMais()">✕</button>
-  </div>
-  <div class="mais-grid">
-
-    @if (isAdmin) {
-    <div class="mais-card" [routerLink]="['/relatorioCorrida']" (click)="fecharMais()">
-      <span class="mais-icon">📊</span>
-      <span class="mais-label">Relatório Corridas</span>
-    </div>
-    <div class="mais-card" [routerLink]="['/relatorioMotoristas']" (click)="fecharMais()">
-      <span class="mais-icon">🏍️</span>
-      <span class="mais-label">Relatório Motoristas</span>
-    </div>
-    <div class="mais-card" [routerLink]="['/rankingMotoristas']" (click)="fecharMais()">
-      <span class="mais-icon">🏆</span>
-      <span class="mais-label">Ranking Motoristas</span>
-    </div>
-    <div class="mais-card" [routerLink]="['/usuarioList']" (click)="fecharMais()">
-      <span class="mais-icon">⚙️</span>
-      <span class="mais-label">Usuários</span>
-    </div>
-    }
-
-    @if (isCliente) {
-    <div class="mais-card" [routerLink]="['/relatorioCorrida']" (click)="fecharMais()">
-      <span class="mais-icon">📊</span>
-      <span class="mais-label">Relatórios</span>
-    </div>
-    <div class="mais-card" [routerLink]="['/usuarioList']" (click)="fecharMais()">
-      <span class="mais-icon">⚙️</span>
-      <span class="mais-label">Configurações</span>
-    </div>
-    }
-
-    @if (isMotorista) {
-    <div class="mais-card" [routerLink]="['/relatorioCorrida']" (click)="fecharMais()">
-      <span class="mais-icon">📊</span>
-      <span class="mais-label">Relatórios</span>
-    </div>
-    <div class="mais-card" [routerLink]="['/usuarioList']" (click)="fecharMais()">
-      <span class="mais-icon">⚙️</span>
-      <span class="mais-label">Configurações</span>
-    </div>
-    }
-
-    <div class="mais-card mais-card-sair" (click)="sair()">
-      <span class="mais-icon">🚪</span>
-      <span class="mais-label mais-label-sair">Sair</span>
-    </div>
-
-  </div>
-</div>
-}
-
 <!-- ===== BOTTOMBAR (mobile) ===== -->
 <nav class="mobile-bottombar">
 
@@ -143,7 +85,7 @@
     <span class="tab-icon">🔢</span>
     <span class="tab-label">Fila</span>
   </a>
-  <a class="tab-item" [class.active-tab]="maisAberto" (click)="toggleMais()">
+  <a [routerLink]="['/configuracoes']" routerLinkActive="active-tab" class="tab-item">
     <span class="tab-icon">☰</span>
     <span class="tab-label">Mais</span>
   </a>
@@ -162,7 +104,7 @@
     <span class="tab-icon">🔢</span>
     <span class="tab-label">Fila</span>
   </a>
-  <a class="tab-item" [class.active-tab]="maisAberto" (click)="toggleMais()">
+  <a [routerLink]="['/configuracoes']" routerLinkActive="active-tab" class="tab-item">
     <span class="tab-icon">☰</span>
     <span class="tab-label">Mais</span>
   </a>
@@ -189,7 +131,7 @@
     </span>
     <span class="tab-label">Status</span>
   </a>
-  <a class="tab-item" [class.active-tab]="maisAberto" (click)="toggleMais()">
+  <a [routerLink]="['/configuracoes']" routerLinkActive="active-tab" class="tab-item">
     <span class="tab-icon">☰</span>
     <span class="tab-label">Mais</span>
   </a>
