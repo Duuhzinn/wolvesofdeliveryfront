@@ -15,6 +15,13 @@
       <input type="password" [(ngModel)]="usuario.senha" id="senha" name="senha" placeholder="Digite sua senha" required>
     </div>
 
+    <div class="login-lembrar">
+      <span class="lembrar-label">Lembrar minha senha</span>
+      <div class="toggle" [class.ativo]="lembrarMe" (click)="lembrarMe = !lembrarMe">
+        <div class="toggle-bolinha"></div>
+      </div>
+    </div>
+
     <button type="submit">Acessar</button>
 
   </form>

@@ -1,4 +1,4 @@
-<!-- Barra de navegação principal -->
+<!-- ===== DESKTOP NAVBAR (não muda nada) ===== -->
 <nav class="wolf-navbar">
   <div class="navbar-brand">
     <div class="brand-icon">🐺</div>
@@ -51,69 +51,148 @@
     <li class="sair"><a (click)="sair()">Sair</a></li>
   </ul>
 
-  <button
-    class="hamburger"
-    [class.open]="menuAberto"
-    (click)="toggleMenu()"
-    aria-label="Abrir menu"
-  >
+  <button class="hamburger" [class.open]="menuAberto" (click)="toggleMenu()" aria-label="Abrir menu">
     <span></span><span></span><span></span>
   </button>
 </nav>
 
-<!-- Menu Mobile -->
-<div class="mobile-menu" [class.open]="menuAberto">
-  <ul>
-    <li><a [routerLink]="['/home']" (click)="toggleMenu()">Dashboard</a></li>
+<!-- ===== MOBILE TOPBAR (novo) ===== -->
+<nav class="mobile-topbar">
+  <div class="topbar-brand">
+    <span class="topbar-icon">🐺</span>
+    <span class="topbar-title">Wolves <span class="topbar-user">— {{ nomeUsuario }}</span></span>
+  </div>
+</nav>
 
-    @if (isAdmin || isCliente || isMotorista) {
-    <li>
-      <a (click)="toggleSub('motorista')" [class.open]="subAberto === 'motorista'">
-        Motorista <span class="chevron">▼</span>
-      </a>
-      <ul class="submenu-mobile" [class.open]="subAberto === 'motorista'">
-        <li><a [routerLink]="['/motoristaStatus']" (click)="toggleMenu()">Controle de Status</a></li>
-        <li><a [routerLink]="['/ordemDaFila']" (click)="toggleMenu()">Ordem da Fila</a></li>
-      </ul>
-    </li>
+<!-- ===== TELA MAIS (mobile) ===== -->
+@if (maisAberto) {
+<div class="mais-tela" [class.mais-saindo]="maisFechar">
+  <div class="mais-header">
+    <span>Menu</span>
+    <button (click)="fecharMais()">✕</button>
+  </div>
+  <div class="mais-grid">
+
+    @if (isAdmin) {
+    <div class="mais-card" [routerLink]="['/relatorioCorrida']" (click)="fecharMais()">
+      <span class="mais-icon">📊</span>
+      <span class="mais-label">Relatório Corridas</span>
+    </div>
+    <div class="mais-card" [routerLink]="['/relatorioMotoristas']" (click)="fecharMais()">
+      <span class="mais-icon">🏍️</span>
+      <span class="mais-label">Relatório Motoristas</span>
+    </div>
+    <div class="mais-card" [routerLink]="['/rankingMotoristas']" (click)="fecharMais()">
+      <span class="mais-icon">🏆</span>
+      <span class="mais-label">Ranking Motoristas</span>
+    </div>
+    <div class="mais-card" [routerLink]="['/usuarioList']" (click)="fecharMais()">
+      <span class="mais-icon">⚙️</span>
+      <span class="mais-label">Usuários</span>
+    </div>
     }
 
-    @if (isAdmin || isCliente || isMotorista) {
-    <li>
-      <a (click)="toggleSub('corridas')" [class.open]="subAberto === 'corridas'">
-        Corridas <span class="chevron">▼</span>
-      </a>
-      <ul class="submenu-mobile" [class.open]="subAberto === 'corridas'">
-        <li><a [routerLink]="['/corridas/andamento']" (click)="toggleMenu()">Chamar Motorista</a></li>
-        <li><a [routerLink]="['/corridas/finalizada']" (click)="toggleMenu()">Finalizadas</a></li>
-      </ul>
-    </li>
+    @if (isCliente) {
+    <div class="mais-card" [routerLink]="['/relatorioCorrida']" (click)="fecharMais()">
+      <span class="mais-icon">📊</span>
+      <span class="mais-label">Relatórios</span>
+    </div>
+    <div class="mais-card" [routerLink]="['/usuarioList']" (click)="fecharMais()">
+      <span class="mais-icon">⚙️</span>
+      <span class="mais-label">Configurações</span>
+    </div>
     }
 
-    @if (isAdmin || isCliente || isMotorista) {
-    <li>
-      <a (click)="toggleSub('relatorios')" [class.open]="subAberto === 'relatorios'">
-        Relatórios <span class="chevron">▼</span>
-      </a>
-      <ul class="submenu-mobile" [class.open]="subAberto === 'relatorios'">
-        <li><a [routerLink]="['/relatorioCorrida']" (click)="toggleMenu()">Corridas</a></li>
-        <li><a [routerLink]="['/relatorioMotoristas']" (click)="toggleMenu()">Motoristas</a></li>
-        <li><a [routerLink]="['/rankingMotoristas']" (click)="toggleMenu()">Ranking Motoristas</a></li>
-      </ul>
-    </li>
+    @if (isMotorista) {
+    <div class="mais-card" [routerLink]="['/relatorioCorrida']" (click)="fecharMais()">
+      <span class="mais-icon">📊</span>
+      <span class="mais-label">Relatórios</span>
+    </div>
+    <div class="mais-card" [routerLink]="['/usuarioList']" (click)="fecharMais()">
+      <span class="mais-icon">⚙️</span>
+      <span class="mais-label">Configurações</span>
+    </div>
     }
 
-    @if (isAdmin || isCliente || isMotorista) {
-    <li>
-      <a (click)="toggleSub('config')" [class.open]="subAberto === 'config'">
-        Configurações <span class="chevron">▼</span>
-      </a>
-      <ul class="submenu-mobile" [class.open]="subAberto === 'config'">
-        <li><a [routerLink]="['/usuarioList']" (click)="toggleMenu()">Usuários</a></li>
-      </ul>
-    </li>
-    }
+    <div class="mais-card mais-card-sair" (click)="sair()">
+      <span class="mais-icon">🚪</span>
+      <span class="mais-label mais-label-sair">Sair</span>
+    </div>
 
-    <li class="sair-mobile"><a (click)="sair()">Sair</a></li>
-  </ul>
+  </div>
 </div>
+}
+
+<!-- ===== BOTTOMBAR (mobile) ===== -->
+<nav class="mobile-bottombar">
+
+  @if (isAdmin) {
+  <a [routerLink]="['/home']" routerLinkActive="active-tab" class="tab-item">
+    <span class="tab-icon">🏠</span>
+    <span class="tab-label">Início</span>
+  </a>
+  <a [routerLink]="['/motoristaStatus']" routerLinkActive="active-tab" class="tab-item">
+    <span class="tab-icon">🏍️</span>
+    <span class="tab-label">Motorista</span>
+  </a>
+  <a [routerLink]="['/corridas/andamento']" routerLinkActive="active-tab" class="tab-item">
+    <span class="tab-icon">📦</span>
+    <span class="tab-label">Corridas</span>
+  </a>
+  <a [routerLink]="['/ordemDaFila']" routerLinkActive="active-tab" class="tab-item">
+    <span class="tab-icon">🔢</span>
+    <span class="tab-label">Fila</span>
+  </a>
+  <a class="tab-item" [class.active-tab]="maisAberto" (click)="toggleMais()">
+    <span class="tab-icon">☰</span>
+    <span class="tab-label">Mais</span>
+  </a>
+  }
+
+  @if (isCliente) {
+  <a [routerLink]="['/home']" routerLinkActive="active-tab" class="tab-item">
+    <span class="tab-icon">🏠</span>
+    <span class="tab-label">Início</span>
+  </a>
+  <a [routerLink]="['/corridas/andamento']" routerLinkActive="active-tab" class="tab-item">
+    <span class="tab-icon">📦</span>
+    <span class="tab-label">Corridas</span>
+  </a>
+  <a [routerLink]="['/ordemDaFila']" routerLinkActive="active-tab" class="tab-item">
+    <span class="tab-icon">🔢</span>
+    <span class="tab-label">Fila</span>
+  </a>
+  <a class="tab-item" [class.active-tab]="maisAberto" (click)="toggleMais()">
+    <span class="tab-icon">☰</span>
+    <span class="tab-label">Mais</span>
+  </a>
+  }
+
+  @if (isMotorista) {
+  <a [routerLink]="['/home']" routerLinkActive="active-tab" class="tab-item">
+    <span class="tab-icon">🏠</span>
+    <span class="tab-label">Início</span>
+  </a>
+  <a [routerLink]="['/corridas/andamento']" routerLinkActive="active-tab" class="tab-item">
+    <span class="tab-icon">📦</span>
+    <span class="tab-label">Corridas</span>
+  </a>
+  <a [routerLink]="['/ordemDaFila']" routerLinkActive="active-tab" class="tab-item">
+    <span class="tab-icon">🔢</span>
+    <span class="tab-label">Fila</span>
+  </a>
+  <a [routerLink]="['/motoristaStatus']" routerLinkActive="active-tab" class="tab-item">
+    <span class="tab-icon">
+      @if (statusMotoristaAtual === 1) { 🟢 }
+      @else if (statusMotoristaAtual === 2) { 🟡 }
+      @else { 🔴 }
+    </span>
+    <span class="tab-label">Status</span>
+  </a>
+  <a class="tab-item" [class.active-tab]="maisAberto" (click)="toggleMais()">
+    <span class="tab-icon">☰</span>
+    <span class="tab-label">Mais</span>
+  </a>
+  }
+
+</nav>

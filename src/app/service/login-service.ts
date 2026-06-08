@@ -34,6 +34,7 @@ export class LoginService {
             localStorage.setItem('usuarioId', usuarioLogado.id.toString());
             localStorage.setItem('tipoUser', usuarioLogado.tipoUser);
             localStorage.setItem('nome', usuarioLogado.nome);
+            localStorage.setItem('statusMotorista', usuarioLogado.status?.toString() ?? '0');
 
             // SETA ONLINE SE FOR CLIENTE OU ADMIN
             if (usuarioLogado.tipoUser === 'CLIENTE' || usuarioLogado.tipoUser === 'ADMIN') {

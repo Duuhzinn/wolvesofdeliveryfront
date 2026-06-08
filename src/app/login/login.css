@@ -82,6 +82,57 @@
   background: #3B3870;
 }
 
+.login-lembrar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.login-lembrar label {
+  font-size: 12px;
+  color: #888;
+  cursor: pointer;
+}
+
+.login-lembrar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.lembrar-label {
+  font-size: 12px;
+  color: #888;
+}
+
+.toggle {
+  width: 44px;
+  height: 24px;
+  background: #ddd;
+  border-radius: 20px;
+  padding: 3px;
+  cursor: pointer;
+  transition: background 0.3s;
+  display: flex;
+  align-items: center;
+}
+
+.toggle.ativo {
+  background: #534AB7;
+}
+
+.toggle-bolinha {
+  width: 18px;
+  height: 18px;
+  background: #fff;
+  border-radius: 50%;
+  transition: transform 0.3s;
+}
+
+.toggle.ativo .toggle-bolinha {
+  transform: translateX(20px);
+}
+
 @media (max-width: 480px) {
   .login-card {
     padding: 30px 24px;

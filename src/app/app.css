@@ -74,3 +74,12 @@ main {
         opacity: 1;
     }
 }
+
+@media (max-width: 700px) {
+  body {
+    padding-bottom: 60px;
+  }
+  main {
+    padding-bottom: 60px;
+  }
+}
