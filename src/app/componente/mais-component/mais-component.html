@@ -26,10 +26,10 @@
       <span class="config-titulo">Usuários</span>
       <span class="config-sub">Gerencie os usuários do sistema</span>
     </div>
-    <div class="config-card">
-        <span class="config-icon">⚙️</span>
-        <span class="config-titulo">Configuração de Corrida</span>
-        <span class="config-sub">Valor e regras das corridas</span>
+    <div class="config-card" (click)="abrirModalConfig()">
+      <span class="config-icon">⚙️</span>
+      <span class="config-titulo">Configuração de Corrida</span>
+      <span class="config-sub">Valor e regras das corridas</span>
     </div>
     }
 
@@ -39,10 +39,10 @@
       <span class="config-titulo">Relatórios</span>
       <span class="config-sub">Visualize suas corridas por período</span>
     </div>
-    <div class="config-card">
-        <span class="config-icon">⚙️</span>
-        <span class="config-titulo">Configuração de Corrida</span>
-        <span class="config-sub">Valor e regras das corridas</span>
+    <div class="config-card" (click)="abrirModalConfig()">
+      <span class="config-icon">⚙️</span>
+      <span class="config-titulo">Configuração de Corrida</span>
+      <span class="config-sub">Valor e regras das corridas</span>
     </div>
     }
 
@@ -62,3 +62,66 @@
 
   </div>
 </div>
+
+<!-- MODAL CONFIGURAÇÃO DE CORRIDA -->
+@if (modalConfigCorrida) {
+<div class="modal-overlay" (click)="fecharModal()">
+  <div class="modal-box" (click)="$event.stopPropagation()">
+
+    <div class="modal-header">
+      <span>⚙️ Configuração de Corrida</span>
+      <button class="modal-fechar" (click)="fecharModal()">✕</button>
+    </div>
+
+    <!-- MODAL CLIENTE -->
+    @if (isCliente) {
+    <div class="modal-body">
+      <label>Valor da corrida (R$)</label>
+      <input type="text" [(ngModel)]="valorCorrida" placeholder="Ex: 15.00" min="0" step="0.01" class="input-cliente"/>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-cancelar" (click)="fecharModal()">Cancelar</button>
+      <button class="btn-salvar" (click)="salvarConfigCliente()" [disabled]="salvando">
+        {{ salvando ? 'Salvando...' : 'Gravar' }}
+      </button>
+    </div>
+    }
+
+    <!-- MODAL ADMIN -->
+    @if (isAdmin) {
+    <div class="modal-secao">
+      <span class="modal-secao-titulo">VALOR GERAL</span>
+      <div class="modal-geral-row">
+        <input type="number" [(ngModel)]="valorGeral" placeholder="Ex: 15.00" min="0" step="0.01" class="input-geral"/>
+        <button class="btn-salvar btn-aplicar" (click)="salvarValorGeral()" [disabled]="salvandoGeral || valorGeral === null">
+          {{ salvandoGeral ? 'Aplicando...' : 'Aplicar a todos' }}
+        </button>
+      </div>
+    </div>
+
+    <div class="modal-secao">
+      <span class="modal-secao-titulo">ESTABELECIMENTOS</span>
+      @if (clientes.length === 0) {
+        <span class="modal-vazio">Nenhum estabelecimento cadastrado</span>
+      }
+      @for (cliente of clientes; track cliente.usuario.id) {
+      <div class="modal-cliente-row">
+        <span class="modal-cliente-nome">{{ cliente.usuario.nome }}</span>
+        <input type="text" [(ngModel)]="cliente.valorEditado" min="0" step="0.01" class="input-cliente" placeholder="--"/>
+        @if (valorAlterado(cliente)) {
+        <button class="btn-salvar btn-salvar-mini" (click)="salvarClienteIndividual(cliente)" [disabled]="cliente.salvando">
+          {{ cliente.salvando ? '...' : 'Gravar' }}
+        </button>
+        }
+      </div>
+      }
+    </div>
+
+    <div class="modal-footer">
+      <button class="btn-cancelar" (click)="fecharModal()">Fechar</button>
+    </div>
+    }
+
+  </div>
+</div>
+}

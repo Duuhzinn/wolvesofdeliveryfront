@@ -168,7 +168,7 @@
 
 .btn-mini-buscar {
   flex: 1;
-  background-color: #534AB7;
+  background-color: #3B3870;
   color: #fff;
   border: none;
   padding: 6px 14px;
@@ -180,7 +180,7 @@
 }
 
 .btn-mini-buscar:hover {
-  background-color: #3B3870;
+  background-color: #534AB7;
 }
 
 .btn-mini-buscar:disabled {

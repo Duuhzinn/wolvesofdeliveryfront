@@ -235,6 +235,33 @@ export class UsuarioService {
     return this.http.patch(AppConstants.statusUsuario(id, status), {}, { headers });
   }
 
+  //CONFIGURAÇÕES DE CORRIDA
+  //CARREGA AS CONFIGURAÇÕES DE CORRIDAS DOS CLIENTES INDIVIDUAIS
+  getConfigRaceClient(clienteId: number){
+    const token = localStorage.getItem('tokenAutenticacao');
+    const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
+    return this.http.get(AppConstants.configCliente(clienteId), { headers })
+  }
+  // CARREGA TODAS AS CONFIGURAÇÕES DE CORRIDA DOS CLIENTES
+  getConfigAllRaceClient(page: number = 0, size: number = 10) {
+    const token = localStorage.getItem('tokenAutenticacao');
+    const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
+    return this.http.get<any>(`${AppConstants.configAllCliente}?page=${page}&size=${size}`, { headers });
+  }
+  // ADMIN ATUALIZA TODOS AS CONFIG DE CORRIDA
+  patchConfigRaceAll(valor: number) {
+    const token = localStorage.getItem('tokenAutenticacao');
+    const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
+    return this.http.patch(AppConstants.configUpdateTodos, { valor }, { headers, responseType: 'text' });
+  }
+  // ATUALIZA CONFIG DE UM CLIENTE ESPECÍFICO
+  patchConfigRaceClient(clienteId: number, valor: any) {
+    const token = localStorage.getItem('tokenAutenticacao');
+    const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
+    return this.http.patch(AppConstants.configUpdateCliente(clienteId), { valor }, { headers });
+  }
+
+
 
   //AQUI COMEÇA AS ESTASTISTICAS
 

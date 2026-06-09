@@ -121,7 +121,7 @@
 }
 
 .btn-editar {
-  background-color: #534AB7;
+  background-color: #3B3870;
   color: #fff;
   border: none;
   padding: 8px 14px;
@@ -134,7 +134,7 @@
 }
 
 .btn-editar:hover {
-  background-color: #3B3870;
+  background-color: #534AB7;
 }
 
 .btn-Salvar {

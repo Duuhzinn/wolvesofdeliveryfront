@@ -65,7 +65,7 @@
 }
 
 .login-card button[type="submit"] {
-  background: #534AB7;
+  background: #3B3870;
   color: #fff;
   border: none;
   border-radius: 10px;
@@ -79,7 +79,7 @@
 }
 
 .login-card button[type="submit"]:hover {
-  background: #3B3870;
+  background: #534AB7;
 }
 
 .login-lembrar {

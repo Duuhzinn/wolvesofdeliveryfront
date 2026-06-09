@@ -6,6 +6,7 @@ public static get baseServidor(): string {return "https://wolvesofdeliveryapi.on
 public static get baseLogin(): string {return this.baseServidor + "/login"}
 
 //BASE PARA MONTAR REQUISIÇÕES DE USUARIOS
+public static teste(): string { alert("entrou no AppConstants!"); return this.baseUserURL + "/createUser";}
 public static get baseUserURL(): string {return this.baseServidor + "/v1/users"}
 public static get allUser(): string {return this.baseUserURL + "/allUser"}
 public static pesqUserNome(nome: String, tipoUser: string): string {
@@ -64,8 +65,14 @@ public static updateRace(corridaId: number): string{return this.baseRaceURL + "/
 public static cancelCall(motoristaAtual: number): string {return this.baseRaceURL + "/cancelCall/" + motoristaAtual}
 public static expireRace(corridaId: number): string{return this.baseRaceURL + "/expireRace/" + corridaId}
 
+//BASE MATA MONTAR REQUISIÇÕES DAS CONFIGURAÇÕES
+public static get baseConfigURL(): string {return this.baseServidor + "/v1/configuration"}
+public static configCliente(clienteId: number): string {return this.baseConfigURL + "/race/" + clienteId}
+public static get configAllCliente(): string {return this.baseConfigURL + "/race/clients"}
+public static get configUpdateTodos(): string { return this.baseConfigURL + "/race/updateAll" }
+public static configUpdateCliente(clienteId: number): string { return this.baseConfigURL + "/race/update/" + clienteId }
 
-//ESTATÍSTICAS POR ANO
+//BASE MATA MONTAR REQUISIÇÕES ESTATÍSTICAS POR ANO
 public static estatisticasCliente(clienteId: number, ano: number): string {
   return this.baseRaceURL + "/estatisticas/cliente/" + clienteId + "/" + ano;
 }
@@ -88,8 +95,4 @@ public static dashBoardCliente(clienteId: number): string {
   return this.baseDashBoardURL + "/cliente/" + clienteId;
 }
 
-
-
-
-public static teste(): string { alert("entrou no AppConstants!"); return this.baseUserURL + "/createUser";}
 }
