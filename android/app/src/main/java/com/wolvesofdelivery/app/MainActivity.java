@@ -15,7 +15,7 @@ public class MainActivity extends BridgeActivity {
 
   private void criarCanalNotificacao() {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-      NotificationManager manager = getSystemService(NotificationManager.class);
+      NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 
       // CANAL DE NOVA CORRIDA - VIBRAÇÃO LONGA
       NotificationChannel canal = new NotificationChannel(
