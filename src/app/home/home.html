@@ -124,7 +124,7 @@
         @for (corrida of corridasHoje; track corrida.id) {
         <div class="corrida-item">
           <span class="corrida-motorista">🏍️ {{ corrida.motorista?.nome ?? 'Motorista não informado' }}</span>
-          <span class="corrida-endereco">📍 {{ corrida.endereco_entrega ?? 'Endereço não informado' }}</span>
+          <span class="corrida-endereco">📍 {{ corrida.endereco_entrega ?? 'Endereço não informado' }} -- &nbsp;💵 R$ {{ corrida.valor_corrida | number:'1.2-2' }}</span>
           <span class="corrida-hora"><i class="ti ti-clock"></i> {{ corrida.data_chamada | date:'HH:mm' }}</span>
         </div>
         }
@@ -185,7 +185,7 @@
         @for (corrida of corridasMotoristasHoje; track corrida.id) {
         <div class="corrida-item">
           <span class="corrida-motorista">🏪 {{ corrida.cliente?.nome ?? 'Cliente não informado' }}</span>
-          <span class="corrida-endereco">📍 {{ corrida.endereco_entrega ?? 'Endereço não informado' }}</span>
+          <span class="corrida-endereco">📍 {{ corrida.endereco_entrega ?? 'Endereço não informado' }} -- &nbsp;💵 R$ {{ corrida.valor_corrida | number:'1.2-2' }}</span>
           <span class="corrida-hora"><i class="ti ti-clock"></i> {{ corrida.termino_corrida | date:'HH:mm' }}</span>
         </div>
         }

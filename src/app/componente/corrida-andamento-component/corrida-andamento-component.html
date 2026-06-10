@@ -24,11 +24,18 @@
       <div class="card-body">
         <p class="card-label">CLIENTE</p>
         <p><i class="ti ti-building-store"></i> <span>{{ corrida.cliente?.nome }}</span></p>
+        @if (isMotorista) {
+          <a [href]="'geo:0,0?q=' + encodeURIComponent(corrida.cliente?.endereco)" class="btn-nav">
+          <i class="ti ti-navigation"></i> NAVEGAR
+          </a>
+        }
         <p class="card-label">ENTREGA</p>
         <p><i class="ti ti-map-pin"></i> <span>{{ corrida.endereco_entrega }}</span></p>
-        <a [href]="'geo:0,0?q=' + encodeURIComponent(corrida.endereco_entrega)" class="btn-nav">
-          <i class="ti ti-navigation"></i> Navegar
-        </a>
+        @if (isMotorista) {
+          <a [href]="'geo:0,0?q=' + encodeURIComponent(corrida.endereco_entrega)" class="btn-nav">
+            <i class="ti ti-navigation"></i> NAVEGAR
+          </a>
+        }
         <p class="card-label">CORRIDA</p>
         <p><i class="ti ti-clock"></i> <span>Chamada: {{ corrida.data_chamada | date:'dd/MM/yyyy HH:mm:ss' }}</span></p>
         <p><i class="ti ti-check"></i> <span>Aceite: {{ corrida.data_aceite | date:'dd/MM/yyyy HH:mm:ss' }}</span></p>
