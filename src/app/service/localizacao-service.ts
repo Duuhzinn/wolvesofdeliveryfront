@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Geolocation } from '@capacitor/geolocation';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { AppConstants } from '../app-constants';
 
 @Injectable({
@@ -17,7 +17,10 @@ export class LocalizacaoService {
 
     this.intervalo = setInterval(async () => {
       try {
-        const posicao = await Geolocation.getCurrentPosition();
+        const posicao = await Geolocation.getCurrentPosition({
+          enableHighAccuracy: true,
+          timeout: 10000
+        });
         const payload = {
           motoristaId,
           motoristaNome,
@@ -25,7 +28,9 @@ export class LocalizacaoService {
           lat: posicao.coords.latitude,
           lng: posicao.coords.longitude
         };
-        this.http.post(AppConstants.baseLocalizacaoURL, payload).subscribe();
+        const token = localStorage.getItem('tokenAutenticacao');
+        const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
+        this.http.post(AppConstants.baseLocalizacaoURL, payload, { headers }).subscribe();
       } catch (err) {
         console.log('Erro ao obter localização:', err);
       }

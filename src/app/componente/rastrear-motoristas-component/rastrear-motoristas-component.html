@@ -11,9 +11,9 @@
       <div class="select-wrapper">
         <select class="motorista-select" (change)="selecionarCorrida($event)">
           <option value="">Selecione um motorista...</option>
-          @for (corrida of corridasAtivas; track corrida.motoristaId) {
-            <option [value]="corrida.motoristaId">
-              🏍️ {{ corrida.motoristaNome }} — Corrida #{{ corrida.corridaId }}
+          @for (corrida of corridasAtivas; track corrida.id) {
+            <option [value]="corrida.id">
+              🏁 Corrida #{{ corrida.id }} — 🏍️ {{ corrida.motorista?.nome }}
             </option>
           }
         </select>
