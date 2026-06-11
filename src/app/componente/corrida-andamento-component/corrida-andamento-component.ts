@@ -13,6 +13,7 @@ import { UsuarioService } from '../../service/usuario-service';
 import { Subscription, take, timer } from 'rxjs';
 import { WebsocketService } from '../../service/websocket-service';
 import { FormsModule } from '@angular/forms';
+import { LocalizacaoService } from '../../service/localizacao-service';
 
 @Component({
   selector: 'app-corrida-andamento-component',
@@ -42,6 +43,7 @@ export class CorridaAndamentoComponent implements OnInit, OnDestroy {
     private cdr: ChangeDetectorRef,
     private websocketService: WebsocketService,
     private notificationState: NotificationStateService,
+    private localizacaoService: LocalizacaoService,
     @Inject(PLATFORM_ID) private platformId: Object,
   ) {}
 
@@ -262,6 +264,7 @@ export class CorridaAndamentoComponent implements OnInit, OnDestroy {
     this.usuarioService.patchAtualizarCorrida(corridaId).subscribe({
       next: (resp) => {
         console.log('Corrida atualizada:', resp);
+        this.localizacaoService.pararEnvioLocalizacao();
         this.paginaAtual = 0;
         this.corridas = [];
         this.carregarCorridas();

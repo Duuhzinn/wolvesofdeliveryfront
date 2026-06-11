@@ -8,6 +8,7 @@ import { FirebaseService } from './service/firebase-service';
 import { NotificationStateService } from './service/notificationstate-service';
 import { UsuarioService } from './service/usuario-service';
 import { WebsocketService } from './service/websocket-service';
+import { LocalizacaoService } from './service/localizacao-service'; // ✅ ADICIONADO
 import { Capacitor } from '@capacitor/core';
 import { PushNotifications } from '@capacitor/push-notifications';
 import { Haptics } from '@capacitor/haptics';
@@ -31,6 +32,7 @@ export class App implements OnInit {
     private notificationState: NotificationStateService,
     private usuarioService: UsuarioService,
     private websocketService: WebsocketService,
+    private localizacaoService: LocalizacaoService, // ✅ ADICIONADO
     private cdr: ChangeDetectorRef,
     @Inject(PLATFORM_ID) private platformId: Object,
   ) {
@@ -119,11 +121,13 @@ export class App implements OnInit {
     window.history.replaceState({}, '', '/home');
     if (isPlatformBrowser(this.platformId)) {
       const motoristaId = Number(localStorage.getItem('usuarioId'));
+      const motoristaNome = localStorage.getItem('nome') ?? 'Motorista'; // ✅ ADICIONADO
       const corridaId = Number(localStorage.getItem('corridaId'));
       //alert('corrida: ' + corridaId + 'Motorista: ' + motoristaId);
       this.usuarioService.patchAceitarCorrida(corridaId).subscribe({
         next: (resp) => {
           console.log('Corrida criada:', resp);
+          this.localizacaoService.iniciarEnvioLocalizacao(motoristaId, motoristaNome, corridaId); // ✅ ADICIONADO
           this.usuarioService.patchOcupado(Number(motoristaId)).subscribe({
             next: (resp) => console.log('Status atualizado:', resp),
             error: (err) => console.log('Erro ao atualizar status:', err),

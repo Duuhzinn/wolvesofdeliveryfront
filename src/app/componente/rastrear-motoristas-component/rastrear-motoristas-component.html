@@ -1,0 +1,33 @@
+<div class="container">
+  <div class="cards-container">
+
+    <div class="motorista-card">
+      <h2>🛰️ RASTREAR MOTORISTAS</h2>
+    </div>
+
+    @if (corridasAtivas.length === 0) {
+      <p class="sem-corridas">Nenhuma corrida em andamento no momento.</p>
+    } @else {
+      <div class="select-wrapper">
+        <select class="motorista-select" (change)="selecionarCorrida($event)">
+          <option value="">Selecione um motorista...</option>
+          @for (corrida of corridasAtivas; track corrida.motoristaId) {
+            <option [value]="corrida.motoristaId">
+              🏍️ {{ corrida.motoristaNome }} — Corrida #{{ corrida.corridaId }}
+            </option>
+          }
+        </select>
+      </div>
+    }
+
+    <div class="mapa-wrapper">
+      @if (!corridaSelecionada) {
+        <div class="mapa-placeholder">
+          <span>Selecione um motorista para ver no mapa</span>
+        </div>
+      }
+      <div id="mapa" [class.visivel]="corridaSelecionada"></div>
+    </div>
+
+  </div>
+</div>

@@ -13,6 +13,7 @@ export class WebsocketService {
   private atualizacaoSubscription: StompSubscription | null = null;
   private dashboardSubscription: StompSubscription | null = null;
   private dashboardSubscription2: StompSubscription | null = null;
+  private localizacaoSubscription: StompSubscription | null = null;
 
   // CALLBACKS REGISTRADOS
   private onConnectCallbacks: (() => void)[] = [];
@@ -149,6 +150,27 @@ export class WebsocketService {
     if (this.dashboardSubscription2) {
       this.dashboardSubscription2.unsubscribe();
       this.dashboardSubscription2 = null;
+    }
+  }
+
+  // ESCUTA LOCALIZAÇÃO DOS MOTORISTAS EM TEMPO REAL
+  conectarLocalizacao(callback: (payload: any) => void) {
+    this.ativarSeNecessario(() => {
+      if (this.localizacaoSubscription) {
+        this.localizacaoSubscription.unsubscribe();
+        this.localizacaoSubscription = null;
+      }
+      this.localizacaoSubscription = this.client.subscribe('/topic/localizacao', (message) => {
+        const payload = JSON.parse(message.body);
+        callback(payload);
+      });
+    });
+  }
+
+  desconectarLocalizacao() {
+    if (this.localizacaoSubscription) {
+      this.localizacaoSubscription.unsubscribe();
+      this.localizacaoSubscription = null;
     }
   }
 }

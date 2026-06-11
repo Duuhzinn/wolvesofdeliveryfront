@@ -95,4 +95,8 @@ public static dashBoardCliente(clienteId: number): string {
   return this.baseDashBoardURL + "/cliente/" + clienteId;
 }
 
+//BASE PARA MONTAR REQUISIÇÕES DE LOCALIZAÇÃO
+public static get baseLocalizacaoURL(): string {return this.baseServidor + "/v1/localizacao"}
+
+
 }
