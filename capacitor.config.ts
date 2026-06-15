@@ -6,6 +6,16 @@ const config: CapacitorConfig = {
   webDir: 'dist/wolvesofdelivery/browser',
   server: {
     androidScheme: 'https'
+  },
+  plugins: {
+    BackgroundRunner: {
+      label: 'com.wolvesofdelivery.background',
+      src: 'runner.js',
+      event: 'backgroundFetch',
+      repeat: true,
+      interval: 1,
+      autoStart: false,
+    }
   }
 };
 

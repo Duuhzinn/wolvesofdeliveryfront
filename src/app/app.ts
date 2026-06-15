@@ -8,7 +8,8 @@ import { FirebaseService } from './service/firebase-service';
 import { NotificationStateService } from './service/notificationstate-service';
 import { UsuarioService } from './service/usuario-service';
 import { WebsocketService } from './service/websocket-service';
-import { LocalizacaoService } from './service/localizacao-service'; // ✅ ADICIONADO
+import { LocalizacaoService } from './service/localizacao-service';
+import { App as CapacitorApp } from '@capacitor/app';
 import { Capacitor } from '@capacitor/core';
 import { PushNotifications } from '@capacitor/push-notifications';
 import { Haptics } from '@capacitor/haptics';
@@ -32,7 +33,7 @@ export class App implements OnInit {
     private notificationState: NotificationStateService,
     private usuarioService: UsuarioService,
     private websocketService: WebsocketService,
-    private localizacaoService: LocalizacaoService, // ✅ ADICIONADO
+    private localizacaoService: LocalizacaoService,
     private cdr: ChangeDetectorRef,
     @Inject(PLATFORM_ID) private platformId: Object,
   ) {
@@ -41,6 +42,7 @@ export class App implements OnInit {
     if (Capacitor.isNativePlatform() && !App.listenersRegistrados) {
       App.listenersRegistrados = true;
       this.registrarListenersNativos();
+      this.registrarListenerResume(); // ✅ ADICIONADO
     }
   }
 
@@ -76,6 +78,23 @@ export class App implements OnInit {
           this.notificationState.mostrarTelaCorrida();
           this.cdr.detectChanges();
         }, 1000);
+      }
+    });
+  }
+
+  // ✅ ADICIONADO: RETOMA O ENVIO DE LOCALIZAÇÃO QUANDO O APP VOLTA AO FOREGROUND
+  private registrarListenerResume() {
+    CapacitorApp.addListener('resume', () => {
+      if (isPlatformBrowser(this.platformId)) {
+        const statusMotorista = localStorage.getItem('statusMotorista');
+        const corridaId = Number(localStorage.getItem('corridaId'));
+        const motoristaId = Number(localStorage.getItem('usuarioId'));
+        const motoristaNome = localStorage.getItem('nome') ?? 'Motorista';
+
+        if (statusMotorista === '2' && corridaId) {
+          console.log('App retomado - reiniciando envio de localização');
+          this.localizacaoService.iniciarEnvioLocalizacao(motoristaId, motoristaNome, corridaId);
+        }
       }
     });
   }
@@ -121,13 +140,12 @@ export class App implements OnInit {
     window.history.replaceState({}, '', '/home');
     if (isPlatformBrowser(this.platformId)) {
       const motoristaId = Number(localStorage.getItem('usuarioId'));
-      const motoristaNome = localStorage.getItem('nome') ?? 'Motorista'; // ✅ ADICIONADO
+      const motoristaNome = localStorage.getItem('nome') ?? 'Motorista';
       const corridaId = Number(localStorage.getItem('corridaId'));
-      //alert('corrida: ' + corridaId + 'Motorista: ' + motoristaId);
       this.usuarioService.patchAceitarCorrida(corridaId).subscribe({
         next: (resp) => {
           console.log('Corrida criada:', resp);
-          this.localizacaoService.iniciarEnvioLocalizacao(motoristaId, motoristaNome, corridaId); // ✅ ADICIONADO
+          this.localizacaoService.iniciarEnvioLocalizacao(motoristaId, motoristaNome, corridaId);
           this.usuarioService.patchOcupado(Number(motoristaId)).subscribe({
             next: (resp) => console.log('Status atualizado:', resp),
             error: (err) => console.log('Erro ao atualizar status:', err),

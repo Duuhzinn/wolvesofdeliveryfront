@@ -15,9 +15,11 @@ export class RastrearMotoristasComponent implements OnInit, OnDestroy {
 
   corridasAtivas: any[] = [];
   corridaSelecionada: any = null;
+  sinalPerdido: boolean = false; // ✅ ADICIONADO
 
   private mapa: any = null;
   private marcador: any = null;
+  private timeoutSinal: any = null; // ✅ ADICIONADO
 
   constructor(
     private usuarioService: UsuarioService,
@@ -30,9 +32,16 @@ export class RastrearMotoristasComponent implements OnInit, OnDestroy {
   ngOnInit() {
     if (isPlatformBrowser(this.platformId)) {
       this.carregarCorridasEmAndamento();
+
       this.websocketService.conectarLocalizacao((payload: any) => {
         this.ngZone.run(() => {
           this.atualizarLocalizacao(payload);
+        });
+      });
+
+      this.websocketService.conectarAtualizacao(() => {
+        this.ngZone.run(() => {
+          this.recarregarCorridas();
         });
       });
     }
@@ -40,6 +49,8 @@ export class RastrearMotoristasComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.websocketService.desconectarLocalizacao();
+    this.websocketService.desconectarAtualizacao();
+    if (this.timeoutSinal) clearTimeout(this.timeoutSinal); // ✅ ADICIONADO
   }
 
   carregarCorridasEmAndamento() {
@@ -54,10 +65,48 @@ export class RastrearMotoristasComponent implements OnInit, OnDestroy {
     });
   }
 
+  recarregarCorridas() {
+    this.usuarioService.getCorridasAdmAndamento(0).subscribe({
+      next: (data: any) => {
+        this.ngZone.run(() => {
+          this.corridasAtivas = data.content;
+
+          if (this.corridaSelecionada) {
+            const aindaAtiva = this.corridasAtivas.find(c => c.id === this.corridaSelecionada.id);
+            if (!aindaAtiva) {
+              this.corridaSelecionada = null;
+              this.mapa = null;
+              this.marcador = null;
+              this.sinalPerdido = false; // ✅ ADICIONADO
+              if (this.timeoutSinal) clearTimeout(this.timeoutSinal); // ✅ ADICIONADO
+            }
+          }
+
+          this.cdr.detectChanges();
+        });
+      },
+      error: (err: any) => console.log('Erro ao recarregar corridas:', err),
+    });
+  }
+
   atualizarLocalizacao(payload: any) {
-    if (this.corridaSelecionada?.motorista?.id === payload.motoristaId) {
+    if (String(this.corridaSelecionada?.motorista?.id) === String(payload.motoristaId)) {
+      this.sinalPerdido = false; // ✅ ADICIONADO
       this.moverMarcador(payload.lat, payload.lng);
+      this.reiniciarTimeoutSinal(); // ✅ ADICIONADO
+      this.cdr.detectChanges(); // ✅ ADICIONADO
     }
+  }
+
+  // ✅ ADICIONADO: REINICIA O TIMER DE 15s
+  reiniciarTimeoutSinal() {
+    if (this.timeoutSinal) clearTimeout(this.timeoutSinal);
+    this.timeoutSinal = setTimeout(() => {
+      this.ngZone.run(() => {
+        this.sinalPerdido = true;
+        this.cdr.detectChanges();
+      });
+    }, 15000);
   }
 
   selecionarCorrida(event: Event) {
@@ -65,6 +114,8 @@ export class RastrearMotoristasComponent implements OnInit, OnDestroy {
     const corrida = this.corridasAtivas.find(c => c.id === corridaId);
     if (!corrida) return;
     this.corridaSelecionada = corrida;
+    this.sinalPerdido = false; // ✅ ADICIONADO
+    if (this.timeoutSinal) clearTimeout(this.timeoutSinal); // ✅ ADICIONADO
     setTimeout(() => {
       this.inicializarMapa(-23.5505, -46.6333);
     }, 100);

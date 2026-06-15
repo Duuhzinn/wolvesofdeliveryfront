@@ -10,7 +10,7 @@ import {
 } from '@angular/core';
 import { NotificationStateService } from '../../service/notificationstate-service';
 import { UsuarioService } from '../../service/usuario-service';
-import { Subscription, take, timer } from 'rxjs';
+import { Subscription, timer } from 'rxjs';
 import { WebsocketService } from '../../service/websocket-service';
 import { FormsModule } from '@angular/forms';
 import { LocalizacaoService } from '../../service/localizacao-service';
@@ -140,22 +140,22 @@ export class CorridaAndamentoComponent implements OnInit, OnDestroy {
   }
 
   confirmarEndereco() {
-  if (!this.enderecoEntrega) {
-    return;
-  } else {
-    this.modalEndereco = false;
-    this.chamarMotorista();
-    this.cdr.detectChanges();
+    if (!this.enderecoEntrega) {
+      return;
+    } else {
+      this.modalEndereco = false;
+      this.chamarMotorista();
+      this.cdr.detectChanges();
+    }
   }
-}
 
   cancelarCorrida() {
     this.pararTudo();
     this.modalChamandoMotorista = false;
 
-    if(this.motoristaAtual !== null){
+    if (this.motoristaAtual !== null) {
       this.usuarioService.patchCancelarChamada(this.motoristaAtual).subscribe();
-      this.motoristaAtual = null
+      this.motoristaAtual = null;
     }
   }
 
@@ -204,7 +204,6 @@ export class CorridaAndamentoComponent implements OnInit, OnDestroy {
     this.websocketService.conectarCorrida(onAceite, onRecusa);
   }
 
-  
   chamarMotorista() {
     this.modalChamandoMotorista = true;
     this.cdr.detectChanges();
@@ -212,7 +211,7 @@ export class CorridaAndamentoComponent implements OnInit, OnDestroy {
     this.usuarioService.getConsultaPrimeiroMotorista().subscribe({
       next: (motoristaId) => {
         if (motoristaId !== null) {
-          this.motoristaAtual = motoristaId //SALVA O MOTORISTA ATUAL NA VARIAVEL
+          this.motoristaAtual = motoristaId;
           const despachante = Number(localStorage.getItem('usuarioId'));
 
           this.usuarioService.patchChamandoMotorista(motoristaId).subscribe({
@@ -223,19 +222,16 @@ export class CorridaAndamentoComponent implements OnInit, OnDestroy {
                   localStorage.setItem('corridaId', resp.corridaId);
                   this.escutarWebSocket();
 
-                  // AGUARDA 1 MINUTO SEM RENOTIFICAR
                   this.timerSubscription = timer(60000).subscribe({
                     next: () => {
                       this.usuarioService.patchMarcarOffline(motoristaId).subscribe();
                       const corridaId = Number(localStorage.getItem('corridaId'));
-                      
-                      //ENVIAR A NOTIFICACAO DE CORRIDA PERDIDA E EXPIRA A CORRIDA
+
                       this.usuarioService.postEnviarNotificacaoPerdida(motoristaId, corridaId).subscribe({
-                         next: (resp: any) => console.log('Notificação de corrida perdida enviada:', resp),
-                         error: (err: any) => console.log('Erro ao enviar notificação perdida:', err),
+                        next: (resp: any) => console.log('Notificação de corrida perdida enviada:', resp),
+                        error: (err: any) => console.log('Erro ao enviar notificação perdida:', err),
                       });
-                      
-                      //EXPIRA A DORRIDA
+
                       this.usuarioService.patchExpirarCorrida(corridaId).subscribe({
                         next: (resp: any) => console.log('Corrida expirada!'),
                         error: (err: any) => console.log('Erro ao expirar corrida:', err),

@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit, PLATFORM_ID } from '@angular/core';
 import { LoginService } from '../service/login-service';
 import { FormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
 
 @Component({
   selector: 'app-login',
@@ -11,33 +11,37 @@ import { CommonModule } from '@angular/common';
   styleUrl: './login.css',
 })
 export class Login implements OnInit {
-
   usuario = { login: '', senha: '' };
   lembrarMe: boolean = false;
 
-  constructor(private loginService: LoginService) {}
+  constructor(
+    private loginService: LoginService,
+    @Inject(PLATFORM_ID) private platformId: Object,
+  ) {}
 
   ngOnInit(): void {
-    // CARREGA AS CREDENCIAIS SALVAS SE EXISTIREM
-    const loginSalvo = localStorage.getItem('savedLogin');
-    const senhaSalva = localStorage.getItem('savedSenha');
-    if (loginSalvo && senhaSalva) {
-      this.usuario.login = loginSalvo;
-      this.usuario.senha = senhaSalva;
-      this.lembrarMe = true;
+    if (isPlatformBrowser(this.platformId)) {
+      // CARREGA AS CREDENCIAIS SALVAS SE EXISTIREM
+      const loginSalvo = localStorage.getItem('savedLogin');
+      const senhaSalva = localStorage.getItem('savedSenha');
+      if (loginSalvo && senhaSalva) {
+        this.usuario.login = loginSalvo;
+        this.usuario.senha = senhaSalva;
+        this.lembrarMe = true;
+      }
     }
   }
 
   public login() {
-    if (this.lembrarMe) {
-      // SALVA AS CREDENCIAIS
-      localStorage.setItem('savedLogin', this.usuario.login);
-      localStorage.setItem('savedSenha', this.usuario.senha);
-    } else {
-      // REMOVE AS CREDENCIAIS SALVAS
-      localStorage.removeItem('savedLogin');
-      localStorage.removeItem('savedSenha');
+    if (isPlatformBrowser(this.platformId)) {
+      if (this.lembrarMe) {
+        localStorage.setItem('savedLogin', this.usuario.login);
+        localStorage.setItem('savedSenha', this.usuario.senha);
+      } else {
+        localStorage.removeItem('savedLogin');
+        localStorage.removeItem('savedSenha');
+      }
     }
-    this.loginService.login(this.usuario);
+    this.loginService.login(this.usuario); // ✅ FORA do if
   }
 }

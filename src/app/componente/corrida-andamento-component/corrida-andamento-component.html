@@ -25,14 +25,16 @@
         <p class="card-label">CLIENTE</p>
         <p><i class="ti ti-building-store"></i> <span>{{ corrida.cliente?.nome }}</span></p>
         @if (isMotorista) {
-          <a [href]="'geo:0,0?q=' + encodeURIComponent(corrida.cliente?.endereco)" class="btn-nav">
-          <i class="ti ti-navigation"></i> NAVEGAR
+          <a [href]="'https://www.google.com/maps/dir/?api=1&destination=' + encodeURIComponent(corrida.cliente?.endereco)" 
+            target="_blank" class="btn-nav">
+            <i class="ti ti-navigation"></i> NAVEGAR
           </a>
         }
         <p class="card-label">ENTREGA</p>
         <p><i class="ti ti-map-pin"></i> <span>{{ corrida.endereco_entrega }}</span></p>
         @if (isMotorista) {
-          <a [href]="'geo:0,0?q=' + encodeURIComponent(corrida.endereco_entrega)" class="btn-nav">
+          <a [href]="'https://www.google.com/maps/dir/?api=1&destination=' + encodeURIComponent(corrida.endereco_entrega)" 
+            target="_blank" class="btn-nav">
             <i class="ti ti-navigation"></i> NAVEGAR
           </a>
         }
@@ -98,3 +100,4 @@
     <button class="btn-ok" (click)="fecharModalSemMotorista()">OK</button>
   </div>
 </div>
+

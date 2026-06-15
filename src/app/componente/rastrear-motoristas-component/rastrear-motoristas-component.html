@@ -20,6 +20,12 @@
       </div>
     }
 
+    @if (corridaSelecionada && sinalPerdido) {
+      <div class="sinal-perdido">
+        ⚠️ Sinal perdido — última posição conhecida
+      </div>
+    }
+
     <div class="mapa-wrapper">
       @if (!corridaSelecionada) {
         <div class="mapa-placeholder">
