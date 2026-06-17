@@ -98,5 +98,12 @@ public static dashBoardCliente(clienteId: number): string {
 //BASE PARA MONTAR REQUISIÇÕES DE LOCALIZAÇÃO
 public static get baseLocalizacaoURL(): string {return this.baseServidor + "/v1/localizacao"}
 
+//BASE PARA MONTAR REQUISIÇÕES DE LOGRADOUROS
+public static get baseLogradouroURL(): string {return this.baseServidor + "/v1/logradouros"}
+public static listarLogradouros(pagina: number): string {return this.baseLogradouroURL + "/list/" + pagina}
+public static buscarLogradouro(rua: string, pagina: number): string {return this.baseLogradouroURL + "/search/" + rua + "/" + pagina}
+public static get salvarLogradouro(): string {return this.baseLogradouroURL + "/save"}
+public static deletarLogradouro(id: number): string {return this.baseLogradouroURL + "/delete/" + id}
+public static get salvarTodosLogradouros(): string {return this.baseLogradouroURL + "/saveAll"}
 
 }

@@ -1,0 +1,90 @@
+<div class="container">
+  <div class="cards-container">
+
+    <div class="motorista-card header-card">
+      <h2>LOGRADOUROS CADASTRADOS</h2>
+      <div class="input-busca">
+        <input type="text" placeholder="Digite o nome da rua..." [(ngModel)]="termoBusca" (input)="buscar()"/>
+        <button class="btn-novo" (click)="chamarModalNovo()">Novo</button>
+      </div>
+    </div>
+
+    @if (logradouros.length === 0) {
+      <p class="sem-registros">Nenhum logradouro cadastrado.</p>
+    }
+
+    @for (l of logradouros; track l.id) {
+    <div class="corrida-card">
+      <div class="card-top">
+        <span class="card-id">#{{ l.id }}</span>
+        <span class="tag-cep">{{ l.cep }}</span>
+      </div>
+      <div class="card-body">
+        <p><i class="ti ti-road"></i> <span>{{ l.rua }}</span></p>
+        <p><i class="ti ti-building"></i> <span>{{ l.bairro }}</span></p>
+        <p><i class="ti ti-map-pin"></i> <span>{{ l.cidade }}</span></p>
+      </div>
+      <div class="card-footer">
+        <button class="btn-deletar" (click)="deletar(l.id)">Deletar</button>
+      </div>
+    </div>
+    }
+
+  </div>
+</div>
+
+<!-- MODAL INSERÇÃO -->
+<div class="modal-overlay" *ngIf="modalInsertEdit">
+  <div class="driver-modal modal-lg" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h5 class="modal-title">NOVO LOGRADOURO</h5>
+      <button type="button" class="close" (click)="fecharModal()"><span>&times;</span></button>
+    </div>
+    <div class="modal-body">
+      <form>
+        <div class="input-container-flex">
+          <div class="field-group group-full">
+            <label class="form-label">RUA</label>
+            <input type="text" class="form-control" [(ngModel)]="logradouro.rua" name="rua" placeholder="Nome da rua"/>
+          </div>
+        </div>
+        <div class="input-container-flex mt-3">
+          <div class="field-group group-full">
+            <label class="form-label">BAIRRO</label>
+            <input type="text" class="form-control" [(ngModel)]="logradouro.bairro" name="bairro" placeholder="Nome do bairro"/>
+          </div>
+        </div>
+        <div class="input-container-flex mt-3">
+          <div class="field-group group-nome">
+            <label class="form-label">CIDADE</label>
+            <input type="text" class="form-control" [(ngModel)]="logradouro.cidade" name="cidade" placeholder="Nome da cidade"/>
+          </div>
+          <div class="field-group group-id">
+            <label class="form-label">CEP</label>
+            <input type="text" class="form-control" [(ngModel)]="logradouro.cep" name="cep" placeholder="00000-000"/>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="modal-footer">
+      <!-- ✅ BOTÃO IMPORTAR EXCEL NO FOOTER DO MODAL -->
+      <input type="file" #inputExcel accept=".xlsx,.xls" style="display:none" (change)="importarExcel($event)"/>
+      <button class="btn-importar" (click)="inputExcel.click()" [disabled]="importando">
+        {{ importando ? 'Importando ' + importadosCount + '...' : '📊 Importar Excel' }}
+      </button>
+      <div style="flex:1"></div>
+      <button type="button" class="btn-Fechar" (click)="fecharModal()">Fechar</button>
+      <button type="button" class="btn-Salvar" (click)="salvar()" [disabled]="!logradouro.rua || !logradouro.bairro || !logradouro.cidade || !logradouro.cep">Salvar</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL SUCESSO -->
+<div class="modal-overlay" *ngIf="modalSucess">
+  <div class="modal-atencao" (click)="$event.stopPropagation()">
+    <div class="success-icon"><span>✓</span></div>
+    <h3>Sucesso!</h3>
+    <p>Logradouro salvo com sucesso.</p>
+    <button type="button" class="btn-Salvar" (click)="fecharModal()">Ok, entendi!</button>
+  </div>
+</div>

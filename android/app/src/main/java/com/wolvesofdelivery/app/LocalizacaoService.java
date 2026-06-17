@@ -7,8 +7,9 @@ import android.app.Service;
 import android.content.Intent;
 import android.location.Location;
 import android.os.Build;
+import android.os.Handler;
+import android.os.HandlerThread;
 import android.os.IBinder;
-import android.os.Looper;
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -30,6 +31,7 @@ public class LocalizacaoService extends Service {
   private FusedLocationProviderClient fusedLocationClient;
   private LocationCallback locationCallback;
   private ExecutorService executor = Executors.newSingleThreadExecutor();
+  private HandlerThread handlerThread; // ✅ ADICIONADO
 
   private String motoristaId;
   private String motoristaNome;
@@ -59,6 +61,10 @@ public class LocalizacaoService extends Service {
   private void iniciarRastreamento() {
     fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
+    handlerThread = new HandlerThread("LocationThread");
+    handlerThread.start();
+    Handler locationHandler = new Handler(handlerThread.getLooper());
+
     LocationRequest locationRequest = new LocationRequest.Builder(3000)
       .setPriority(Priority.PRIORITY_HIGH_ACCURACY)
       .setMinUpdateIntervalMillis(1000)
@@ -81,13 +87,14 @@ public class LocalizacaoService extends Service {
     };
 
     try {
-      fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, Looper.getMainLooper());
+      fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, locationHandler.getLooper());
     } catch (SecurityException e) {
       e.printStackTrace();
     }
   }
 
   private void enviarLocalizacao(double lat, double lng) {
+    if (executor.isShutdown()) return;
     executor.execute(() -> {
       try {
         URL url = new URL("https://wolvesofdeliveryapi.onrender.com/wolvesofdeliveryAPI/v1/localizacao");
@@ -133,6 +140,9 @@ public class LocalizacaoService extends Service {
     super.onDestroy();
     if (fusedLocationClient != null && locationCallback != null) {
       fusedLocationClient.removeLocationUpdates(locationCallback);
+    }
+    if (handlerThread != null) {
+      handlerThread.quitSafely();
     }
     executor.shutdown();
   }
