@@ -1,6 +1,5 @@
 <div class="container">
   <div class="cards-container">
-
     <div class="motorista-card">
       <h2>🛰️ RASTREAR MOTORISTAS</h2>
     </div>
@@ -11,19 +10,15 @@
       <div class="select-wrapper">
         <select class="motorista-select" (change)="selecionarCorrida($event)">
           <option value="">Selecione um motorista...</option>
-          @for (corrida of corridasAtivas; track corrida.id) {
-            <option [value]="corrida.id">
-              🏁 Corrida #{{ corrida.id }} — 🏍️ {{ corrida.motorista?.nome }}
-            </option>
+          @for (corrida of corridasUnicas; track corrida.motorista?.id) {
+            <option [value]="corrida.id">🐺 {{ corrida.motorista?.nome }}</option>
           }
         </select>
       </div>
     }
 
     @if (corridaSelecionada && sinalPerdido) {
-      <div class="sinal-perdido">
-        ⚠️ Sinal perdido — última posição conhecida
-      </div>
+      <div class="sinal-perdido">⚠️ Sinal perdido — última posição conhecida</div>
     }
 
     <div class="mapa-wrapper">
@@ -34,6 +29,5 @@
       }
       <div id="mapa" [class.visivel]="corridaSelecionada"></div>
     </div>
-
   </div>
 </div>

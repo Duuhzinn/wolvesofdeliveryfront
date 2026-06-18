@@ -14,6 +14,7 @@ import { Subscription, timer } from 'rxjs';
 import { WebsocketService } from '../../service/websocket-service';
 import { FormsModule } from '@angular/forms';
 import { LocalizacaoService } from '../../service/localizacao-service';
+import { LogradouroService } from '../../service/logradouro-service';
 
 @Component({
   selector: 'app-corrida-andamento-component',
@@ -25,7 +26,6 @@ export class CorridaAndamentoComponent implements OnInit, OnDestroy {
   modalChamandoMotorista: boolean = false;
   modalSemMotorista: boolean = false;
   modalEndereco: boolean = false;
-  enderecoEntrega: string = '';
   private aguardandoAceite: boolean = false;
 
   paginaAtual: number = 0;
@@ -38,12 +38,18 @@ export class CorridaAndamentoComponent implements OnInit, OnDestroy {
 
   corridas: any[] = [];
 
+  todasRuas: any[] = [];
+  sugestoes: any[] = [];
+  mostrarSugestoes: boolean = false;
+  indiceAtivo: number = 0;
+  entregas: { rua: string; numero: string }[] = [{ rua: '', numero: '' }];
+
   constructor(
     private usuarioService: UsuarioService,
     private cdr: ChangeDetectorRef,
     private websocketService: WebsocketService,
-    private notificationState: NotificationStateService,
     private localizacaoService: LocalizacaoService,
+    private logradouroService: LogradouroService,
     @Inject(PLATFORM_ID) private platformId: Object,
   ) {}
 
@@ -128,25 +134,51 @@ export class CorridaAndamentoComponent implements OnInit, OnDestroy {
   }
 
   abrirModalEndereco() {
-    this.enderecoEntrega = '';
+    this.entregas = [{ rua: '', numero: '' }];
+    this.sugestoes = [];
+    this.mostrarSugestoes = false;
     this.modalEndereco = true;
+
+    if (this.todasRuas.length === 0) {
+      this.logradouroService.listar().subscribe({
+        next: (data) => {
+          this.todasRuas = data;
+          this.cdr.detectChanges();
+        },
+      });
+    }
     this.cdr.detectChanges();
   }
 
   fecharModalEndereco() {
     this.modalEndereco = false;
-    this.enderecoEntrega = '';
+    this.entregas = [{ rua: '', numero: '' }];
+    this.sugestoes = [];
+    this.mostrarSugestoes = false;
     this.cdr.detectChanges();
   }
 
   confirmarEndereco() {
-    if (!this.enderecoEntrega) {
-      return;
-    } else {
-      this.modalEndereco = false;
-      this.chamarMotorista();
-      this.cdr.detectChanges();
-    }
+    const validas = this.entregas.filter((e) => e.rua && e.numero);
+    if (validas.length === 0) return;
+
+    // SALVA OS ENDEREÇOS PARA REUSO NO CASO DE REDESPACHO
+    const enderecos = validas.map((e) => e.rua + ', ' + e.numero);
+    localStorage.setItem('enderecosEntrega', JSON.stringify(enderecos));
+
+    this.modalEndereco = false;
+    this.chamarMotorista();
+    this.cdr.detectChanges();
+  }
+
+  adicionarEntrega() {
+    this.entregas.push({ rua: '', numero: '' });
+    this.cdr.detectChanges();
+  }
+
+  removerEntrega(index: number) {
+    this.entregas.splice(index, 1);
+    this.cdr.detectChanges();
   }
 
   cancelarCorrida() {
@@ -154,9 +186,22 @@ export class CorridaAndamentoComponent implements OnInit, OnDestroy {
     this.modalChamandoMotorista = false;
 
     if (this.motoristaAtual !== null) {
-      this.usuarioService.patchCancelarChamada(this.motoristaAtual).subscribe();
+      const corridaIdsRaw = localStorage.getItem('corridaIds');
+      const corridaIds: number[] = corridaIdsRaw ? JSON.parse(corridaIdsRaw) : [];
+
+      if (corridaIds.length > 0) {
+        this.usuarioService
+          .patchCancelarChamadaMultipla(this.motoristaAtual, corridaIds)
+          .subscribe();
+      } else {
+        this.usuarioService.patchCancelarChamada(this.motoristaAtual).subscribe();
+      }
       this.motoristaAtual = null;
     }
+
+    localStorage.removeItem('corridaIds');
+    localStorage.removeItem('corridaId');
+    localStorage.removeItem('enderecosEntrega');
   }
 
   fecharModalSemMotorista() {
@@ -173,7 +218,48 @@ export class CorridaAndamentoComponent implements OnInit, OnDestroy {
     this.websocketService.desconectarCorrida();
   }
 
-  private escutarWebSocket() {
+  private iniciarTimer(motoristaId: number) {
+    this.timerSubscription = timer(60000).subscribe({
+      next: () => {
+        this.usuarioService.patchMarcarOffline(motoristaId).subscribe();
+
+        const corridaIdsRaw = localStorage.getItem('corridaIds');
+        const corridaIds: number[] = corridaIdsRaw ? JSON.parse(corridaIdsRaw) : [];
+        const corridaId = Number(localStorage.getItem('corridaId'));
+
+        if (corridaIds.length > 0) {
+          this.usuarioService.postEnviarNotificacaoPerdida(motoristaId, corridaIds[0]).subscribe({
+            next: (resp: any) => console.log('Notificação de corrida perdida enviada:', resp),
+            error: (err: any) => console.log('Erro ao enviar notificação perdida:', err),
+          });
+          this.usuarioService.patchExpirarCorridasMultiplas(corridaIds).subscribe({
+            next: (resp: any) => console.log('Corridas expiradas!'),
+            error: (err: any) => console.log('Erro ao expirar corridas:', err),
+          });
+        } else {
+          this.usuarioService.postEnviarNotificacaoPerdida(motoristaId, corridaId).subscribe({
+            next: (resp: any) => console.log('Notificação de corrida perdida enviada:', resp),
+            error: (err: any) => console.log('Erro ao enviar notificação perdida:', err),
+          });
+          this.usuarioService.patchExpirarCorrida(corridaId).subscribe({
+            next: (resp: any) => console.log('Corrida expirada!'),
+            error: (err: any) => console.log('Erro ao expirar corrida:', err),
+          });
+        }
+
+        // EXPIROU — LIMPA E MOSTRA MODAL SEM MOTORISTA
+        localStorage.removeItem('corridaIds');
+        localStorage.removeItem('corridaId');
+        localStorage.removeItem('enderecosEntrega');
+        this.pararTudo();
+        this.modalChamandoMotorista = false;
+        this.modalSemMotorista = true;
+        this.cdr.detectChanges();
+      },
+    });
+  }
+
+  private escutarWebSocket(motoristaId: number) {
     if (!isPlatformBrowser(this.platformId)) return;
     if (this.aguardandoAceite) return;
     this.aguardandoAceite = true;
@@ -191,14 +277,34 @@ export class CorridaAndamentoComponent implements OnInit, OnDestroy {
       }, 0);
     };
 
-    // CALLBACK DE RECUSA
+    // CALLBACK DE RECUSA — backend já passou as corridas pro próximo, só reinicia o timer
     const onRecusa = () => {
       if (this.timerSubscription) {
         this.timerSubscription.unsubscribe();
         this.timerSubscription = null;
       }
       this.aguardandoAceite = false;
-      this.chamarMotorista();
+
+      // BUSCA O PROXIMO MOTORISTA QUE O BACKEND JA DEFINIU
+      const corridaIdsRaw = localStorage.getItem('corridaIds');
+      const corridaIds: number[] = corridaIdsRaw ? JSON.parse(corridaIdsRaw) : [];
+
+      if (corridaIds.length > 0) {
+        // BUSCA O MOTORISTA ATUAL DAS CORRIDAS
+        this.usuarioService.getConsultaPrimeiroMotorista().subscribe({
+          next: (proximoMotoristaId) => {
+            if (proximoMotoristaId !== null) {
+              this.motoristaAtual = proximoMotoristaId;
+              this.escutarWebSocket(proximoMotoristaId);
+              this.iniciarTimer(proximoMotoristaId);
+            } else {
+              this.modalChamandoMotorista = false;
+              this.modalSemMotorista = true;
+              this.cdr.detectChanges();
+            }
+          },
+        });
+      }
     };
 
     this.websocketService.conectarCorrida(onAceite, onRecusa);
@@ -216,34 +322,25 @@ export class CorridaAndamentoComponent implements OnInit, OnDestroy {
 
           this.usuarioService.patchChamandoMotorista(motoristaId).subscribe({
             next: () => {
-              this.usuarioService.postEnviarNotificacao(motoristaId, despachante, this.enderecoEntrega).subscribe({
-                next: (resp) => {
-                  //alert('Notificação enviada');
-                  localStorage.setItem('corridaId', resp.corridaId);
-                  this.escutarWebSocket();
+              const enderecosRaw = localStorage.getItem('enderecosEntrega');
+              const enderecos: string[] = enderecosRaw
+                ? JSON.parse(enderecosRaw)
+                : this.entregas
+                    .filter((e) => e.rua && e.numero)
+                    .map((e) => e.rua + ', ' + e.numero);
 
-                  this.timerSubscription = timer(60000).subscribe({
-                    next: () => {
-                      this.usuarioService.patchMarcarOffline(motoristaId).subscribe();
-                      const corridaId = Number(localStorage.getItem('corridaId'));
-
-                      this.usuarioService.postEnviarNotificacaoPerdida(motoristaId, corridaId).subscribe({
-                        next: (resp: any) => console.log('Notificação de corrida perdida enviada:', resp),
-                        error: (err: any) => console.log('Erro ao enviar notificação perdida:', err),
-                      });
-
-                      this.usuarioService.patchExpirarCorrida(corridaId).subscribe({
-                        next: (resp: any) => console.log('Corrida expirada!'),
-                        error: (err: any) => console.log('Erro ao expirar corrida:', err),
-                      });
-
-                      this.pararTudo();
-                      this.chamarMotorista();
-                    },
-                  });
-                },
-                error: (err) => console.log('Erro ao enviar notificação:', err),
-              });
+              this.usuarioService
+                .postEnviarNotificacaoMultipla(motoristaId, despachante, enderecos)
+                .subscribe({
+                  next: (resp) => {
+                    //alert('Notificação enviada');
+                    localStorage.setItem('corridaId', resp.corridaIds[0]);
+                    localStorage.setItem('corridaIds', JSON.stringify(resp.corridaIds));
+                    this.escutarWebSocket(motoristaId);
+                    this.iniciarTimer(motoristaId);
+                  },
+                  error: (err) => console.log('Erro ao enviar notificação:', err),
+                });
             },
           });
         } else {
@@ -271,5 +368,53 @@ export class CorridaAndamentoComponent implements OnInit, OnDestroy {
 
   encodeURIComponent(str: string): string {
     return encodeURIComponent(str);
+  }
+
+  onFocarEndereco(index: number) {
+    this.indiceAtivo = index;
+    if (this.entregas[index].rua.length === 0) {
+      this.mostrarSugestoes = false;
+      return;
+    }
+    this.sugestoes = this.todasRuas.filter(
+      (r, i, arr) => arr.findIndex((x) => x.rua === r.rua) === i,
+    );
+    this.mostrarSugestoes = this.sugestoes.length > 0;
+    this.cdr.detectChanges();
+  }
+
+  //BUSCANDO O ENDEREÇO DIGITADO
+  onDigitarEndereco(valor: string, index: number) {
+    this.indiceAtivo = index;
+    this.entregas[index].rua = valor.toUpperCase();
+
+    if (valor.length === 0) {
+      this.sugestoes = [];
+      this.mostrarSugestoes = false;
+      this.cdr.detectChanges();
+      return;
+    }
+
+    const filtradas = this.todasRuas.filter((r) =>
+      r.rua.toUpperCase().includes(this.entregas[index].rua),
+    );
+
+    this.sugestoes = filtradas.filter((r, i, arr) => arr.findIndex((x) => x.rua === r.rua) === i);
+    this.mostrarSugestoes = this.sugestoes.length > 0;
+    this.cdr.detectChanges();
+  }
+
+  selecionarLogradouro(logradouro: any) {
+    this.entregas[this.indiceAtivo].rua = logradouro.rua.toUpperCase();
+    this.sugestoes = [];
+    this.mostrarSugestoes = false;
+    this.cdr.detectChanges();
+  }
+
+  fecharSugestoes() {
+    setTimeout(() => {
+      this.mostrarSugestoes = false;
+      this.cdr.detectChanges();
+    }, 200);
   }
 }

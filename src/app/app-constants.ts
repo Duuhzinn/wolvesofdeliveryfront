@@ -43,6 +43,10 @@ public static lostRace(motoristaID: number, corridaID: number): string {
 public static acceptRace(corridaId: number): string {
   return this.basePushNotification + "/acceptRace/" + corridaId
 }
+public static sendMultiple(motoristaID: number, despachanteId: number): string {
+  return this.basePushNotification + "/sendMultiple/" + motoristaID + "/" + despachanteId;
+}
+public static get acceptMultiple(): string { return this.basePushNotification + "/acceptMultiple" }
 
 
 //BASE PARA MONTAR AS REQUISIÇÕES DA CORRIDA
@@ -64,6 +68,12 @@ public static allRaceFinished(): string {return this.baseRaceURL + "/allRaceFini
 public static updateRace(corridaId: number): string{return this.baseRaceURL + "/updateRace/" + corridaId}
 public static cancelCall(motoristaAtual: number): string {return this.baseRaceURL + "/cancelCall/" + motoristaAtual}
 public static expireRace(corridaId: number): string{return this.baseRaceURL + "/expireRace/" + corridaId}
+public static cancelMultiple(motoristaId: number): string { return this.baseRaceURL + "/cancelMultiple/" + motoristaId }
+public static expireMultiple(): string { return this.baseRaceURL + "/expireMultiple" }
+public static recusarMultiplas(motoristaId: number, despachanteId: number): string {
+  return this.baseDriveURL + "/recusarMultiplas/" + motoristaId + "/" + despachanteId;
+}
+
 
 //BASE MATA MONTAR REQUISIÇÕES DAS CONFIGURAÇÕES
 public static get baseConfigURL(): string {return this.baseServidor + "/v1/configuration"}
@@ -105,5 +115,6 @@ public static buscarLogradouro(rua: string, pagina: number): string {return this
 public static get salvarLogradouro(): string {return this.baseLogradouroURL + "/save"}
 public static deletarLogradouro(id: number): string {return this.baseLogradouroURL + "/delete/" + id}
 public static get salvarTodosLogradouros(): string {return this.baseLogradouroURL + "/saveAll"}
+public static get listarTodosLogradouros(): string { return this.baseLogradouroURL + "/listAll" }
 
 }

@@ -25,7 +25,7 @@ export class RastrearMotoristasComponent implements OnInit, OnDestroy {
   sinalPerdido: boolean = false;
 
   private mapa: any = null;
-  private marcadores: Map<string, any> = new Map(); // ✅ MAPA DE MARCADORES POR MOTORISTA
+  private marcadores: Map<string, any> = new Map();
   private timeoutSinal: any = null;
 
   constructor(
@@ -78,10 +78,10 @@ export class RastrearMotoristasComponent implements OnInit, OnDestroy {
         this.ngZone.run(() => {
           this.corridasAtivas = data.content;
 
-          // ✅ REMOVE MARCADORES DE CORRIDAS QUE NÃO ESTÃO MAIS ATIVAS
+          // REMOVE MARCADORES DE CORRIDAS QUE NÃO ESTÃO MAIS ATIVAS
           this.marcadores.forEach((marcador, motoristaId) => {
             const aindaAtivo = this.corridasAtivas.find(
-              c => String(c.motorista?.id) === motoristaId
+              (c) => String(c.motorista?.id) === motoristaId,
             );
             if (!aindaAtivo) {
               marcador.map = null;
@@ -90,7 +90,7 @@ export class RastrearMotoristasComponent implements OnInit, OnDestroy {
           });
 
           if (this.corridaSelecionada) {
-            const aindaAtiva = this.corridasAtivas.find(c => c.id === this.corridaSelecionada.id);
+            const aindaAtiva = this.corridasAtivas.find((c) => c.id === this.corridaSelecionada.id);
             if (!aindaAtiva) {
               this.corridaSelecionada = null;
               this.sinalPerdido = false;
@@ -108,12 +108,12 @@ export class RastrearMotoristasComponent implements OnInit, OnDestroy {
   atualizarLocalizacao(payload: any) {
     const motoristaId = String(payload.motoristaId);
 
-    // ✅ ATUALIZA OU CRIA MARCADOR PARA ESSE MOTORISTA
+    // ATUALIZA OU CRIA MARCADOR PARA ESSE MOTORISTA
     if (this.mapa) {
       if (this.marcadores.has(motoristaId)) {
         this.marcadores.get(motoristaId).position = { lat: payload.lat, lng: payload.lng };
       } else {
-        const corrida = this.corridasAtivas.find(c => String(c.motorista?.id) === motoristaId);
+        const corrida = this.corridasAtivas.find((c) => String(c.motorista?.id) === motoristaId);
         const nome = corrida?.motorista?.nome ?? 'Motorista';
         const markerEl = document.createElement('div');
         markerEl.style.cssText = 'display:flex;flex-direction:column;align-items:center;gap:2px;';
@@ -132,7 +132,7 @@ export class RastrearMotoristasComponent implements OnInit, OnDestroy {
       }
     }
 
-    // ✅ SE É O MOTORISTA SELECIONADO, CENTRALIZA E ATUALIZA SINAL
+    // SE É O MOTORISTA SELECIONADO, CENTRALIZA E ATUALIZA SINAL
     if (String(this.corridaSelecionada?.motorista?.id) === motoristaId) {
       this.sinalPerdido = false;
       this.mapa?.panTo({ lat: payload.lat, lng: payload.lng });
@@ -174,9 +174,19 @@ export class RastrearMotoristasComponent implements OnInit, OnDestroy {
       mapId: 'DEMO_MAP_ID',
     });
 
-    // ✅ RECRIA TODOS OS MARCADORES EXISTENTES NO NOVO MAPA
+    // RECRIA TODOS OS MARCADORES EXISTENTES NO NOVO MAPA
     this.marcadores.forEach((marcador, motoristaId) => {
       marcador.map = this.mapa;
+    });
+  }
+
+  get corridasUnicas(): any[] {
+    const vistas = new Set<number>();
+    return this.corridasAtivas.filter((c) => {
+      const id = c.motorista?.id;
+      if (vistas.has(id)) return false;
+      vistas.add(id);
+      return true;
     });
   }
 }

@@ -42,7 +42,7 @@ export class App implements OnInit {
     if (Capacitor.isNativePlatform() && !App.listenersRegistrados) {
       App.listenersRegistrados = true;
       this.registrarListenersNativos();
-      this.registrarListenerResume(); // ✅ ADICIONADO
+      this.registrarListenerResume();
     }
   }
 
@@ -53,8 +53,15 @@ export class App implements OnInit {
       if (title === 'Nova Corrida 🏍️') {
         const corridaId = data?.['corridaId'];
         const despachanteId = data?.['despachanteId'];
+        const corridaIdsRaw = data?.['corridaIds'];
+
         if (corridaId) localStorage.setItem('corridaId', corridaId);
         if (despachanteId) localStorage.setItem('despachanteId', despachanteId);
+        if (corridaIdsRaw) {
+          const ids = corridaIdsRaw.split(',').map(Number);
+          localStorage.setItem('corridaIds', JSON.stringify(ids));
+        }
+
         Haptics.vibrate({ duration: 1000 });
         this.notificationState.mostrarTelaCorrida();
         this.cdr.detectChanges();
@@ -72,8 +79,15 @@ export class App implements OnInit {
       if (title === 'Nova Corrida 🏍️') {
         const corridaId = data?.['corridaId'];
         const despachanteId = data?.['despachanteId'];
+        const corridaIdsRaw = data?.['corridaIds'];
+
         if (corridaId) localStorage.setItem('corridaId', corridaId);
         if (despachanteId) localStorage.setItem('despachanteId', despachanteId);
+        if (corridaIdsRaw) {
+          const ids = corridaIdsRaw.split(',').map(Number);
+          localStorage.setItem('corridaIds', JSON.stringify(ids));
+        }
+
         setTimeout(() => {
           this.notificationState.mostrarTelaCorrida();
           this.cdr.detectChanges();
@@ -82,7 +96,7 @@ export class App implements OnInit {
     });
   }
 
-  // ✅ ADICIONADO: RETOMA O ENVIO DE LOCALIZAÇÃO QUANDO O APP VOLTA AO FOREGROUND
+  // ✅ RETOMA O ENVIO DE LOCALIZAÇÃO QUANDO O APP VOLTA AO FOREGROUND
   private registrarListenerResume() {
     CapacitorApp.addListener('resume', () => {
       if (isPlatformBrowser(this.platformId)) {
@@ -142,9 +156,13 @@ export class App implements OnInit {
       const motoristaId = Number(localStorage.getItem('usuarioId'));
       const motoristaNome = localStorage.getItem('nome') ?? 'Motorista';
       const corridaId = Number(localStorage.getItem('corridaId'));
-      this.usuarioService.patchAceitarCorrida(corridaId).subscribe({
+
+      const corridaIdsRaw = localStorage.getItem('corridaIds');
+      const corridaIds: number[] = corridaIdsRaw ? JSON.parse(corridaIdsRaw) : [corridaId];
+
+      this.usuarioService.patchAceitarCorridasMultiplas(corridaIds).subscribe({
         next: (resp) => {
-          console.log('Corrida criada:', resp);
+          console.log('Corridas aceitas:', resp);
           this.localizacaoService.iniciarEnvioLocalizacao(motoristaId, motoristaNome, corridaId);
           this.usuarioService.patchOcupado(Number(motoristaId)).subscribe({
             next: (resp) => console.log('Status atualizado:', resp),
@@ -153,7 +171,7 @@ export class App implements OnInit {
           this.cdr.detectChanges();
           this.router.navigate(['/corridas', 'andamento']);
         },
-        error: (err) => console.log('Erro ao aceitar corrida:', err),
+        error: (err) => console.log('Erro ao aceitar corridas:', err),
       });
     }
   }
@@ -166,14 +184,19 @@ export class App implements OnInit {
     if (isPlatformBrowser(this.platformId)) {
       const motoristaId = Number(localStorage.getItem('usuarioId'));
       const despachanteId = Number(localStorage.getItem('despachanteId'));
-      const corridaId = Number(localStorage.getItem('corridaId'));
 
-      this.usuarioService.patchRecusarCorrida(motoristaId, corridaId, despachanteId).subscribe({
-        next: (resp) => {
-          console.log('Corrida recusada:', resp);
-          this.cdr.detectChanges();
-        },
-      });
+      const corridaIdsRaw = localStorage.getItem('corridaIds');
+      const corridaId = Number(localStorage.getItem('corridaId'));
+      const corridaIds: number[] = corridaIdsRaw ? JSON.parse(corridaIdsRaw) : [corridaId];
+
+      this.usuarioService
+        .patchRecusarCorridasMultiplas(motoristaId, despachanteId, corridaIds)
+        .subscribe({
+          next: (resp) => {
+            console.log('Corridas recusadas:', resp);
+            this.cdr.detectChanges();
+          },
+        });
     }
   }
 }

@@ -1,59 +1,90 @@
 <div class="container">
   <div class="cards-container">
-
     <div class="motorista-card header-card">
       <h2>CORRIDAS EM ANDAMENTO</h2>
       <div class="input-busca">
         <input type="text" placeholder="Digite o endereço da entrega..." />
         <button class="btn-buscar">Pesquisar</button>
         @if (isCliente) {
-        <button class="btn-novo" (click)="abrirModalEndereco()">Chamar Motorista</button>
+          <button class="btn-novo" (click)="abrirModalEndereco()">Chamar Motorista</button>
         }
       </div>
     </div>
 
     @for (corrida of corridas; track corrida.id) {
-    <div class="corrida-card">
-      <div class="card-top">
-        <span class="card-id">#{{ corrida.id }}</span>
-        <span [ngClass]="{
-          'status-andamento': corrida.status_corrida === 'EM ANDAMENTO',
-          'status-finalizada': corrida.status_corrida === 'FINALIZADA'
-        }">{{ corrida.status_corrida }}</span>
-      </div>
-      <div class="card-body">
-        <p class="card-label">CLIENTE</p>
-        <p><i class="ti ti-building-store"></i> <span>{{ corrida.cliente?.nome }}</span></p>
-        @if (isMotorista) {
-          <a [href]="'https://www.google.com/maps/dir/?api=1&destination=' + encodeURIComponent(corrida.cliente?.endereco)" 
-            target="_blank" class="btn-nav">
-            <i class="ti ti-navigation"></i> NAVEGAR
-          </a>
+      <div class="corrida-card">
+        <div class="card-top">
+          <span class="card-id">#{{ corrida.id }}</span>
+          <span
+            [ngClass]="{
+              'status-andamento': corrida.status_corrida === 'EM ANDAMENTO',
+              'status-finalizada': corrida.status_corrida === 'FINALIZADA',
+            }"
+            >{{ corrida.status_corrida }}</span
+          >
+        </div>
+        <div class="card-body">
+          <p class="card-label">CLIENTE</p>
+          <p>
+            <i class="ti ti-building-store"></i> <span>{{ corrida.cliente?.nome }}</span>
+          </p>
+          @if (isMotorista) {
+            <a
+              [href]="
+                'https://www.google.com/maps/dir/?api=1&destination=' +
+                encodeURIComponent(corrida.cliente?.endereco)
+              "
+              target="_blank"
+              class="btn-nav"
+            >
+              <i class="ti ti-navigation"></i> NAVEGAR
+            </a>
+          }
+          <p class="card-label">ENTREGA</p>
+          <p>
+            <i class="ti ti-map-pin"></i> <span>{{ corrida.endereco_entrega }}</span>
+          </p>
+          @if (isMotorista) {
+            <a
+              [href]="
+                'https://www.google.com/maps/dir/?api=1&destination=' +
+                encodeURIComponent(corrida.endereco_entrega)
+              "
+              target="_blank"
+              class="btn-nav"
+            >
+              <i class="ti ti-navigation"></i> NAVEGAR
+            </a>
+          }
+          <p class="card-label">CORRIDA</p>
+          <p>
+            <i class="ti ti-clock"></i>
+            <span>Chamada: {{ corrida.data_chamada | date: 'dd/MM/yyyy HH:mm:ss' }}</span>
+          </p>
+          <p>
+            <i class="ti ti-check"></i>
+            <span>Aceite: {{ corrida.data_aceite | date: 'dd/MM/yyyy HH:mm:ss' }}</span>
+          </p>
+          <p>
+            <i class="ti ti-rocket"></i>
+            <span>Início: {{ corrida.inicio_corrida | date: 'dd/MM/yyyy HH:mm:ss' }}</span>
+          </p>
+          <p>
+            <i class="ti ti-flag"></i>
+            <span>Término: {{ corrida.termino_corrida | date: 'dd/MM/yyyy HH:mm:ss' }}</span>
+          </p>
+          <p class="card-label">MOTORISTA</p>
+          <p>
+            <i class="ti ti-motorbike"></i> <span>{{ corrida.motorista?.nome }}</span>
+          </p>
+        </div>
+        @if (!corrida.termino_corrida && isMotorista) {
+          <div class="card-footer">
+            <button class="btn-editar" (click)="atualizarCorridas(corrida.id)">Atualizar</button>
+          </div>
         }
-        <p class="card-label">ENTREGA</p>
-        <p><i class="ti ti-map-pin"></i> <span>{{ corrida.endereco_entrega }}</span></p>
-        @if (isMotorista) {
-          <a [href]="'https://www.google.com/maps/dir/?api=1&destination=' + encodeURIComponent(corrida.endereco_entrega)" 
-            target="_blank" class="btn-nav">
-            <i class="ti ti-navigation"></i> NAVEGAR
-          </a>
-        }
-        <p class="card-label">CORRIDA</p>
-        <p><i class="ti ti-clock"></i> <span>Chamada: {{ corrida.data_chamada | date:'dd/MM/yyyy HH:mm:ss' }}</span></p>
-        <p><i class="ti ti-check"></i> <span>Aceite: {{ corrida.data_aceite | date:'dd/MM/yyyy HH:mm:ss' }}</span></p>
-        <p><i class="ti ti-rocket"></i> <span>Início: {{ corrida.inicio_corrida | date:'dd/MM/yyyy HH:mm:ss' }}</span></p>
-        <p><i class="ti ti-flag"></i> <span>Término: {{ corrida.termino_corrida | date:'dd/MM/yyyy HH:mm:ss' }}</span></p>
-        <p class="card-label">MOTORISTA</p>
-        <p><i class="ti ti-motorbike"></i> <span>{{ corrida.motorista?.nome }}</span></p>
       </div>
-      @if (!corrida.termino_corrida && isMotorista) {
-      <div class="card-footer">
-        <button class="btn-editar" (click)="atualizarCorridas(corrida.id)">Atualizar</button>
-      </div>
-      }
-    </div>
     }
-
   </div>
 </div>
 
@@ -61,17 +92,60 @@
 <div class="modal-overlay" *ngIf="modalEndereco">
   <div class="modal-atencao" (click)="$event.stopPropagation()">
     <h3>📍 Endereço de Entrega</h3>
-    <p>Informe o endereço antes de chamar o motorista.</p>
-    <input
-      type="text"
-      class="input-endereco"
-      [(ngModel)]="enderecoEntrega"
-      (input)="enderecoEntrega = enderecoEntrega.toUpperCase()"
-      placeholder="RUA, NÚMERO"
-    />
+    <p>Informe o(s) endereço(s) antes de chamar o motorista.</p>
+
+    <div *ngFor="let entrega of entregas; let i = index" class="entrega-item">
+      <div class="entrega-header">
+        <span>Entrega {{ i + 1 }}</span>
+        <button *ngIf="entregas.length > 1" class="btn-remover" (click)="removerEntrega(i)">✕</button>
+      </div>
+
+      <div class="autocomplete-wrapper">
+        <input
+          type="text"
+          class="input-endereco"
+          [name]="'rua_' + i"
+          [value]="entrega.rua"
+          (focus)="onFocarEndereco(i)"
+          (input)="onDigitarEndereco($any($event.target).value, i)"
+          (blur)="fecharSugestoes()"
+          placeholder="DIGITE A RUA..."
+          autocomplete="new-password"
+        />
+        <div class="sugestoes-lista" *ngIf="mostrarSugestoes && indiceAtivo === i">
+          <div
+            class="sugestao-item"
+            *ngFor="let s of sugestoes"
+            (mousedown)="selecionarLogradouro(s)"
+          >
+            {{ s.rua }}
+          </div>
+        </div>
+      </div>
+
+      <input
+        type="text"
+        class="input-endereco"
+        [(ngModel)]="entrega.numero"
+        [name]="'numero_' + i"
+        (input)="entrega.numero = entrega.numero.toUpperCase()"
+        placeholder="NÚMERO"
+        style="margin-top: 8px"
+        autocomplete="new-password"
+      />
+    </div>
+
+    <button class="btn-adicionar" (click)="adicionarEntrega()">+ Adicionar entrega</button>
+
     <div class="modal-endereco-btns">
       <button class="btn-Fechar" (click)="fecharModalEndereco()">Cancelar</button>
-      <button class="btn-Salvar" (click)="confirmarEndereco()" [disabled]="!enderecoEntrega">Chamar</button>
+      <button
+        class="btn-Salvar"
+        (click)="confirmarEndereco()"
+        [disabled]="!entregas[0].rua || !entregas[0].numero"
+      >
+        Chamar
+      </button>
     </div>
   </div>
 </div>
@@ -100,4 +174,3 @@
     <button class="btn-ok" (click)="fecharModalSemMotorista()">OK</button>
   </div>
 </div>
-

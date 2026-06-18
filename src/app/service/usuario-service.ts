@@ -133,12 +133,42 @@ export class UsuarioService {
     );
   }
 
+  patchAceitarCorridasMultiplas(corridaIds: number[]): Observable<any> {
+    const token = localStorage.getItem('tokenAutenticacao');
+    const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
+    return this.http.patch(AppConstants.acceptMultiple, corridaIds, { headers, responseType: 'text' });
+  }
+
+  postEnviarNotificacaoMultipla(motoristaID: number, despachanteId: number, enderecos: string[]): Observable<any> {
+    const token = localStorage.getItem('tokenAutenticacao');
+    const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
+    return this.http.post(AppConstants.sendMultiple(motoristaID, despachanteId), { enderecos }, { headers });
+  }
+
   //RECUSA DO MOTORISTA NA CORRIDA NOTIFICADA
   patchRecusarCorrida(motoristaId: number, corridaId: number, despachante: number){  
     const token = localStorage.getItem('tokenAutenticacao');
     const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
     return this.http.patch(AppConstants.recusarCorrida(motoristaId, corridaId, despachante), {}, { headers, responseType: 'text' },
     );
+  }
+
+  patchCancelarChamadaMultipla(motoristaAtual: number, corridaIds: number[]): Observable<any> {
+  const token = localStorage.getItem('tokenAutenticacao');
+  const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
+  return this.http.patch(AppConstants.cancelMultiple(motoristaAtual), corridaIds, { headers, responseType: 'text' });
+  }
+
+  patchExpirarCorridasMultiplas(corridaIds: number[]): Observable<any> {
+    const token = localStorage.getItem('tokenAutenticacao');
+    const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
+    return this.http.patch(AppConstants.expireMultiple(), corridaIds, { headers, responseType: 'text' });
+  }
+
+  patchRecusarCorridasMultiplas(motoristaId: number, despachanteId: number, corridaIds: number[]): Observable<any> {
+    const token = localStorage.getItem('tokenAutenticacao');
+    const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
+    return this.http.patch(AppConstants.recusarMultiplas(motoristaId, despachanteId), corridaIds, { headers, responseType: 'text' });
   }
 
   //ALTERA O STATUS DO MOTORISTA PARA OFFLINE
