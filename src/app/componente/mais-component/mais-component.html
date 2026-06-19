@@ -48,6 +48,11 @@
         <span class="config-titulo">Logradouros</span>
         <span class="config-sub">Gerencie os endereços da cidade</span>
       </div>
+      <div class="config-card" [routerLink]="['/meuPerfil']">
+        <span class="config-icon">👤</span>
+        <span class="config-titulo">Meu Perfil</span>
+        <span class="config-sub">Visualize e edite seus dados</span>
+      </div>
       <div class="config-card" [routerLink]="['/usuarioList']">
         <span class="config-icon">👥</span>
         <span class="config-titulo">Usuários</span>
@@ -71,6 +76,11 @@
         <span class="config-titulo">Configuração de Corrida</span>
         <span class="config-sub">Valor e regras das corridas</span>
       </div>
+      <div class="config-card" [routerLink]="['/meuPerfil']">
+        <span class="config-icon">👤</span>
+        <span class="config-titulo">Meu Perfil</span>
+        <span class="config-sub">Visualize e edite seus dados</span>
+      </div>
     }
 
     @if (isMotorista) {
@@ -83,6 +93,11 @@
         <span class="config-icon">📊</span>
         <span class="config-titulo">Relatórios</span>
         <span class="config-sub">Visualize suas corridas por período</span>
+      </div>
+      <div class="config-card" [routerLink]="['/meuPerfil']">
+        <span class="config-icon">👤</span>
+        <span class="config-titulo">Meu Perfil</span>
+        <span class="config-sub">Visualize e edite seus dados</span>
       </div>
     }
 

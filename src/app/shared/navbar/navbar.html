@@ -72,6 +72,7 @@
               </ul>
             } 
           </li>
+          <li><a [routerLink]="['/meuPerfil']">Meu Perfil</a></li>
           @if (isAdmin || isCliente || isMotorista) {
             <li><a [routerLink]="['/usuarioList']">Usuários</a></li>
           }

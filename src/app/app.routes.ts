@@ -12,6 +12,8 @@ import { RelatoriosComponent } from './componente/relatorios-component/relatorio
 import { MaisComponent } from './componente/mais-component/mais-component';
 import { RastrearMotoristasComponent } from './componente/rastrear-motoristas-component/rastrear-motoristas-component';
 import { LogradourosComponent } from './componente/logradouros-component/logradouros-component';
+import { PerfilComponent } from './componente/perfil-component/perfil-component';
+
 
 //DECLARANDO ROTAS
 export const routes: Routes = [
@@ -29,7 +31,8 @@ export const routes: Routes = [
     {path: 'rankingMotoristas', component: RankingMotoristasComponent}, // DECLARA AS ROTAS PARA OS RELATORIOS DOS RANKING DO MOTORISTA
     {path: 'configuracoes', component: MaisComponent}, //DECLARA A ROTA PARA AS CONFIGURAÇÕES
     {path: 'rastrearMotorista', component: RastrearMotoristasComponent}, // DECLARA A ROTA PARA RASTREAR MOTORISTAS
-    {path: 'logradouros', component: LogradourosComponent} // DECLARA A ROTA PARA LOGRADOUROS
+    {path: 'logradouros', component: LogradourosComponent}, // DECLARA A ROTA PARA LOGRADOUROS
+    {path: 'meuPerfil', component: PerfilComponent} // DECLARA A ROTA PARA O PERFIL DO USUÁRIO
 ];
 
 

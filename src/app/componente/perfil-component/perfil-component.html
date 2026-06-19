@@ -1,0 +1,93 @@
+<div class="container">
+  <div class="cards-container">
+
+    <div class="motorista-card header-card">
+      <h2>MEU PERFIL</h2>
+    </div>
+
+    @if (usuario) {
+    <div class="corrida-card perfil-card">
+      <div class="card-top">
+        <span class="card-id">#{{ usuario.id }}</span>
+        <span [ngClass]="{
+          'tipo-admin': usuario.tipoUser === 'ADMIN',
+          'tipo-cliente': usuario.tipoUser === 'CLIENTE',
+          'tipo-motorista': usuario.tipoUser === 'MOTORISTA'
+        }">{{ usuario.tipoUser }}</span>
+      </div>
+      <div class="card-body">
+        <p class="card-label">DADOS</p>
+        <p><i class="ti ti-user"></i> <span>{{ usuario.nome }}</span></p>
+        <p><i class="ti ti-mail"></i> <span>{{ usuario.email }}</span></p>
+        <p><i class="ti ti-phone"></i> <span>{{ usuario.telefone }}</span></p>
+        <p class="card-label">ENDEREÇO</p>
+        <p><i class="ti ti-map-pin"></i> <span>{{ usuario.endereco }}</span></p>
+      </div>
+      <div class="card-footer">
+        <button class="btn-editar" (click)="abrirModalEdit()">Editar</button>
+      </div>
+    </div>
+    }
+
+  </div>
+</div>
+
+<!-- MODAL EDIÇÃO -->
+<div class="modal-overlay" *ngIf="modalEdit">
+  <div class="driver-modal modal-lg" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h5 class="modal-title">EDITAR PERFIL</h5>
+      <button type="button" class="close" (click)="fecharModal()"><span>&times;</span></button>
+    </div>
+    <div class="modal-body">
+      <form>
+        <div class="input-container-flex">
+          <div class="field-group group-nome">
+            <label class="form-label">NOME</label>
+            <input type="text" class="form-control" [(ngModel)]="usuarioEdit.nome" name="nome" placeholder="Nome completo"/>
+          </div>
+        </div>
+        <div class="input-container-flex mt-3">
+          <div class="field-group group-full">
+            <label class="form-label">ENDEREÇO</label>
+            <input type="text" class="form-control" [(ngModel)]="usuarioEdit.endereco" name="endereco" placeholder="Rua, Número - Bairro"/>
+          </div>
+        </div>
+        <div class="input-container-flex mt-3">
+          <div class="field-group group-full">
+            <label class="form-label">E-MAIL</label>
+            <input type="email" class="form-control" [(ngModel)]="usuarioEdit.email" name="email" placeholder="exemplo@exemplo"/>
+          </div>
+        </div>
+        <div class="input-container-flex mt-3">
+          <div class="field-group group-3-col">
+            <label class="form-label">TELEFONE</label>
+            <input type="text" class="form-control" [(ngModel)]="usuarioEdit.telefone" name="telefone" placeholder="(00) 00000-0000"/>
+          </div>
+          <div class="field-group group-3-col">
+            <label class="form-label">LOGIN</label>
+            <input type="text" class="form-control" [(ngModel)]="usuarioEdit.login" name="login" placeholder="exemplo.exemplo"/>
+          </div>
+          <div class="field-group group-3-col">
+            <label class="form-label">SENHA</label>
+            <input type="password" class="form-control" [(ngModel)]="usuarioEdit.senha" name="senha" placeholder="******"/>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn-Fechar" (click)="fecharModal()">Fechar</button>
+      <button type="button" class="btn-Salvar" (click)="salvar()">Salvar</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL SUCESSO -->
+<div class="modal-overlay" *ngIf="modalSucesso">
+  <div class="modal-atencao" (click)="$event.stopPropagation()">
+    <div class="success-icon"><span>✓</span></div>
+    <h3>Sucesso!</h3>
+    <p>Perfil atualizado com sucesso.</p>
+    <button type="button" class="btn-Salvar" (click)="fecharModal()">Ok, entendi!</button>
+  </div>
+</div>

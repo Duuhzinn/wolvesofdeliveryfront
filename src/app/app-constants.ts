@@ -15,6 +15,8 @@ public static pesqUserNome(nome: String, tipoUser: string): string {
 public static salvarUsuario(): string {return this.baseUserURL + "/createUser"}
 public static atualizarUsuario(): string {return this.baseUserURL + "/updateUser" }
 public static usuarioLogado(): string {return this.baseUserURL + "/userLogado"}
+public static get usuarioLogadoURL(): string {return this.baseUserURL + "/userLogado"}
+public static usuarioPorId(id: number): string {return this.baseUserURL + "/" + id}
 
 //BASE PARA MONTAR REQUISIÇÕES DE MOTORISTAS
 public static get baseDriveURL(): string {return this.baseServidor + "/v1/drive"}
@@ -31,6 +33,7 @@ public static recusarCorrida(motoristaId: number, corridaId: number, despachante
 public static statusUsuario(id: number, status: number): string {
   return this.baseUserURL + "/status/" + id + "/" + status
 }
+
 
 //BASE PARA MONTAR A REQUISIÇÕES DO PUSH NOTIFICATION
 public static get basePushNotification(): string {return this.baseServidor + "/v1/pushnotification"}

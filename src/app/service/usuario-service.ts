@@ -24,6 +24,19 @@ export class UsuarioService {
     return this.http.get<any>(AppConstants.allUser, { headers });
   }
 
+  // BUSCA O USUÁRIO LOGADO PELO TOKEN
+  getUsuarioLogado(): Observable<any> {
+    const token = localStorage.getItem('tokenAutenticacao');
+    const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
+    return this.http.get(AppConstants.usuarioLogado(), { headers });
+  }
+  // BUSCA USUÁRIO POR ID
+  getUsuarioById(id: number): Observable<any> {
+    const token = localStorage.getItem('tokenAutenticacao');
+    const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
+    return this.http.get(AppConstants.usuarioPorId(id), { headers });
+  }
+  
   //LISTA TODOS OS MOTORISTAS
   getMotoristaList(): Observable<any> {
     let headers = new HttpHeaders();
