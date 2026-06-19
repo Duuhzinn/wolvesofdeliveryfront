@@ -8,133 +8,252 @@
   <ul class="navbar-menu">
     <li><a [routerLink]="['/home']" routerLinkActive="active">Dashboard</a></li>
 
-    @if (isAdmin || isCliente || isMotorista) {
-    <li class="dropdown">
-      <a>Motorista <span class="chevron">▼</span></a>
-      <ul class="dropdown-menu">
-        <li><a [routerLink]="['/motoristaStatus']">Controle de Status</a></li>
-        <li><a [routerLink]="['/ordemDaFila']">Ordem da Fila</a></li>
-      </ul>
-    </li>
+    @if (isAdmin || isMotorista) {
+      <li class="dropdown">
+        <a>Motorista <span class="chevron">▼</span></a>
+        <ul class="dropdown-menu">
+          <li><a [routerLink]="['/motoristaStatus']">Controle de Status</a></li>
+          <li><a [routerLink]="['/ordemDaFila']">Ordem da Fila</a></li>
+        </ul>
+      </li>
     }
 
     @if (isAdmin || isCliente || isMotorista) {
-    <li class="dropdown">
-      <a>Corridas <span class="chevron">▼</span></a>
-      <ul class="dropdown-menu">
-        <li><a [routerLink]="['/corridas/andamento']">Chamar Motorista</a></li>
-        <li><a [routerLink]="['/corridas/finalizada']">Finalizadas</a></li>
-      </ul>
-    </li>
+      <li class="dropdown">
+        <a>Corridas <span class="chevron">▼</span></a>
+        <ul class="dropdown-menu">
+          <li><a [routerLink]="['/corridas/andamento']">Chamar Motorista</a></li>
+          <li><a [routerLink]="['/corridas/finalizada']">Finalizadas</a></li>
+        </ul>
+      </li>
     }
 
     @if (isAdmin || isCliente || isMotorista) {
-    <li class="dropdown">
-      <a>Relatórios <span class="chevron">▼</span></a>
-      <ul class="dropdown-menu">
-        <li><a [routerLink]="['/relatorioCorrida']">Corridas</a></li>
-        <li><a [routerLink]="['/relatorioMotoristas']">Motoristas</a></li>
-        <li><a [routerLink]="['/rankingMotoristas']">Ranking Motoristas</a></li>
-      </ul>
-    </li>
+      <li class="dropdown">
+        <a>Relatórios <span class="chevron">▼</span></a>
+        <ul class="dropdown-menu">
+          @if (isAdmin || isCliente || isMotorista) {
+            <li><a [routerLink]="['/relatorioCorrida']">Corridas</a></li>
+          }
+          @if (isAdmin) {
+            <li><a [routerLink]="['/relatorioMotoristas']">Motoristas</a></li>
+          }
+          @if (isAdmin) {
+            <li><a [routerLink]="['/rankingMotoristas']">Ranking Motoristas</a></li>
+          }
+        </ul>
+      </li>
+    }
+
+    @if (isAdmin) {
+      <li class="dropdown">
+        <a>Rastreamentos <span class="chevron">▼</span></a>
+        <ul class="dropdown-menu">
+          <li><a [routerLink]="['/rastrearMotorista']">Motoristas</a></li>
+
+        </ul>
+      </li>
     }
 
     @if (isAdmin || isCliente || isMotorista) {
-    <li class="dropdown">
-      <a>Configurações <span class="chevron">▼</span></a>
-      <ul class="dropdown-menu">
-        <li><a [routerLink]="['/configuracoes']">Gerais</a></li>
-        <li><a [routerLink]="['/usuarioList']">Usuários</a></li>
-      </ul>
-    </li>
+      <li class="dropdown">
+        <a>Configurações <span class="chevron">▼</span></a>
+        <ul class="dropdown-menu">
+          <li class="submenu">
+            @if (isAdmin || isCliente) {
+              <a>Gestão do Sistema <span class="chevron">▶</span></a>
+              <ul class="submenu-menu">
+                @if (isAdmin) {
+                  <li><a [routerLink]="['/logradouros']">Cadastro de Endereços</a></li>
+                }
+                <li><a (click)="abrirModalConfig()">Configuração de Corridas</a></li>
+              </ul>
+            } 
+          </li>
+          @if (isAdmin || isCliente || isMotorista) {
+            <li><a [routerLink]="['/usuarioList']">Usuários</a></li>
+          }
+        </ul>
+      </li>
     }
 
     <li class="sair"><a (click)="sair()">Sair</a></li>
   </ul>
-
-  <button class="hamburger" [class.open]="menuAberto" (click)="toggleMenu()" aria-label="Abrir menu">
-    <span></span><span></span><span></span>
-  </button>
+  
 </nav>
 
 <!-- ===== MOBILE TOPBAR (novo) ===== -->
 <nav class="mobile-topbar">
   <div class="topbar-brand">
     <span class="topbar-icon">🐺</span>
-    <span class="topbar-title">Wolves <span class="topbar-user">— {{ nomeUsuario }}</span></span>
+    <span class="topbar-title"
+      >Wolves <span class="topbar-user">— {{ nomeUsuario }}</span></span
+    >
   </div>
 </nav>
 
 <!-- ===== BOTTOMBAR (mobile) ===== -->
 <nav class="mobile-bottombar">
-
   @if (isAdmin) {
-  <a [routerLink]="['/home']" routerLinkActive="active-tab" class="tab-item">
-    <span class="tab-icon">🏠</span>
-    <span class="tab-label">Início</span>
-  </a>
-  <a [routerLink]="['/motoristaStatus']" routerLinkActive="active-tab" class="tab-item">
-    <span class="tab-icon">🏍️</span>
-    <span class="tab-label">Motorista</span>
-  </a>
-  <a [routerLink]="['/corridas/andamento']" routerLinkActive="active-tab" class="tab-item">
-    <span class="tab-icon">📦</span>
-    <span class="tab-label">Corridas</span>
-  </a>
-  <a [routerLink]="['/ordemDaFila']" routerLinkActive="active-tab" class="tab-item">
-    <span class="tab-icon">🔢</span>
-    <span class="tab-label">Fila</span>
-  </a>
-  <a [routerLink]="['/configuracoes']" routerLinkActive="active-tab" class="tab-item">
-    <span class="tab-icon">☰</span>
-    <span class="tab-label">Mais</span>
-  </a>
+    <a [routerLink]="['/home']" routerLinkActive="active-tab" class="tab-item">
+      <span class="tab-icon">🏠</span>
+      <span class="tab-label">Início</span>
+    </a>
+    <a [routerLink]="['/motoristaStatus']" routerLinkActive="active-tab" class="tab-item">
+      <span class="tab-icon">🏍️</span>
+      <span class="tab-label">Motorista</span>
+    </a>
+    <a [routerLink]="['/corridas/andamento']" routerLinkActive="active-tab" class="tab-item">
+      <span class="tab-icon">📦</span>
+      <span class="tab-label">Corridas</span>
+    </a>
+    <a [routerLink]="['/ordemDaFila']" routerLinkActive="active-tab" class="tab-item">
+      <span class="tab-icon">🔢</span>
+      <span class="tab-label">Fila</span>
+    </a>
+    <a [routerLink]="['/configuracoes']" routerLinkActive="active-tab" class="tab-item">
+      <span class="tab-icon">☰</span>
+      <span class="tab-label">Mais</span>
+    </a>
   }
 
   @if (isCliente) {
-  <a [routerLink]="['/home']" routerLinkActive="active-tab" class="tab-item">
-    <span class="tab-icon">🏠</span>
-    <span class="tab-label">Início</span>
-  </a>
-  <a [routerLink]="['/corridas/andamento']" routerLinkActive="active-tab" class="tab-item">
-    <span class="tab-icon">📦</span>
-    <span class="tab-label">Corridas</span>
-  </a>
-  <a [routerLink]="['/ordemDaFila']" routerLinkActive="active-tab" class="tab-item">
-    <span class="tab-icon">🔢</span>
-    <span class="tab-label">Fila</span>
-  </a>
-  <a [routerLink]="['/configuracoes']" routerLinkActive="active-tab" class="tab-item">
-    <span class="tab-icon">☰</span>
-    <span class="tab-label">Mais</span>
-  </a>
+    <a [routerLink]="['/home']" routerLinkActive="active-tab" class="tab-item">
+      <span class="tab-icon">🏠</span>
+      <span class="tab-label">Início</span>
+    </a>
+    <a [routerLink]="['/corridas/andamento']" routerLinkActive="active-tab" class="tab-item">
+      <span class="tab-icon">📦</span>
+      <span class="tab-label">Corridas</span>
+    </a>
+    <a [routerLink]="['/ordemDaFila']" routerLinkActive="active-tab" class="tab-item">
+      <span class="tab-icon">🔢</span>
+      <span class="tab-label">Fila</span>
+    </a>
+    <a [routerLink]="['/configuracoes']" routerLinkActive="active-tab" class="tab-item">
+      <span class="tab-icon">☰</span>
+      <span class="tab-label">Mais</span>
+    </a>
   }
 
   @if (isMotorista) {
-  <a [routerLink]="['/home']" routerLinkActive="active-tab" class="tab-item">
-    <span class="tab-icon">🏠</span>
-    <span class="tab-label">Início</span>
-  </a>
-  <a [routerLink]="['/corridas/andamento']" routerLinkActive="active-tab" class="tab-item">
-    <span class="tab-icon">📦</span>
-    <span class="tab-label">Corridas</span>
-  </a>
-  <a [routerLink]="['/ordemDaFila']" routerLinkActive="active-tab" class="tab-item">
-    <span class="tab-icon">🔢</span>
-    <span class="tab-label">Fila</span>
-  </a>
-  <a [routerLink]="['/motoristaStatus']" routerLinkActive="active-tab" class="tab-item">
-    <span class="tab-icon">
-      @if (statusMotoristaAtual === 1) { 🟢 }
-      @else if (statusMotoristaAtual === 2) { 🟡 }
-      @else { 🔴 }
-    </span>
-    <span class="tab-label">Status</span>
-  </a>
-  <a [routerLink]="['/configuracoes']" routerLinkActive="active-tab" class="tab-item">
-    <span class="tab-icon">☰</span>
-    <span class="tab-label">Mais</span>
-  </a>
+    <a [routerLink]="['/home']" routerLinkActive="active-tab" class="tab-item">
+      <span class="tab-icon">🏠</span>
+      <span class="tab-label">Início</span>
+    </a>
+    <a [routerLink]="['/corridas/andamento']" routerLinkActive="active-tab" class="tab-item">
+      <span class="tab-icon">📦</span>
+      <span class="tab-label">Corridas</span>
+    </a>
+    <a [routerLink]="['/ordemDaFila']" routerLinkActive="active-tab" class="tab-item">
+      <span class="tab-icon">🔢</span>
+      <span class="tab-label">Fila</span>
+    </a>
+    <a [routerLink]="['/motoristaStatus']" routerLinkActive="active-tab" class="tab-item">
+      <span class="tab-icon">
+        @if (statusMotoristaAtual === 1) {
+          🟢
+        } @else if (statusMotoristaAtual === 2) {
+          🟡
+        } @else {
+          🔴
+        }
+      </span>
+      <span class="tab-label">Status</span>
+    </a>
+    <a [routerLink]="['/configuracoes']" routerLinkActive="active-tab" class="tab-item">
+      <span class="tab-icon">☰</span>
+      <span class="tab-label">Mais</span>
+    </a>
   }
-
 </nav>
+
+<!-- MODAL CONFIGURAÇÃO DE CORRIDA -->
+@if (modalConfigCorrida) {
+  <div class="modal-overlay" (click)="fecharModal()">
+    <div class="modal-box" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <span>⚙️ Configuração de Corrida</span>
+        <button class="modal-fechar" (click)="fecharModal()">✕</button>
+      </div>
+
+      <!-- MODAL CLIENTE -->
+      @if (isCliente) {
+        <div class="modal-body">
+          <label>Valor da corrida (R$)</label>
+          <input
+            type="text"
+            [(ngModel)]="valorCorrida"
+            placeholder="Ex: 15.00"
+            min="0"
+            step="0.01"
+            class="input-cliente"
+          />
+        </div>
+        <div class="modal-footer">
+          <button class="btn-cancelar" (click)="fecharModal()">Cancelar</button>
+          <button class="btn-salvar" (click)="salvarConfigCliente()" [disabled]="salvando">
+            {{ salvando ? 'Salvando...' : 'Gravar' }}
+          </button>
+        </div>
+      }
+
+      <!-- MODAL ADMIN -->
+      @if (isAdmin) {
+        <div class="modal-secao">
+          <span class="modal-secao-titulo">VALOR GERAL</span>
+          <div class="modal-geral-row">
+            <input
+              type="number"
+              [(ngModel)]="valorGeral"
+              placeholder="Ex: 15.00"
+              min="0"
+              step="0.01"
+              class="input-geral"
+            />
+            <button
+              class="btn-salvar btn-aplicar"
+              (click)="salvarValorGeral()"
+              [disabled]="salvandoGeral || valorGeral === null"
+            >
+              {{ salvandoGeral ? 'Aplicando...' : 'Aplicar a todos' }}
+            </button>
+          </div>
+        </div>
+
+        <div class="modal-secao">
+          <span class="modal-secao-titulo">ESTABELECIMENTOS</span>
+          @if (clientes.length === 0) {
+            <span class="modal-vazio">Nenhum estabelecimento cadastrado</span>
+          }
+          @for (cliente of clientes; track cliente.usuario.id) {
+            <div class="modal-cliente-row">
+              <span class="modal-cliente-nome">{{ cliente.usuario.nome }}</span>
+              <input
+                type="text"
+                [(ngModel)]="cliente.valorEditado"
+                min="0"
+                step="0.01"
+                class="input-cliente"
+                placeholder="--"
+              />
+              @if (valorAlterado(cliente)) {
+                <button
+                  class="btn-salvar btn-salvar-mini"
+                  (click)="salvarClienteIndividual(cliente)"
+                  [disabled]="cliente.salvando"
+                >
+                  {{ cliente.salvando ? '...' : 'Gravar' }}
+                </button>
+              }
+            </div>
+          }
+        </div>
+
+        <div class="modal-footer">
+          <button class="btn-cancelar" (click)="fecharModal()">Fechar</button>
+        </div>
+      }
+    </div>
+  </div>
+}

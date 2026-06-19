@@ -5,6 +5,21 @@
     </div>
 
     @if (isAdmin) {
+      <!-- CORRIDAS -->
+      <div class="grupo-titulo">🏍️ Corridas</div>
+      <div class="config-card" [routerLink]="['/corridas/finalizada']">
+        <span class="config-icon">🏁</span>
+        <span class="config-titulo">Corridas Finalizadas</span>
+        <span class="config-sub">Visualize as corridas finalizadas</span>
+      </div>
+      <div class="config-card" [routerLink]="['/rastrearMotorista']">
+        <span class="config-icon">🛰️</span>
+        <span class="config-titulo">Rastrear Motorista</span>
+        <span class="config-sub">Veja a localização em tempo real</span>
+      </div>
+
+      <!-- RELATÓRIOS -->
+      <div class="grupo-titulo">📊 Relatórios</div>
       <div class="config-card" [routerLink]="['/relatorioCorrida']">
         <span class="config-icon">📊</span>
         <span class="config-titulo">Relatório de Corridas</span>
@@ -20,16 +35,9 @@
         <span class="config-titulo">Ranking de Motoristas</span>
         <span class="config-sub">Veja o ranking geral</span>
       </div>
-      <div class="config-card" [routerLink]="['/usuarioList']">
-        <span class="config-icon">👥</span>
-        <span class="config-titulo">Usuários</span>
-        <span class="config-sub">Gerencie os usuários do sistema</span>
-      </div>
-      <div class="config-card" [routerLink]="['/rastrearMotorista']">
-        <span class="config-icon">🛰️</span>
-        <span class="config-titulo">Rastrear Motorista</span>
-        <span class="config-sub">Veja a localização em tempo real</span>
-      </div>
+
+      <!-- GESTÃO -->
+      <div class="grupo-titulo">⚙️ Gestão</div>
       <div class="config-card" (click)="abrirModalConfig()">
         <span class="config-icon">⚙️</span>
         <span class="config-titulo">Configuração de Corrida</span>
@@ -40,9 +48,19 @@
         <span class="config-titulo">Logradouros</span>
         <span class="config-sub">Gerencie os endereços da cidade</span>
       </div>
+      <div class="config-card" [routerLink]="['/usuarioList']">
+        <span class="config-icon">👥</span>
+        <span class="config-titulo">Usuários</span>
+        <span class="config-sub">Gerencie os usuários do sistema</span>
+      </div>
     }
 
     @if (isCliente) {
+      <div class="config-card" [routerLink]="['/corridas/finalizada']">
+        <span class="config-icon">🏁</span>
+        <span class="config-titulo">Finalizadas</span>
+        <span class="config-sub">Visualize suas corridas finalizadas</span>
+      </div>
       <div class="config-card" [routerLink]="['/relatorioCorrida']">
         <span class="config-icon">📊</span>
         <span class="config-titulo">Relatórios</span>
@@ -56,6 +74,11 @@
     }
 
     @if (isMotorista) {
+      <div class="config-card" [routerLink]="['/corridas/finalizada']">
+        <span class="config-icon">🏁</span>
+        <span class="config-titulo">Finalizadas</span>
+        <span class="config-sub">Visualize suas corridas finalizadas</span>
+      </div>
       <div class="config-card" [routerLink]="['/relatorioCorrida']">
         <span class="config-icon">📊</span>
         <span class="config-titulo">Relatórios</span>
@@ -63,6 +86,7 @@
       </div>
     }
 
+    <div class="grupo-titulo">🚪 Sessão</div>
     <div class="config-card config-card-sair" (click)="sair()">
       <span class="config-icon">🚪</span>
       <span class="config-titulo config-titulo-sair">Sair</span>

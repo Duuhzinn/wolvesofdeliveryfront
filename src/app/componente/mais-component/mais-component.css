@@ -252,3 +252,21 @@
 .config-card * {
   pointer-events: none;
 }
+
+@media (min-width: 768px) {
+  .desktop-hidden {
+    display: none;
+  }
+}
+
+.grupo-titulo {
+  flex: 1 1 100%;
+  font-size: 11px;
+  font-weight: 700;
+  color: #888;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 6px;
+  margin-top: 8px;
+}
