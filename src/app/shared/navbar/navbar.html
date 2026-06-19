@@ -8,15 +8,7 @@
   <ul class="navbar-menu">
     <li><a [routerLink]="['/home']" routerLinkActive="active">Dashboard</a></li>
 
-    @if (isAdmin || isMotorista) {
-      <li class="dropdown">
-        <a>Motorista <span class="chevron">▼</span></a>
-        <ul class="dropdown-menu">
-          <li><a [routerLink]="['/motoristaStatus']">Controle de Status</a></li>
-          <li><a [routerLink]="['/ordemDaFila']">Ordem da Fila</a></li>
-        </ul>
-      </li>
-    }
+    
 
     @if (isAdmin || isCliente || isMotorista) {
       <li class="dropdown">
@@ -24,6 +16,16 @@
         <ul class="dropdown-menu">
           <li><a [routerLink]="['/corridas/andamento']">Chamar Motorista</a></li>
           <li><a [routerLink]="['/corridas/finalizada']">Finalizadas</a></li>
+        </ul>
+      </li>
+    }
+
+    @if (isAdmin || isMotorista) {
+      <li class="dropdown">
+        <a>Motorista <span class="chevron">▼</span></a>
+        <ul class="dropdown-menu">
+          <li><a [routerLink]="['/motoristaStatus']">Controle de Status</a></li>
+          <li><a [routerLink]="['/ordemDaFila']">Ordem da Fila</a></li>
         </ul>
       </li>
     }
