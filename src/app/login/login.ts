@@ -26,7 +26,12 @@ export class Login implements OnInit {
       const senhaSalva = localStorage.getItem('savedSenha');
       if (loginSalvo && senhaSalva) {
         this.usuario.login = loginSalvo;
-        this.usuario.senha = senhaSalva;
+        try {
+          this.usuario.senha = atob(senhaSalva);
+        } catch {
+          this.usuario.senha = senhaSalva; // FALLBACK PRA SENHA ANTIGA
+          localStorage.setItem('savedSenha', btoa(senhaSalva)); // MIGRA PRA BASE64
+        }
         this.lembrarMe = true;
       }
     }
@@ -36,7 +41,7 @@ export class Login implements OnInit {
     if (isPlatformBrowser(this.platformId)) {
       if (this.lembrarMe) {
         localStorage.setItem('savedLogin', this.usuario.login);
-        localStorage.setItem('savedSenha', this.usuario.senha);
+        localStorage.setItem('savedSenha', btoa(this.usuario.senha));
       } else {
         localStorage.removeItem('savedLogin');
         localStorage.removeItem('savedSenha');

@@ -28,7 +28,9 @@ export class WebsocketService {
     // ÚNICO onConnect - CHAMA TODOS OS CALLBACKS REGISTRADOS
     this.client.onConnect = () => {
       console.log('WebSocket conectado');
-      this.onConnectCallbacks.forEach(cb => cb());
+      const callbacks = [...this.onConnectCallbacks];
+      this.onConnectCallbacks = []; // LIMPA PARA NÃO ACUMULAR
+      callbacks.forEach(cb => cb()); 
     };
   }
 
