@@ -15,8 +15,8 @@ export class WebsocketService {
   private dashboardSubscription2: StompSubscription | null = null;
   private localizacaoSubscription: StompSubscription | null = null;
 
-  // CALLBACKS REGISTRADOS
-  private onConnectCallbacks: (() => void)[] = [];
+  // CALLBACKS REGISTRADOS COM CHAVE UNICA - EVITA DUPLICATAS
+  private onConnectCallbacks: Map<string, () => void> = new Map();
 
   constructor() {
     this.client = new Client({
@@ -25,36 +25,35 @@ export class WebsocketService {
       reconnectDelay: 5000,
     });
 
-    // ÚNICO onConnect - CHAMA TODOS OS CALLBACKS REGISTRADOS
+    // RECONECTA E REINSCREVE EM TODOS OS TOPICOS ATIVOS
     this.client.onConnect = () => {
       console.log('WebSocket conectado');
-      const callbacks = [...this.onConnectCallbacks];
-      this.onConnectCallbacks = []; // LIMPA PARA NÃO ACUMULAR
-      callbacks.forEach(cb => cb()); 
+      this.onConnectCallbacks.forEach(cb => cb());
     };
   }
 
-  private ativarSeNecessario(callback: () => void) {
+  // REGISTRA CALLBACK COM CHAVE - SOBRESCREVE SE JA EXISTIR
+  private ativarSeNecessario(key: string, callback: () => void) {
+    this.onConnectCallbacks.set(key, callback);
     if (this.client.connected) {
       callback();
-    } else {
-      this.onConnectCallbacks.push(callback);
-      if (!this.client.active) {
-        this.client.activate();
-      }
+    } else if (!this.client.active) {
+      this.client.activate();
     }
   }
 
+  // ESCUTA FILA DE CORRIDAS
   conectar(callback: () => void) {
-    this.ativarSeNecessario(() => {
+    this.ativarSeNecessario('fila', () => {
       this.client.subscribe('/topic/fila', () => {
         callback();
       });
     });
   }
 
+  // ESCUTA ACEITE E RECUSA DE CORRIDA
   conectarCorrida(callbackAceite: () => void, callbackRecusa: () => void) {
-    this.ativarSeNecessario(() => {
+    this.ativarSeNecessario('corrida', () => {
       if (this.corridaSubscription) {
         this.corridaSubscription.unsubscribe();
         this.corridaSubscription = null;
@@ -75,6 +74,7 @@ export class WebsocketService {
     });
   }
 
+  // DESCONECTA LISTENERS DE CORRIDA
   desconectarCorrida() {
     if (this.corridaSubscription) {
       this.corridaSubscription.unsubscribe();
@@ -84,14 +84,16 @@ export class WebsocketService {
       this.recusaSubscription.unsubscribe();
       this.recusaSubscription = null;
     }
+    this.onConnectCallbacks.delete('corrida');
   }
 
   desconectar() {
     this.client.deactivate();
   }
 
+  // ESCUTA ATUALIZACOES DE CORRIDA EM ANDAMENTO
   conectarAtualizacao(callback: () => void) {
-    this.ativarSeNecessario(() => {
+    this.ativarSeNecessario('atualizacao', () => {
       if (this.atualizacaoSubscription) {
         this.atualizacaoSubscription.unsubscribe();
         this.atualizacaoSubscription = null;
@@ -102,15 +104,18 @@ export class WebsocketService {
     });
   }
 
+  // DESCONECTA LISTENER DE ATUALIZACAO
   desconectarAtualizacao() {
     if (this.atualizacaoSubscription) {
       this.atualizacaoSubscription.unsubscribe();
       this.atualizacaoSubscription = null;
     }
+    this.onConnectCallbacks.delete('atualizacao');
   }
 
+  // ESCUTA CANCELAMENTO DE CORRIDA
   escutarCancelamento(callback: () => void): void {
-    this.ativarSeNecessario(() => {
+    this.ativarSeNecessario('cancelamento', () => {
       if (this.cancelamentoSubscription) {
         this.cancelamentoSubscription.unsubscribe();
         this.cancelamentoSubscription = null;
@@ -123,7 +128,7 @@ export class WebsocketService {
 
   // ESCUTA CORRIDA E FILA PARA ATUALIZAR A DASHBOARD EM TEMPO REAL
   conectarDashboard(callback: () => void) {
-    this.ativarSeNecessario(() => {
+    this.ativarSeNecessario('dashboard', () => {
       if (this.dashboardSubscription) {
         this.dashboardSubscription.unsubscribe();
         this.dashboardSubscription = null;
@@ -132,11 +137,11 @@ export class WebsocketService {
         this.dashboardSubscription2.unsubscribe();
         this.dashboardSubscription2 = null;
       }
-      // ESCUTA FINALIZAÇÕES E ACEITES
+      // ESCUTA FINALIZACOES E ACEITES
       this.dashboardSubscription = this.client.subscribe('/topic/corrida', () => {
         callback();
       });
-      // ESCUTA RECUSAS E EXPIRAÇÕES
+      // ESCUTA RECUSAS E EXPIRACOES
       this.dashboardSubscription2 = this.client.subscribe('/topic/fila', () => {
         callback();
       });
@@ -153,11 +158,12 @@ export class WebsocketService {
       this.dashboardSubscription2.unsubscribe();
       this.dashboardSubscription2 = null;
     }
+    this.onConnectCallbacks.delete('dashboard');
   }
 
-  // ESCUTA LOCALIZAÇÃO DOS MOTORISTAS EM TEMPO REAL
+  // ESCUTA LOCALIZACAO DOS MOTORISTAS EM TEMPO REAL
   conectarLocalizacao(callback: (payload: any) => void) {
-    this.ativarSeNecessario(() => {
+    this.ativarSeNecessario('localizacao', () => {
       if (this.localizacaoSubscription) {
         this.localizacaoSubscription.unsubscribe();
         this.localizacaoSubscription = null;
@@ -169,10 +175,12 @@ export class WebsocketService {
     });
   }
 
+  // DESCONECTA LISTENER DE LOCALIZACAO
   desconectarLocalizacao() {
     if (this.localizacaoSubscription) {
       this.localizacaoSubscription.unsubscribe();
       this.localizacaoSubscription = null;
     }
+    this.onConnectCallbacks.delete('localizacao');
   }
 }
