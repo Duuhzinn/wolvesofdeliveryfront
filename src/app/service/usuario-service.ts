@@ -346,5 +346,26 @@ getCorridasDespachanteFinalizada(usuarioId: number, page: number): Observable<an
     return this.http.get(url, { headers });
   }
 
+  //LISTA OS MOTORISTAS BLOQUEADOS PELO RESTAURANTE/CLIENTE
+  getMotoristasBloqueados(restauranteId: number): Observable<any> {
+    const token = localStorage.getItem('tokenAutenticacao');
+    const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
+    return this.http.get(AppConstants.listarMotoristasBloqueados(restauranteId), { headers });
+  }
+
+  //BLOQUEIA UM MOTORISTA PARA O RESTAURANTE/CLIENTE
+  postBloquearMotorista(restauranteId: number, motoristaId: number): Observable<any> {
+    const token = localStorage.getItem('tokenAutenticacao');
+    const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
+    return this.http.post(AppConstants.bloquearMotorista(restauranteId, motoristaId), {}, { headers });
+  }
+
+  //DESBLOQUEIA UM MOTORISTA PARA O RESTAURANTE/CLIENTE
+  deleteDesbloquearMotorista(restauranteId: number, motoristaId: number): Observable<any> {
+    const token = localStorage.getItem('tokenAutenticacao');
+    const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
+    return this.http.delete(AppConstants.desbloquearMotorista(restauranteId, motoristaId), { headers, responseType: 'text' });
+  }
+
 
 }

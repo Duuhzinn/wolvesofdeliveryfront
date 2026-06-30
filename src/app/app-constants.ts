@@ -120,4 +120,17 @@ public static deletarLogradouro(id: number): string {return this.baseLogradouroU
 public static get salvarTodosLogradouros(): string {return this.baseLogradouroURL + "/saveAll"}
 public static get listarTodosLogradouros(): string { return this.baseLogradouroURL + "/listAll" }
 
+
+//BASE PARA MONTAR REQUISIÇÕES DE MOTORISTAS BLOQUEADOS
+public static get baseMotoristaBloqueadoURL(): string {return this.baseServidor + "/v1/motoristasBloqueados"}
+public static listarMotoristasBloqueados(restauranteId: number): string {
+  return this.baseMotoristaBloqueadoURL + "/restaurante/" + restauranteId;
+}
+public static bloquearMotorista(restauranteId: number, motoristaId: number): string {
+  return this.baseMotoristaBloqueadoURL + "/save/" + restauranteId + "/" + motoristaId;
+}
+public static desbloquearMotorista(restauranteId: number, motoristaId: number): string {
+  return this.baseMotoristaBloqueadoURL + "/delete/" + restauranteId + "/" + motoristaId;
+}
+
 }

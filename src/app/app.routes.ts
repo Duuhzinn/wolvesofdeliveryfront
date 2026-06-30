@@ -13,6 +13,7 @@ import { MaisComponent } from './componente/mais-component/mais-component';
 import { RastrearMotoristasComponent } from './componente/rastrear-motoristas-component/rastrear-motoristas-component';
 import { LogradourosComponent } from './componente/logradouros-component/logradouros-component';
 import { PerfilComponent } from './componente/perfil-component/perfil-component';
+import { MotoristaBloqueadoComponent } from './componente/motorista-bloqueado-component/motorista-bloqueado-component';
 
 
 //DECLARANDO ROTAS
@@ -32,7 +33,8 @@ export const routes: Routes = [
     {path: 'configuracoes', component: MaisComponent}, //DECLARA A ROTA PARA AS CONFIGURAÇÕES
     {path: 'rastrearMotorista', component: RastrearMotoristasComponent}, // DECLARA A ROTA PARA RASTREAR MOTORISTAS
     {path: 'logradouros', component: LogradourosComponent}, // DECLARA A ROTA PARA LOGRADOUROS
-    {path: 'meuPerfil', component: PerfilComponent} // DECLARA A ROTA PARA O PERFIL DO USUÁRIO
+    {path: 'meuPerfil', component: PerfilComponent}, // DECLARA A ROTA PARA O PERFIL DO USUÁRIO
+    {path: 'motoristasBloqueados', component: MotoristaBloqueadoComponent} //DECLARA A ROTA PARA MOTORISTAS BLOQUEADO
 ];
 
 

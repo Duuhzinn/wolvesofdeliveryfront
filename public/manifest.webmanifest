@@ -1,6 +1,7 @@
 {
   "name": "Wolves of Delivery",
   "short_name": "Wolves",
+  "start_url": "/",
   "icons": [
     {
       "src": "logoWolves.png",

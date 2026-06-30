@@ -1,0 +1,122 @@
+.container {
+  padding: 12px 20px 30px 20px;
+  max-width: 100%;
+  margin: 0 auto;
+}
+
+.header-bloqueio {
+  background: #534AB7;
+  border-radius: 12px;
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.header-bloqueio h2 {
+  color: #fff;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  margin: 0;
+}
+
+.btn-voltar {
+  background: #f0f0f0;
+  border: none;
+  border-radius: 10px;
+  width: 36px;
+  height: 36px;
+  font-size: 16px;
+  cursor: pointer;
+  color: #555;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-voltar:hover { background: #e0e0e0; }
+
+.vazio {
+  font-size: 13px;
+  color: #aaa;
+  text-align: center;
+  padding: 20px 0;
+  display: block;
+}
+
+.motoristas-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+}
+
+.motorista-card {
+  background: #fff;
+  border: 0.5px solid #eee;
+  border-radius: 12px;
+  padding: 18px 14px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  flex: 1 1 140px;
+  text-align: center;
+}
+
+.motorista-nome {
+  font-size: 13px;
+  font-weight: 700;
+  color: #333;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+}
+
+.toggle-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: #4caf50;
+}
+
+.toggle-label.label-bloqueado {
+  color: #ee3232;
+}
+
+.toggle-switch {
+  width: 46px;
+  height: 26px;
+  border-radius: 999px;
+  background: #4caf50;
+  border: none;
+  cursor: pointer;
+  position: relative;
+  padding: 0;
+  transition: background 0.2s;
+}
+
+.toggle-switch.toggle-bloqueado {
+  background: #ee3232;
+}
+
+.toggle-bola {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #fff;
+  transition: left 0.2s;
+}
+
+.toggle-switch.toggle-bloqueado .toggle-bola {
+  left: 23px;
+}
+
+@media (max-width: 600px) {
+  .container { padding: 15px; }
+}

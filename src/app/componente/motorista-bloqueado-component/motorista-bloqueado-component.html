@@ -1,0 +1,35 @@
+<div class="container">
+  <div class="header-bloqueio">
+    <h2>Bloqueio de Motorista</h2>
+  </div>
+
+  @if (carregando) {
+    <span class="vazio">Carregando motoristas...</span>
+  }
+
+  @if (!carregando && motoristas.length === 0) {
+    <span class="vazio">Nenhum motorista cadastrado</span>
+  }
+
+  @if (!carregando) {
+    <div class="motoristas-grid">
+      @for (motorista of motoristas; track motorista.id) {
+        <div class="motorista-card">
+          <span class="motorista-nome">{{ motorista.nome }}</span>
+
+          <button
+            class="toggle-switch"
+            [class.toggle-bloqueado]="motoristaEstaBloqueado(motorista.id)"
+            (click)="motoristaEstaBloqueado(motorista.id) ? desbloquear(motorista.id) : bloquear(motorista.id)"
+          >
+            <span class="toggle-bola"></span>
+          </button>
+
+          <span class="toggle-label" [class.label-bloqueado]="motoristaEstaBloqueado(motorista.id)">
+            {{ motoristaEstaBloqueado(motorista.id) ? 'Bloqueado' : 'Desbloqueado' }}
+          </span>
+        </div>
+      }
+    </div>
+  }
+</div>
