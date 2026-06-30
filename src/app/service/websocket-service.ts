@@ -28,7 +28,7 @@ export class WebsocketService {
     // RECONECTA E REINSCREVE EM TODOS OS TOPICOS ATIVOS
     this.client.onConnect = () => {
       console.log('WebSocket conectado');
-      this.onConnectCallbacks.forEach(cb => cb());
+      this.onConnectCallbacks.forEach((cb) => cb());
     };
   }
 
@@ -52,7 +52,10 @@ export class WebsocketService {
   }
 
   // ESCUTA ACEITE E RECUSA DE CORRIDA
-  conectarCorrida(callbackAceite: () => void, callbackRecusa: () => void) {
+  conectarCorrida(
+    callbackAceite: () => void,
+    callbackRecusa: (proximoMotoristaId: number | null) => void,
+  ) {
     this.ativarSeNecessario('corrida', () => {
       if (this.corridaSubscription) {
         this.corridaSubscription.unsubscribe();
@@ -68,8 +71,10 @@ export class WebsocketService {
         this.desconectarCorrida();
       });
 
-      this.recusaSubscription = this.client.subscribe('/topic/recusa', () => {
-        callbackRecusa();
+      this.recusaSubscription = this.client.subscribe('/topic/recusa', (message) => {
+        const body = message.body;
+        const proximoMotoristaId = body && body !== 'null' ? JSON.parse(body) : null;
+        callbackRecusa(proximoMotoristaId);
       });
     });
   }

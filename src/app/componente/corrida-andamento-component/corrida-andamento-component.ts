@@ -277,78 +277,82 @@ export class CorridaAndamentoComponent implements OnInit, OnDestroy {
       }, 0);
     };
 
-    // CALLBACK DE RECUSA — backend já passou as corridas pro próximo, só reinicia o timer
-    const onRecusa = () => {
+    // CALLBACK DE RECUSA — backend já enviou o proximoMotoristaId calculado (pulando bloqueados)
+    const onRecusa = (proximoMotoristaId: number | null) => {
       if (this.timerSubscription) {
         this.timerSubscription.unsubscribe();
         this.timerSubscription = null;
       }
       this.aguardandoAceite = false;
 
-      // BUSCA O PROXIMO MOTORISTA QUE O BACKEND JA DEFINIU
-      const corridaIdsRaw = localStorage.getItem('corridaIds');
-      const corridaIds: number[] = corridaIdsRaw ? JSON.parse(corridaIdsRaw) : [];
-
-      if (corridaIds.length > 0) {
-        // BUSCA O MOTORISTA ATUAL DAS CORRIDAS
-        this.usuarioService.getConsultaPrimeiroMotorista().subscribe({
-          next: (proximoMotoristaId) => {
-            if (proximoMotoristaId !== null) {
-              this.motoristaAtual = proximoMotoristaId;
-              this.escutarWebSocket(proximoMotoristaId);
-              this.iniciarTimer(proximoMotoristaId);
-            } else {
-              this.modalChamandoMotorista = false;
-              this.modalSemMotorista = true;
-              this.cdr.detectChanges();
-            }
-          },
-        });
+      if (proximoMotoristaId !== null) {
+        this.motoristaAtual = proximoMotoristaId;
+        this.escutarWebSocket(proximoMotoristaId);
+        this.iniciarTimer(proximoMotoristaId);
+      } else {
+        this.modalChamandoMotorista = false;
+        this.modalSemMotorista = true;
+        this.cdr.detectChanges();
       }
     };
-
     this.websocketService.conectarCorrida(onAceite, onRecusa);
   }
 
   chamarMotorista() {
     this.modalChamandoMotorista = true;
     this.cdr.detectChanges();
+    this.tentarProximoMotorista([]);
+  }
 
-    this.usuarioService.getConsultaPrimeiroMotorista().subscribe({
-      next: (motoristaId) => {
-        if (motoristaId !== null) {
-          this.motoristaAtual = motoristaId;
-          const despachante = Number(localStorage.getItem('usuarioId'));
+  private tentarProximoMotorista(motoristasTentados: number[]) {
+    this.usuarioService.getListaOrdemDafila().subscribe({
+      next: (fila: any[]) => {
+        const proximo = fila.find((m) => !motoristasTentados.includes(m.id));
 
-          this.usuarioService.patchChamandoMotorista(motoristaId).subscribe({
-            next: () => {
-              const enderecosRaw = localStorage.getItem('enderecosEntrega');
-              const enderecos: string[] = enderecosRaw
-                ? JSON.parse(enderecosRaw)
-                : this.entregas
-                    .filter((e) => e.rua && e.numero)
-                    .map((e) => e.rua + ', ' + e.numero);
-
-              this.usuarioService
-                .postEnviarNotificacaoMultipla(motoristaId, despachante, enderecos)
-                .subscribe({
-                  next: (resp) => {
-                    //alert('Notificação enviada');
-                    localStorage.setItem('corridaId', resp.corridaIds[0]);
-                    localStorage.setItem('corridaIds', JSON.stringify(resp.corridaIds));
-                    this.escutarWebSocket(motoristaId);
-                    this.iniciarTimer(motoristaId);
-                  },
-                  error: (err) => console.log('Erro ao enviar notificação:', err),
-                });
-            },
-          });
-        } else {
-          //alert("Sem Motorista online")
+        if (!proximo) {
+          // SEM MAIS MOTORISTAS DISPONÍVEIS NA FILA
           this.modalChamandoMotorista = false;
           this.modalSemMotorista = true;
           this.cdr.detectChanges();
+          return;
         }
+
+        const motoristaId = proximo.id;
+        this.motoristaAtual = motoristaId;
+        const despachante = Number(localStorage.getItem('usuarioId'));
+
+        this.usuarioService.patchChamandoMotorista(motoristaId).subscribe({
+          next: () => {
+            const enderecosRaw = localStorage.getItem('enderecosEntrega');
+            const enderecos: string[] = enderecosRaw
+              ? JSON.parse(enderecosRaw)
+              : this.entregas.filter((e) => e.rua && e.numero).map((e) => e.rua + ', ' + e.numero);
+
+            this.usuarioService
+              .postEnviarNotificacaoMultipla(motoristaId, despachante, enderecos)
+              .subscribe({
+                next: (resp) => {
+                  localStorage.setItem('corridaId', resp.corridaIds[0]);
+                  localStorage.setItem('corridaIds', JSON.stringify(resp.corridaIds));
+                  this.escutarWebSocket(motoristaId);
+                  this.iniciarTimer(motoristaId);
+                },
+                error: (err) => {
+                  console.log('Erro ao enviar notificação:', err);
+
+                  if (err.status === 400) {
+                    // BLOQUEADO PARA ESSE ESTABELECIMENTO — TENTA O PRÓXIMO, SEM MUDAR O STATUS DELE
+                    this.usuarioService.patchCancelarChamada(motoristaId).subscribe(); // volta ele pro status online (já que patchChamandoMotorista o marcou como status 3)
+                    this.tentarProximoMotorista([...motoristasTentados, motoristaId]);
+                  } else {
+                    this.modalChamandoMotorista = false;
+                    this.modalSemMotorista = true;
+                    this.cdr.detectChanges();
+                  }
+                },
+              });
+          },
+        });
       },
     });
   }
